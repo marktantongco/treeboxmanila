@@ -50,17 +50,26 @@ const testimonials = [
 
 function StarRating({ rating }: { rating: number }) {
   return (
-    <div className="flex gap-0.5">
+    <div className="flex items-center gap-1.5">
       {Array.from({ length: 5 }).map((_, i) => (
-        <Star
+        <motion.div
           key={i}
-          className={`h-4 w-4 ${
-            i < rating
-              ? "text-[var(--color-brand-amber)] fill-[var(--color-brand-amber)]"
-              : "text-gray-200"
-          }`}
-        />
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ delay: i * 0.1, type: "spring", stiffness: 300, damping: 15 }}
+        >
+          <Star
+            className={`h-6 w-6 ${
+              i < rating
+                ? "text-[var(--color-brand-amber)] fill-[var(--color-brand-amber)] drop-shadow-md"
+                : "text-gray-200"
+            }`}
+          />
+        </motion.div>
       ))}
+      <span className="ml-3 text-lg font-bold text-[var(--color-brand-amber-dark)]">
+        {rating}.0
+      </span>
     </div>
   );
 }
@@ -132,54 +141,77 @@ export function Testimonials() {
             <div className="relative">
               {/* Quote icon */}
               <div className="absolute -top-6 left-8 sm:left-12 z-10">
-                <div className="w-12 h-12 rounded-xl gradient-green flex items-center justify-center shadow-lg shadow-green-900/20">
-                  <Quote className="h-6 w-6 text-white" />
-                </div>
+                <motion.div
+                  animate={{ rotate: [0, 5, -5, 0] }}
+                  transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                  className="w-14 h-14 rounded-xl gradient-green flex items-center justify-center shadow-lg shadow-green-900/20"
+                >
+                  <Quote className="h-7 w-7 text-white" />
+                </motion.div>
               </div>
 
-              <div className="bg-[var(--color-brand-cream)] rounded-2xl p-8 sm:p-12 pt-16 relative overflow-hidden">
-                {/* Decorative */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--color-brand-green)]/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-[var(--color-brand-amber)]/5 rounded-full translate-y-1/2 -translate-x-1/2" />
+              {/* Card with animated gradient border */}
+              <div className="gradient-border-card rounded-2xl p-[3px]">
+                <div className="bg-[var(--color-brand-cream)] rounded-2xl p-8 sm:p-12 pt-16 relative overflow-hidden">
+                  {/* Decorative */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--color-brand-green)]/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-[var(--color-brand-amber)]/5 rounded-full translate-y-1/2 -translate-x-1/2" />
 
-                <div className="relative">
-                  <AnimatePresence mode="wait" custom={direction}>
-                    <motion.div
-                      key={current}
-                      custom={direction}
-                      variants={variants}
-                      initial="enter"
-                      animate="center"
-                      exit="exit"
-                      transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-                    >
-                      <StarRating rating={t.rating} />
+                  <div className="relative">
+                    <AnimatePresence mode="wait" custom={direction}>
+                      <motion.div
+                        key={current}
+                        custom={direction}
+                        variants={variants}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                      >
+                        {/* Star rating - more prominent */}
+                        <div className="bg-white/60 inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-sm shadow-sm mb-6">
+                          <StarRating rating={t.rating} />
+                        </div>
 
-                      <blockquote className="mt-6 text-lg sm:text-xl text-gray-700 leading-relaxed font-medium">
-                        &ldquo;{t.content}&rdquo;
-                      </blockquote>
+                        <blockquote className="mt-2 text-lg sm:text-xl text-gray-700 leading-relaxed font-medium">
+                          &ldquo;{t.content}&rdquo;
+                        </blockquote>
 
-                      <div className="mt-8 flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-full gradient-green flex items-center justify-center text-white font-bold text-lg shadow-md">
-                          {t.name.charAt(0)}
+                        <div className="mt-8 flex items-center gap-4">
+                          {/* Avatar with gradient */}
+                          <div className="w-14 h-14 rounded-full gradient-green flex items-center justify-center text-white font-bold text-xl shadow-md ring-3 ring-white">
+                            {t.name.charAt(0)}
+                          </div>
+                          <div>
+                            <p className="font-bold text-gray-900">{t.name}</p>
+                            <p className="text-sm text-gray-500">{t.role}</p>
+                          </div>
+                          <div className="ml-auto hidden sm:block">
+                            <span className="inline-block text-xs font-semibold px-3 py-1.5 rounded-full bg-green-50 text-[var(--color-brand-green)] border border-green-100">
+                              {t.service}
+                            </span>
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-bold text-gray-900">{t.name}</p>
-                          <p className="text-sm text-gray-500">{t.role}</p>
-                        </div>
-                        <div className="ml-auto hidden sm:block">
-                          <span className="inline-block text-xs font-semibold px-3 py-1.5 rounded-full bg-green-50 text-[var(--color-brand-green)] border border-green-100">
-                            {t.service}
-                          </span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
                 </div>
               </div>
 
               {/* Navigation */}
               <div className="flex items-center justify-between mt-8">
+                {/* Counter - more prominent */}
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl font-extrabold text-[var(--color-brand-green)] tabular-nums">
+                    {String(current + 1).padStart(2, "0")}
+                  </span>
+                  <div className="w-10 h-0.5 bg-[var(--color-brand-green)]/30 rounded-full" />
+                  <span className="text-lg text-gray-400 font-bold tabular-nums">
+                    {String(testimonials.length).padStart(2, "0")}
+                  </span>
+                </div>
+
+                {/* Dot indicators */}
                 <div className="flex gap-2">
                   {testimonials.map((_, i) => (
                     <button
@@ -189,14 +221,16 @@ export function Testimonials() {
                         setCurrent(i);
                       }}
                       aria-label={`Go to testimonial ${i + 1}`}
-                      className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                      className={`h-2 rounded-full transition-all duration-300 ${
                         i === current
                           ? "bg-[var(--color-brand-green)] w-8"
-                          : "bg-gray-300 hover:bg-gray-400"
+                          : "bg-gray-300 hover:bg-gray-400 w-2"
                       }`}
                     />
                   ))}
                 </div>
+
+                {/* Arrow buttons */}
                 <div className="flex gap-2">
                   <button
                     onClick={prev}

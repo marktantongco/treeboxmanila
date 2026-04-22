@@ -46,20 +46,20 @@ const reasons = [
 function StatDisplay({ stat, suffix, label }: { stat: string | number; suffix: string; label: string }) {
   if (typeof stat === "number") {
     return (
-      <div className="text-center mb-4">
-        <div className="text-4xl font-extrabold text-gradient-green">
+      <div className="text-center mb-5">
+        <div className="text-6xl sm:text-7xl lg:text-8xl font-extrabold text-gradient-green leading-none tracking-tight">
           <AnimatedCounter target={stat} suffix={suffix} />
         </div>
-        <p className="text-xs text-gray-400 font-medium uppercase tracking-wider mt-1">{label}</p>
+        <p className="text-sm text-gray-400 font-semibold uppercase tracking-[0.2em] mt-3">{label}</p>
       </div>
     );
   }
   return (
-    <div className="text-center mb-4">
-      <div className="text-4xl font-extrabold text-gradient-green">
+    <div className="text-center mb-5">
+      <div className="text-6xl sm:text-7xl lg:text-8xl font-extrabold text-gradient-green leading-none tracking-tight">
         {stat}{suffix}
       </div>
-      <p className="text-xs text-gray-400 font-medium uppercase tracking-wider mt-1">{label}</p>
+      <p className="text-sm text-gray-400 font-semibold uppercase tracking-[0.2em] mt-3">{label}</p>
     </div>
   );
 }
@@ -67,6 +67,9 @@ function StatDisplay({ stat, suffix, label }: { stat: string | number; suffix: s
 export function WhyChooseUs() {
   return (
     <section className="py-20 lg:py-28 bg-[var(--color-brand-cream)] relative overflow-hidden">
+      {/* Dot pattern background */}
+      <div className="absolute inset-0 pointer-events-none dot-pattern opacity-60" />
+
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 right-0 w-72 h-72 bg-[var(--color-brand-green)]/5 rounded-full blur-3xl" />
@@ -95,16 +98,28 @@ export function WhyChooseUs() {
             return (
               <motion.div key={reason.title} variants={fadeInUp}>
                 <HoverLiftCard className="h-full">
-                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-full text-center">
-                    <motion.div
-                      whileHover={{ rotate: 360 }}
-                      transition={{ duration: 0.6 }}
-                      className="inline-flex items-center justify-center w-14 h-14 rounded-xl gradient-green text-white mb-4 shadow-lg shadow-green-900/20"
-                    >
-                      <Icon className="h-7 w-7" />
-                    </motion.div>
+                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-full text-center group hover:shadow-xl hover:shadow-green-900/5 transition-all duration-500">
+                    {/* Icon with enhanced glow and pulse on hover */}
+                    <div className="relative inline-block mb-2">
+                      {/* Multi-layer glow ring behind icon */}
+                      <div className="absolute inset-[-8px] rounded-2xl bg-[var(--color-brand-green)]/0 group-hover:bg-[var(--color-brand-green)]/10 blur-xl transition-all duration-500 scale-100 group-hover:scale-175" />
+                      <div className="absolute inset-[-4px] rounded-xl bg-[var(--color-brand-green)]/0 group-hover:bg-[var(--color-brand-green)]/20 blur-md transition-all duration-400 scale-100 group-hover:scale-140" />
+                      <motion.div
+                        whileHover={{ rotate: 360, scale: 1.15 }}
+                        transition={{ duration: 0.6 }}
+                        className="relative icon-glow-enhanced inline-flex items-center justify-center w-18 h-18 rounded-xl gradient-green text-white mb-2 shadow-lg shadow-green-900/25"
+                        style={{ width: "4.5rem", height: "4.5rem" }}
+                      >
+                        <Icon className="h-9 w-9" />
+                        {/* Pulse rings on hover */}
+                        <span className="absolute inset-0 rounded-xl bg-[var(--color-brand-green)]/40 opacity-0 group-hover:opacity-100 animate-pulse-badge" />
+                        <span className="absolute inset-[-6px] rounded-2xl border-2 border-[var(--color-brand-green)]/20 opacity-0 group-hover:opacity-100 animate-pulse-ring transition-opacity duration-500" />
+                      </motion.div>
+                    </div>
+
                     <StatDisplay stat={reason.stat} suffix={reason.statSuffix} label={reason.statLabel} />
-                    <h3 className="text-lg font-bold text-gray-900 mb-2">
+
+                    <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[var(--color-brand-green)] transition-colors duration-300">
                       {reason.title}
                     </h3>
                     <p className="text-sm text-gray-500 leading-relaxed">

@@ -1,8 +1,9 @@
 "use client";
 
-import { Phone } from "lucide-react";
+import { Phone, MessageSquare } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 export function MobileCTA() {
   const [visible, setVisible] = useState(false);
@@ -18,19 +19,35 @@ export function MobileCTA() {
   return (
     <AnimatePresence>
       {visible && (
-        <motion.a
-          href="tel:+63281234567"
-          aria-label="Call Treebox Manila now"
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className="fixed bottom-6 right-6 z-50 md:hidden flex items-center justify-center w-14 h-14 rounded-full gradient-green text-white shadow-lg shadow-green-900/30 active:scale-90 transition-transform"
+        <motion.div
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 100, opacity: 0 }}
+          transition={{ type: "spring", stiffness: 300, damping: 25 }}
+          className="fixed bottom-0 left-0 right-0 z-50 md:hidden"
         >
-          {/* Pulse ring */}
-          <span className="absolute inset-0 rounded-full bg-[var(--color-brand-green)] animate-pulse-ring" />
-          <Phone className="h-6 w-6 relative z-10" />
-        </motion.a>
+          {/* Gradient backdrop */}
+          <div className="bg-gradient-to-t from-black/30 via-black/10 to-transparent h-6 -mt-6" />
+          <div className="bg-white/95 backdrop-blur-lg border-t border-gray-200/50 px-4 py-3 shadow-[0_-4px_20px_rgba(0,0,0,0.1)]">
+            <div className="flex gap-3">
+              <Link
+                href="/contact"
+                className="flex-1 flex items-center justify-center gap-2 bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold py-3.5 rounded-xl shadow-lg shadow-amber-500/25 active:scale-[0.98] transition-all duration-200"
+              >
+                <MessageSquare className="h-5 w-5" />
+                <span>Get a Quote</span>
+              </Link>
+              <a
+                href="tel:+63281234567"
+                aria-label="Call Treebox Manila now"
+                className="flex items-center justify-center gap-2 bg-[var(--color-brand-green)] hover:bg-[var(--color-brand-green-light)] text-white font-bold py-3.5 px-5 rounded-xl shadow-lg shadow-green-900/20 active:scale-[0.98] transition-all duration-200"
+              >
+                <Phone className="h-5 w-5" />
+                <span className="hidden xs:inline">Call Us</span>
+              </a>
+            </div>
+          </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );

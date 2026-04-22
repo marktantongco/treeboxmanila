@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { Award, Users, Target, Heart } from "lucide-react";
+import Link from "next/link";
+import { Award, Users, Target, Heart, ArrowRight, Phone } from "lucide-react";
 import { motion } from "framer-motion";
 import { ScrollReveal, StaggerReveal, AnimatedCounter, fadeInUp, fadeInRight, fadeInLeft, HoverLiftCard, ParallaxSection } from "@/components/animations";
 
@@ -210,6 +211,64 @@ export function AboutPageContent() {
               </ScrollReveal>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 lg:py-28 relative overflow-hidden">
+        <div className="gradient-cta absolute inset-0" />
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute -top-20 -right-20 w-72 h-72 bg-white/5 rounded-full blur-3xl" />
+          <div className="absolute -bottom-16 -left-16 w-56 h-56 bg-white/5 rounded-full blur-3xl" />
+          <motion.div
+            animate={{ rotate: [0, 360] }}
+            transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
+            className="absolute top-8 right-12 w-20 h-20 border border-white/10 rounded-xl"
+          />
+          <motion.div
+            animate={{ rotate: [360, 0] }}
+            transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
+            className="absolute bottom-8 left-12 w-14 h-14 border border-white/10 rounded-full"
+          />
+        </div>
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <ScrollReveal>
+            <motion.div
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+              className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/10 mb-6"
+            >
+              <Heart className="h-8 w-8 text-white" />
+            </motion.div>
+          </ScrollReveal>
+          <ScrollReveal delay={0.1}>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4 leading-tight">
+              Ready to Work with the Best?
+            </h2>
+          </ScrollReveal>
+          <ScrollReveal delay={0.2}>
+            <p className="text-green-100/80 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+              Join hundreds of businesses across Metro Manila that trust Treebox Manila for their printing needs. Get a free quote today and experience the difference.
+            </p>
+          </ScrollReveal>
+          <ScrollReveal delay={0.3}>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center gap-2 bg-white text-[var(--color-brand-green)] hover:bg-green-50 font-bold px-10 py-4 rounded-xl shadow-xl shadow-black/20 hover:shadow-2xl transition-all duration-300 text-lg group relative overflow-hidden action-button-prominent"
+              >
+                Get a Free Quote
+                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <a
+                href="tel:+63281234567"
+                className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold px-10 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl transition-all duration-300 text-lg btn-shine"
+              >
+                <Phone className="h-5 w-5" />
+                Call Us Now
+              </a>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
     </>

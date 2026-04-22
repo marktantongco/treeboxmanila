@@ -71,28 +71,28 @@ export function HomePageContent() {
           </ScrollReveal>
 
           <ScrollReveal delay={0.3}>
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Button
                 asChild
                 size="lg"
-                className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-semibold shadow-lg shadow-amber-500/30 hover:shadow-xl hover:shadow-amber-500/40 transition-all duration-300 text-base group relative overflow-hidden"
+                className="bg-white text-[var(--color-brand-green)] hover:bg-green-50 font-bold shadow-xl shadow-black/20 hover:shadow-2xl transition-all duration-300 text-base group relative overflow-hidden h-14 px-8"
               >
-                <a href="tel:+63281234567">
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                  <Phone className="mr-2 h-4 w-4" />
-                  Call +63 2 8123 4567
-                </a>
+                <Link href="/contact">
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-green-100/40 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                  Get a Quote Now
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </Button>
               <Button
                 asChild
-                variant="outline"
                 size="lg"
-                className="border-2 border-white/30 text-white hover:bg-white hover:text-[var(--color-brand-green)] font-semibold text-base group transition-all duration-300"
+                className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-xl shadow-amber-500/30 hover:shadow-2xl hover:shadow-amber-500/40 transition-all duration-300 text-base group relative overflow-hidden h-14 px-8"
               >
-                <Link href="/contact">
-                  Request a Quote Online
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                <a href="tel:+63281234567">
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                  <Phone className="mr-2 h-5 w-5" />
+                  Call +63 2 8123 4567
+                </a>
               </Button>
             </div>
           </ScrollReveal>

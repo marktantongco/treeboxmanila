@@ -135,31 +135,30 @@ export function HeroSection() {
               initial="hidden"
               animate="visible"
               variants={textVariants}
-              className="flex flex-wrap gap-4"
+              className="flex flex-col sm:flex-row gap-4"
             >
               <MagneticButton strength={0.15}>
                 <Button
                   asChild
                   size="lg"
-                  className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-semibold shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/30 transition-all duration-300 text-base group relative overflow-hidden"
+                  className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/30 transition-all duration-300 text-base group relative overflow-hidden h-14 px-8"
                 >
-                  <a href="tel:+63281234567">
+                  <Link href="/contact">
                     <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                    <Phone className="mr-2 h-4 w-4" />
-                    Get a Quote
-                  </a>
+                    Get a Quote Now
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </Link>
                 </Button>
               </MagneticButton>
               <Button
                 asChild
-                variant="outline"
                 size="lg"
-                className="border-2 border-[var(--color-brand-green)] text-[var(--color-brand-green)] hover:bg-[var(--color-brand-green)] hover:text-white font-semibold text-base group transition-all duration-300"
+                className="bg-[var(--color-brand-green)] hover:bg-[var(--color-brand-green-light)] text-white font-bold text-base group transition-all duration-300 h-14 px-8 shadow-lg shadow-green-900/20"
               >
-                <Link href="/services">
-                  Our Services
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                <a href="tel:+63281234567">
+                  <Phone className="mr-2 h-5 w-4" />
+                  Call +63 2 8123 4567
+                </a>
               </Button>
             </motion.div>
 

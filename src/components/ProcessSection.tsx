@@ -1,18 +1,20 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { motion, useInView, useAnimation } from "framer-motion";
 import {
   MessageSquare,
   FileText,
   Printer,
   Truck,
+  ArrowRight,
+  Phone,
 } from "lucide-react";
+import Link from "next/link";
 import {
   ScrollReveal,
   StaggerReveal,
   fadeInUp,
-  RevealLine,
-  FloatingElement,
 } from "@/components/animations";
 
 const steps = [
@@ -46,10 +48,94 @@ const steps = [
   },
 ];
 
+/* ──── Animated connecting line (desktop) ──── */
+function AnimatedConnectingLine() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const controls = useAnimation();
+
+  useEffect(() => {
+    if (isInView) {
+      controls.start("visible");
+    }
+  }, [isInView, controls]);
+
+  return (
+    <div ref={ref} className="hidden lg:block absolute top-[4.5rem] left-[12.5%] right-[12.5%]">
+      {/* Background track */}
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gray-200 rounded-full" />
+      {/* Animated gradient fill */}
+      <motion.div
+        className="absolute top-0 left-0 h-1 rounded-full bg-gradient-to-r from-[var(--color-brand-green)] via-[var(--color-brand-amber)] to-[var(--color-brand-green)]"
+        style={{ transformOrigin: "left" }}
+        initial={{ scaleX: 0 }}
+        variants={{
+          hidden: { scaleX: 0 },
+          visible: { scaleX: 1 },
+        }}
+        animate={controls}
+        transition={{ duration: 2, ease: [0.25, 0.1, 0.25, 1], delay: 0.3 }}
+      />
+      {/* Glowing progress trail */}
+      <motion.div
+        className="absolute top-0 left-0 h-3 rounded-full"
+        style={{
+          transformOrigin: "left",
+          background: "linear-gradient(90deg, transparent, rgba(27,94,32,0.15), transparent)",
+        }}
+        initial={{ scaleX: 0 }}
+        variants={{
+          hidden: { scaleX: 0 },
+          visible: { scaleX: 1 },
+        }}
+        animate={controls}
+        transition={{ duration: 2, ease: [0.25, 0.1, 0.25, 1], delay: 0.3 }}
+      />
+      {/* Diamond nodes at intervals */}
+      <div className="absolute top-0 left-0 right-0 h-1 flex items-center justify-between">
+        {[0, 1, 2, 3].map((i) => (
+          <motion.div
+            key={i}
+            className="relative"
+            initial={{ scale: 0, opacity: 0 }}
+            variants={{
+              hidden: { scale: 0, opacity: 0 },
+              visible: { scale: 1, opacity: 1 },
+            }}
+            animate={controls}
+            transition={{ duration: 0.5, delay: 0.5 + i * 0.4, type: "spring", stiffness: 300 }}
+          >
+            {/* Outer pulse ring */}
+            <motion.div
+              animate={{ scale: [1, 1.8, 1], opacity: [0.4, 0, 0.4] }}
+              transition={{ repeat: Infinity, duration: 2.5, delay: i * 0.3, ease: "easeInOut" }}
+              className="absolute inset-[-6px] rounded-full bg-[var(--color-brand-green)]/20"
+            />
+            {/* Inner dot */}
+            <div className="w-3 h-3 rounded-full bg-[var(--color-brand-green)] shadow-md shadow-green-900/20 ring-2 ring-white" />
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ──── Step badge with enhanced pulse ──── */
+function StepBadge({ number }: { number: number }) {
+  return (
+    <span className="absolute -top-3 -right-3 w-9 h-9 rounded-full gradient-green text-white text-sm font-bold flex items-center justify-center shadow-lg shadow-green-900/30 animate-pulse-badge">
+      {number}
+      {/* Extra pulse ring */}
+      <span className="absolute inset-0 rounded-full bg-[var(--color-brand-green)]/30 animate-pulse-ring" />
+    </span>
+  );
+}
+
 export function ProcessSection() {
   return (
     <section className="py-20 lg:py-28 bg-white relative overflow-hidden">
       {/* Background decoration */}
+      <div className="absolute inset-0 pointer-events-none grid-pattern" />
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--color-brand-green)]/3 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-72 h-72 bg-[var(--color-brand-amber)]/3 rounded-full blur-3xl" />
@@ -74,8 +160,8 @@ export function ProcessSection() {
 
         {/* Steps */}
         <div className="relative">
-          {/* Connecting line (desktop) */}
-          <div className="hidden lg:block absolute top-24 left-[12.5%] right-[12.5%] h-0.5 bg-gradient-to-r from-[var(--color-brand-green)]/20 via-[var(--color-brand-green)]/30 to-[var(--color-brand-green)]/20" />
+          {/* Animated connecting line (desktop) */}
+          <AnimatedConnectingLine />
 
           <StaggerReveal
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6"
@@ -86,7 +172,7 @@ export function ProcessSection() {
               return (
                 <motion.div key={step.title} variants={fadeInUp}>
                   <div className="relative text-center group">
-                    {/* Step number */}
+                    {/* Step icon container */}
                     <div className="relative z-10 mx-auto mb-6">
                       <motion.div
                         whileHover={{ scale: 1.1, rotate: 5 }}
@@ -94,10 +180,8 @@ export function ProcessSection() {
                         className="relative inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white border-2 border-[var(--color-brand-green)]/10 shadow-lg shadow-green-900/5 group-hover:border-[var(--color-brand-green)]/30 group-hover:shadow-xl group-hover:shadow-green-900/10 transition-all duration-500"
                       >
                         <Icon className="h-8 w-8 text-[var(--color-brand-green)]" />
-                        {/* Step badge */}
-                        <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full gradient-green text-white text-xs font-bold flex items-center justify-center shadow-md">
-                          {i + 1}
-                        </span>
+                        {/* Step badge with enhanced pulse */}
+                        <StepBadge number={i + 1} />
                       </motion.div>
                     </div>
 
@@ -117,21 +201,58 @@ export function ProcessSection() {
           </StaggerReveal>
         </div>
 
-        {/* CTA */}
+        {/* Prominent CTA */}
         <ScrollReveal delay={0.3}>
-          <div className="text-center mt-16">
-            <p className="text-gray-500 mb-6">
-              Ready to start your printing project?
-            </p>
-            <motion.a
-              href="tel:+63281234567"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-2 bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 transition-colors duration-300 btn-shine"
-            >
-              <MessageSquare className="h-5 w-5" />
-              Call to Get Started
-            </motion.a>
+          <div className="mt-20">
+            <div className="gradient-cta-card rounded-3xl p-10 sm:p-14 text-center relative overflow-hidden">
+              {/* Decorative elements */}
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full" />
+                <div className="absolute -bottom-6 -left-6 w-28 h-28 bg-white/5 rounded-full" />
+                <motion.div
+                  animate={{ y: [-5, 5, -5], rotate: [0, 5, 0] }}
+                  transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+                  className="absolute top-4 right-4 w-12 h-12 border border-white/10 rounded-lg"
+                />
+                <motion.div
+                  animate={{ y: [5, -5, 5], rotate: [0, -3, 0] }}
+                  transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
+                  className="absolute bottom-4 left-4 w-10 h-10 border border-white/10 rounded-full"
+                />
+              </div>
+
+              <div className="relative z-10">
+                <motion.div
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                  className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white/10 mb-6"
+                >
+                  <Printer className="h-7 w-7 text-white" />
+                </motion.div>
+                <p className="text-green-100/80 text-lg mb-2">
+                  Ready to start your printing project?
+                </p>
+                <p className="text-white text-3xl sm:text-4xl font-extrabold mb-8 leading-tight">
+                  Let&apos;s Bring Your Vision to Life
+                </p>
+                <div className="flex flex-col sm:flex-row justify-center gap-4">
+                  <Link
+                    href="/contact"
+                    className="inline-flex items-center justify-center gap-2 bg-white text-[var(--color-brand-green)] hover:bg-green-50 font-bold px-10 py-4 rounded-xl shadow-xl shadow-black/20 hover:shadow-2xl transition-all duration-300 text-lg group relative overflow-hidden action-button-prominent"
+                  >
+                    Get a Free Quote
+                    <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                  <a
+                    href="tel:+63281234567"
+                    className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold px-10 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl transition-all duration-300 text-lg btn-shine"
+                  >
+                    <Phone className="h-5 w-5" />
+                    Call to Get Started
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </ScrollReveal>
       </div>

@@ -1,6 +1,7 @@
 "use client";
 
-import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, MessageCircle, ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { ContactForm } from "@/components/ContactForm";
 import { ScrollReveal, fadeInUp, fadeInRight, fadeInLeft } from "@/components/animations";
 import { motion } from "framer-motion";
@@ -74,8 +75,32 @@ export function ContactPageContent() {
         </div>
       </section>
 
+      {/* Prominent CTA Buttons */}
+      <section className="bg-white border-b border-gray-100">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+          <ScrollReveal>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <a
+                href="#quote-form"
+                className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand-green)] hover:bg-[var(--color-brand-green-light)] text-white font-bold px-8 py-4 rounded-xl shadow-xl shadow-green-900/20 hover:shadow-2xl transition-all duration-300 text-lg group relative overflow-hidden action-button-prominent w-full sm:w-auto"
+              >
+                Get a Quote Now
+                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </a>
+              <a
+                href="tel:+63281234567"
+                className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl transition-all duration-300 text-lg btn-shine w-full sm:w-auto"
+              >
+                <Phone className="h-5 w-5" />
+                Call Us: +63 2 8123 4567
+              </a>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
       {/* Contact Form + Info */}
-      <section className="py-20 lg:py-28 bg-white">
+      <section id="quote-form" className="py-20 lg:py-28 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Form */}

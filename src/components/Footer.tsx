@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Phone, Mail, MapPin, Clock, Instagram, Youtube, ArrowUpRight, Heart } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Instagram, Youtube, ArrowUpRight, Heart, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 const quickLinks = [
@@ -66,6 +66,13 @@ export function Footer() {
                 to excellence, efficiency, and client relationships built through
                 decades of outstanding service.
               </p>
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold px-5 py-2.5 rounded-lg transition-all duration-300 text-sm btn-shine mb-5"
+              >
+                Get a Quote
+                <ArrowRight className="h-4 w-4" />
+              </Link>
               <div className="flex gap-3">
                 {socialLinks.map(({ href, label, Icon }) => (
                   <motion.a

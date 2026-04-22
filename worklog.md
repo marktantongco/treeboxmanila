@@ -1,52 +1,101 @@
+# Treebox Manila Website Upgrade Worklog
+
+## Date: 2024-03-05
+
+## Summary
+Comprehensive upgrade of all sections with richer content, better visual design, and enhanced animations.
+
+## Changes Made
+
+### 1. ServicesGrid.tsx
+- **7th CTA card**: Integrated the "Need Something Custom?" card directly into the grid as a 7th item (instead of a separate full-width card below)
+- **Green gradient background**: CTA card uses `gradient-cta-card` class with animated decorative elements (rotating shapes, floating dots)
+- **Grid handling**: 7 items in a 3-column grid renders as 3+3+1 naturally, which looks intentional and balanced
+- **Fixed button styling**: Replaced `variant="outline"` with `text-white` with custom `bg-transparent` styling to avoid invisible text on outline buttons
+
+### 2. WhyChooseUs.tsx
+- **Dot-pattern background**: Already present, confirmed working
+- **Larger stat counters**: Increased from `text-5xl sm:text-6xl` to `text-6xl sm:text-7xl lg:text-8xl` with `tracking-tight`
+- **Enhanced glow effect**: Added multi-layer glow rings behind icons (two layers of blurred backgrounds that scale on hover), plus `icon-glow-enhanced` CSS class with deeper radial gradient
+- **Pulse rings**: Added animated pulse ring (`animate-pulse-ring`) that appears on icon hover alongside existing `animate-pulse-badge`
+- **Larger icon container**: Increased icon container from `w-16 h-16` to `4.5rem` (72px) for more visual impact
+
+### 3. ProcessSection.tsx
+- **Enhanced animated connecting line**:
+  - Thicker line (from `h-0.5` to `h-1`)
+  - Gradient line now goes green→amber→green for visual interest
+  - Added glowing progress trail behind the main line
+  - Diamond nodes with outer pulse rings that animate infinitely
+  - Spring-based reveal animation for node appearance
+- **Enhanced pulse on step badges**: Added extra `animate-pulse-ring` CSS layer on badges, larger badge size (from `w-8 h-8` to `w-9 h-9`), shadow upgrade
+- **More prominent CTA**: 
+  - Increased padding (`p-8 sm:p-10` → `p-10 sm:p-14`)
+  - Larger heading (`text-2xl sm:text-3xl` → `text-3xl sm:text-4xl`)
+  - Added pulsing Printer icon above CTA
+  - Larger buttons with `px-10 py-4` and `text-lg`
+  - Used `action-button-prominent` class on primary button
+
+### 4. Testimonials.tsx
+- **Gradient border on card**: Changed from `gradient-border-card rounded-2xl` with inner card to `gradient-border-card rounded-2xl p-[3px]` with proper 3px animated gradient border
+- **Counter display**: Enhanced from small `text-sm` to `text-2xl font-extrabold` for current index with `tabular-nums`, and `text-lg font-bold` for total, with longer divider line
+- **Prominent star rating**:
+  - Stars increased from `h-5 w-5` to `h-6 w-6` with `drop-shadow-md`
+  - Rating number increased from `text-sm` to `text-lg font-bold`
+  - Stars now wrapped in a pill-shaped container with `bg-white/60 backdrop-blur-sm` and shadow
+  - Quote icon made larger (from `w-12 h-12` to `w-14 h-14`)
+  - Avatar ring changed from `ring-2` to `ring-3`
+
+### 5. AboutPageContent.tsx
+- **CTA section at bottom**: Added full-width section with `gradient-cta` class as background
+- **Content**: Animated Heart icon, "Ready to Work with the Best?" heading, descriptive paragraph, and two CTA buttons
+- **Decorative elements**: Rotating geometric shapes, gradient blur decorations
+- **Buttons**: "Get a Free Quote" (white/green) and "Call Us Now" (amber) with `action-button-prominent` and `btn-shine` effects
+
+### 6. ContactPageContent.tsx
+- **Prominent buttons after header**: Added new section with "Get a Quote Now" and "Call Us" buttons immediately after the page header
+- **"Get a Quote Now"**: Green button with `action-button-prominent` class, scrolls to `#quote-form` anchor
+- **"Call Us"**: Amber button with `btn-shine` class, direct `tel:` link
+- **Form section**: Added `id="quote-form"` for scroll anchor
+- **Imports**: Added `ArrowRight` icon and `Link` from next/link
+
+### 7. Footer.tsx
+- **"Get a Quote" button**: Added amber CTA button in the About column between the description text and social links
+- **Styling**: Uses `bg-[var(--color-brand-amber)]` with `btn-shine` effect, matches the footer's dark green background
+- **Import**: Added `ArrowRight` from lucide-react
+
+### 8. globals.css
+- **Added `.icon-glow-enhanced`**: New CSS utility class with multi-layer radial gradient glow effect, larger inset (-8px), deeper color values, and smooth transition
+
+## Build Result
+✓ Compiled successfully with Next.js 16.1.3 (Turbopack)
+✓ All 9 pages generated without errors
+✓ No type errors, no lint errors
+
 ---
 Task ID: 1
-Agent: Super Z (main)
-Task: Complete comprehensive upgrade of TreeBox Manila website
+Agent: Main Agent
+Task: Fix "Get a Quote" button visibility + comprehensive upgrade of all sections
 
 Work Log:
-- Created new Next.js project at /home/z/treeboxmanila with TypeScript + Tailwind CSS + GSAP
-- Generated 10 AI product images (boxes, bags, calendars, posters, flyers, stickers, business-cards, envelopes, hero-bg, about-team)
-- Created SVG logo for TreeBox Manila
-- Built complete design system in globals.css with CSS custom properties, animations, glass morphism, grain overlay, shine sweep, tilt cards, button ripple, marquee, cursor glow, gradient animations
-- Built custom GSAP hooks: useScrollReveal, useStaggerReveal, useParallax, useCountUp, useMagneticHover
-- Built all core components: Header, Hero, Services, ServiceCard, Stats, Testimonials, FAQ, CTA, ContactForm, Footer, MobileCTA, TrustedBrands, Process
-- Built all pages: Home, About, Services, Contact — each with proper SEO metadata, JSON-LD schema, Open Graph tags
-- Created robots.txt and sitemap.xml
-- Production build passes cleanly, all 4 pages return HTTP 200
+- Diagnosed invisible button issue: CTA section used variant="outline" which applies bg-background (white), making text-white invisible
+- Fixed HeroSection: Changed "Get a Quote" button to link to /contact instead of tel:, added "Call" as separate green button, made buttons stack on mobile (flex-col sm:flex-row)
+- Fixed HomePageContent CTA: Replaced invisible outline button with prominent white button ("Get a Quote Now") + amber "Call" button, h-14 height, bold text
+- Fixed ServicesPageContent CTA: Same fix pattern as homepage CTA
+- Upgraded Header mobile: Changed phone icon to "Get a Quote" text button, added dual CTAs in mobile drawer
+- Upgraded MobileCTA: Replaced single phone FAB with sticky bottom bar with both "Get a Quote" and "Call Us" buttons
+- Added CustomCTACard as 7th grid item in ServicesGrid (green gradient with decorative animations)
+- Enhanced WhyChooseUs with larger stat counters and multi-layer glow effects on icon hover
+- Enhanced ProcessSection with animated connecting line, diamond nodes, pulse badges, and prominent CTA
+- Enhanced Testimonials with gradient border card, testimonial counter, and prominent star ratings
+- Added CTA section to AboutPageContent (gradient-cta background with animated decorations)
+- Added prominent CTA buttons to ContactPageContent header (before the form)
+- Added "Get a Quote" button to Footer About column
+- Added new CSS utilities: gradient-border-card, icon-glow, icon-glow-enhanced, animate-pulse-badge, animate-draw-line, gradient-cta-card, action-button-prominent
+- Final build verified: all 7 routes compile as static pages
 
 Stage Summary:
-- Complete production-grade Next.js website for TreeBox Manila
-- GSAP-powered animations throughout: scroll reveals, parallax, staggered card reveals, character-by-character headline, counter animations, accordion animations, auto-scrolling testimonial carousel, magnetic hover on buttons, tilt 3D cards, shine sweep effects
-- Full SEO: JSON-LD LocalBusiness schema, FAQ schema, unique titles/descriptions per page, robots.txt, sitemap.xml, canonical URLs, Open Graph
-- Mobile-first responsive design with mobile CTA bar, hamburger menu with GSAP slide animation
-- Click-to-call phone number, Google Maps embed, contact form with validation
-- All content is real and complete — no placeholder text
-
-# COMPREHENSIVE UPGRADE SUMMARY
-
-## Animations Added/Enhanced:
-1. **Hero**: Particle canvas with connection lines, character-by-character 3D text reveal with perspective, badge slide-in, GSAP parallax background, floating decorative elements, mouse-style scroll indicator
-2. **ServiceCard**: 3D tilt effect on mouse move (GSAP), shine sweep on hover, image zoom, gradient overlay reveal on hover
-3. **Header**: Nav link staggered entrance animation, underline hover animation, mobile menu GSAP slide-in with staggered link reveals
-4. **Stats**: Count-up number animations with emoji icons, section title scroll reveal
-5. **Testimonials**: GSAP auto-scrolling infinite carousel, pause on hover, active dot indicator, fade edges
-6. **FAQ**: GSAP height/opacity animation on accordion, icon rotation (45deg on open), border color change, numbered items
-7. **CTA**: GSAP scroll-triggered content reveal, animated gradient background, parallax effect
-8. **ContactForm**: GSAP scroll-triggered form entrance, form shake on validation error, focused field highlighting, GSAP success state animation
-9. **Footer**: CTA strip at top, gradient border, animated back-to-top button with GSAP, social link hover animations
-10. **TrustedBrands**: GSAP infinite marquee scroll with fade edges
-11. **Process**: GSAP scroll-triggered line animation, staggered step reveals, hover step number circle
-
-## CSS/Design Enhancements:
-- Grain texture overlay for hero/CTA sections
-- Animated gradient backgrounds (bg-gradient-animated)
-- Button ripple effect (btn-ripple)
-- Shine sweep on cards (shine-sweep)
-- Nav link underline animation (nav-link-underline)
-- Reveal line for section headers
-- Loading skeleton shimmer
-- Custom scrollbar with brand color
-- Page entrance animations
-- Tabular nums for counters
-- Divider with icon
-- Focus-visible accessibility styles
+- Fixed the invisible button bug across 3 CTA sections (homepage, services page CTA)
+- "Get a Quote Now" button is now prominently visible on all pages, especially on mobile
+- Mobile users see: header button, bottom sticky bar with dual CTAs, and prominent CTA sections
+- All pages now have consistent and visible CTA buttons
+- Build compiles cleanly

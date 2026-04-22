@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Phone, Menu, X } from "lucide-react";
+import { Phone, Menu, X, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -140,11 +140,11 @@ export function Header() {
             <Button
               asChild
               size="sm"
-              className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white"
+              className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold"
             >
-              <a href="tel:+63281234567" aria-label="Call us">
-                <Phone className="h-4 w-4" />
-              </a>
+              <Link href="/contact" aria-label="Get a quote">
+                Get a Quote
+              </Link>
             </Button>
           </motion.div>
           <Sheet open={open} onOpenChange={setOpen}>
@@ -198,17 +198,27 @@ export function Header() {
                     ))}
                   </AnimatePresence>
                 </nav>
-                <div className="p-4 border-t">
+                <div className="p-4 border-t space-y-3">
                   <Button
                     asChild
-                    className="w-full bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-semibold"
+                    className="w-full bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold h-12"
+                  >
+                    <Link href="/contact">
+                      Get a Quote Now
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="w-full border-2 border-[var(--color-brand-green)] text-[var(--color-brand-green)] hover:bg-[var(--color-brand-green)] hover:text-white font-bold h-12"
                   >
                     <a href="tel:+63281234567">
                       <Phone className="mr-2 h-4 w-4" />
-                      Call to Get a Quote
+                      Call +63 2 8123 4567
                     </a>
                   </Button>
-                  <p className="text-xs text-gray-400 text-center mt-3">
+                  <p className="text-xs text-gray-400 text-center">
                     Mon–Sat: 8AM – 5PM
                   </p>
                 </div>
