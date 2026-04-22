@@ -99,14 +99,22 @@ function ReasonCard({ reason, index }: { reason: typeof reasons[0]; index: numbe
     >
       <HoverLiftCard className="h-full">
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-full text-center group hover:shadow-xl hover:shadow-green-900/5 transition-all duration-500">
+          {/* Icon with continuous slow rotation + speed-up on hover */}
           <motion.div
-            whileHover={{ rotate: 360, scale: 1.1 }}
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
+            whileHover={{ scale: 1.15, rotate: 360 }}
             whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.6 }}
             className="relative inline-flex items-center justify-center rounded-xl gradient-green text-white mb-2 shadow-lg shadow-green-900/25 hover-glow"
             style={{ width: "4.5rem", height: "4.5rem" }}
           >
-            <Icon className="h-9 w-9" />
+            <motion.div
+              animate={{ rotate: -360 }}
+              transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
+              style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+            >
+              <Icon className="h-9 w-9" />
+            </motion.div>
           </motion.div>
 
           <StatDisplay stat={reason.stat} suffix={reason.statSuffix} label={reason.statLabel} />

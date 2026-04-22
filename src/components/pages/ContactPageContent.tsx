@@ -58,9 +58,19 @@ function ContactInfoCard({ info, index }: { info: typeof contactInfo[0]; index: 
       whileHover={{ x: 4, boxShadow: "0 4px 12px rgba(0,0,0,0.06)" }}
       className="flex items-start gap-4 p-4 rounded-xl border border-gray-100 hover:border-[var(--color-brand-green)]/20 hover:shadow-sm transition-all bg-white"
     >
-      <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl gradient-green text-white shrink-0 shadow-md shadow-green-900/10">
-        <Icon className="h-5 w-5" />
-      </div>
+      <motion.div
+        whileHover={{ rotate: 360, scale: 1.1 }}
+        transition={{ duration: 0.5 }}
+        className="inline-flex items-center justify-center w-10 h-10 rounded-xl gradient-green text-white shrink-0 shadow-md shadow-green-900/10"
+      >
+        <motion.div
+          whileHover={{ rotate: -360 }}
+          transition={{ duration: 0.5 }}
+          style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+        >
+          <Icon className="h-5 w-5" />
+        </motion.div>
+      </motion.div>
       <div>
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
           {info.label}

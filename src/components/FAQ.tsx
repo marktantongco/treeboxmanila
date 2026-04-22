@@ -70,7 +70,7 @@ function FAQItem({ faq, index, isOpen, onToggle }: { faq: typeof faqs[0]; index:
         >
           <div className="flex items-center gap-3 pr-4">
             <motion.span
-              animate={{ rotate: isOpen ? 360 : 0, scale: isOpen ? 1.05 : 1 }}
+              animate={isOpen ? { rotate: 360, scale: 1.05 } : { rotate: 0, scale: 1 }}
               transition={{ duration: 0.5, type: "spring", stiffness: 200, damping: 15 }}
               className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold transition-colors duration-300 ${
                 isOpen ? 'bg-[var(--color-brand-green)] text-white shadow-md shadow-green-900/20' : 'bg-green-50 text-[var(--color-brand-green)]'

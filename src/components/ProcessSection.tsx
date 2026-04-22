@@ -177,9 +177,13 @@ function MobileStepCard({ step, index, isActive }: { step: typeof steps[0]; inde
             whileTap={{ scale: 0.95 }}
             className="relative shrink-0"
           >
-            <div className="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center">
+            <motion.div
+              whileHover={{ rotate: 360 }}
+              transition={{ duration: 0.5 }}
+              className="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center"
+            >
               <Icon className="h-6 w-6 text-[var(--color-brand-green)]" />
-            </div>
+            </motion.div>
             <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full gradient-green text-white text-[10px] font-bold flex items-center justify-center shadow-md">
               {index + 1}
             </span>
@@ -291,10 +295,16 @@ export function ProcessSection() {
                       <div className="relative z-10 mx-auto mb-6">
                         <BounceIn delay={i * 0.1}>
                         <motion.div
-                          whileHover={{ scale: 1.1, rotate: 5 }}
+                          whileHover={{ scale: 1.1 }}
                           transition={{ type: "spring", stiffness: 300, damping: 15 }}
                           className="relative inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white border-2 border-[var(--color-brand-green)]/10 shadow-lg shadow-green-900/5 group-hover:border-[var(--color-brand-green)]/30 group-hover:shadow-xl group-hover:shadow-green-900/10 transition-all duration-500"
                         >
+                          {/* Rotating ring decoration */}
+                          <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+                            className="absolute inset-0 rounded-2xl border-2 border-dashed border-[var(--color-brand-green)]/10"
+                          />
                           <Icon className="h-8 w-8 text-[var(--color-brand-green)]" />
                           {/* Step badge with enhanced pulse */}
                           <StepBadge number={i + 1} />

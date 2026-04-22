@@ -163,8 +163,20 @@ export function AboutPageContent() {
                 >
                   <HoverLiftCard className="h-full">
                     <div className="bg-white rounded-2xl p-7 shadow-sm border border-gray-100 h-full">
-                      <motion.div whileHover={{ rotate: 360, scale: 1.1 }} whileTap={{ scale: 0.95 }} transition={{ duration: 0.6 }} className="inline-flex items-center justify-center w-14 h-14 rounded-xl gradient-green text-white mb-5 shadow-lg shadow-green-900/20">
-                        <Icon className="h-7 w-7" />
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ repeat: Infinity, duration: 14, ease: "linear" }}
+                        whileHover={{ scale: 1.15 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="inline-flex items-center justify-center w-14 h-14 rounded-xl gradient-green text-white mb-5 shadow-lg shadow-green-900/20"
+                      >
+                        <motion.div
+                          animate={{ rotate: -360 }}
+                          transition={{ repeat: Infinity, duration: 14, ease: "linear" }}
+                          style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+                        >
+                          <Icon className="h-7 w-7" />
+                        </motion.div>
                       </motion.div>
                       <h3 className="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
                       <p className="text-sm text-gray-500 leading-relaxed">{value.description}</p>

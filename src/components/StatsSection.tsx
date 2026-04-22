@@ -62,12 +62,19 @@ function StatItem({ stat, index }: { stat: typeof stats[0]; index: number }) {
       className="text-center group"
     >
       <motion.div
-        whileHover={{ scale: 1.15, rotate: 8 }}
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
+        whileHover={{ scale: 1.15 }}
         whileTap={{ scale: 0.95 }}
-        transition={{ type: "spring", stiffness: 300 }}
         className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white/10 mb-3 group-hover:bg-white/20 transition-colors"
       >
-        <Icon className="h-6 w-6 text-white" />
+        <motion.div
+          animate={{ rotate: -360 }}
+          transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
+          style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+        >
+          <Icon className="h-6 w-6 text-white" />
+        </motion.div>
       </motion.div>
       <div className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-none tracking-tight">
         <CountUp target={stat.value} suffix={stat.suffix} duration={2} />

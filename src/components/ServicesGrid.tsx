@@ -14,7 +14,6 @@ import {
   cardReveal3D,
   cardRevealLeft,
   cardRevealRight,
-  ImageReveal,
 } from "@/components/animations";
 import { useRef, useEffect, useState } from "react";
 
@@ -120,9 +119,14 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
     >
       <GlowCard className="h-full" glowColor="var(--color-brand-green)">
         <Card className="h-full overflow-hidden border border-gray-100 bg-white hover:border-[var(--color-brand-green)]/20 transition-all duration-500 group">
-          {/* Image with smooth fade-in reveal */}
+          {/* Image - directly visible, no ImageReveal wrapper that can hide images */}
           <div className="relative overflow-hidden aspect-[4/3] bg-gray-100">
-            <ImageReveal direction={index % 2 === 0 ? "left" : "right"} delay={0.15 + index * 0.05}>
+            <motion.div
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.05 }}
+              transition={{ duration: 0.6, delay: 0.15 + index * 0.05, ease: [0.25, 0.1, 0.25, 1] }}
+              className="w-full h-full"
+            >
               <Image
                 src={service.image}
                 alt={service.alt}
@@ -132,7 +136,7 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
                 onLoad={() => setImgLoaded(true)}
                 onError={() => setImgError(true)}
               />
-            </ImageReveal>
+            </motion.div>
             {/* Fallback placeholder while image loads or on error */}
             {!imgLoaded && !imgError && (
               <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-amber-50 animate-pulse flex items-center justify-center">
@@ -385,8 +389,10 @@ export function ServicesGrid() {
           {services.map((service, index) => (
             <ServiceCard key={service.title} service={service} index={index} />
           ))}
-          {/* 7th card - Custom CTA */}
-          <CustomCTACard />
+          {/* 7th card - Custom CTA spanning full width on the last row */}
+          <div className="sm:col-span-2 lg:col-span-3">
+            <CustomCTACard />
+          </div>
         </div>
 
         <ScrollReveal delay={0.3}>

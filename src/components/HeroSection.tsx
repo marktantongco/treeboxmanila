@@ -5,14 +5,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { Phone, ArrowRight, ChevronDown, Shield, Truck, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence, useInView } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   MagneticButton,
   FloatingElement,
   TiltCard,
-  ScrollReveal,
-  MobileSwipeReveal,
-  DirectionalReveal,
 } from "@/components/animations";
 import { useRef } from "react";
 
@@ -272,7 +269,7 @@ export function HeroSection() {
                 return (
                   <div key={badge.text} className="flex items-center gap-2.5 group/badge">
                     <motion.div
-                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
                       transition={{ type: "spring", stiffness: 300 }}
                       className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center group-hover/badge:bg-green-100 transition-colors"
@@ -292,15 +289,15 @@ export function HeroSection() {
             </motion.div>
           </div>
 
-          {/* Hero Image with 3D Tilt — moved higher with negative margin */}
+          {/* Hero Image — centered, moved higher */}
           <motion.div
             initial="hidden"
             animate="visible"
             variants={iv}
-            className="order-1 lg:order-2 lg:-mt-10 xl:-mt-16"
+            className="order-1 lg:order-2 flex justify-center lg:-mt-8 xl:-mt-14"
           >
             <TiltCard tiltAmount={5}>
-              <div className="relative">
+              <div className="relative w-full max-w-[560px]">
                 {/* Decorative shape with morph animation */}
                 <div className="absolute -inset-4 bg-gradient-to-br from-green-200/40 to-amber-200/30 rounded-3xl rotate-3 animate-morph" />
                 <div className="relative overflow-hidden rounded-2xl shadow-2xl shadow-green-900/10 ring-1 ring-black/5">
