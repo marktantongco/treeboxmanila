@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { MobileCTA } from "@/components/MobileCTA";
 import { LocalBusinessSchema } from "@/components/LocalBusinessSchema";
+import { FAQSchema } from "@/components/FAQSchema";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -95,6 +96,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
         <LocalBusinessSchema />
+        <FAQSchema />
         <div className="min-h-screen flex flex-col">
           <Header />
           <main className="flex-1">{children}</main>

@@ -3,6 +3,9 @@
 import { HeroSection } from "@/components/HeroSection";
 import { ServicesGrid } from "@/components/ServicesGrid";
 import { WhyChooseUs } from "@/components/WhyChooseUs";
+import { ProcessSection } from "@/components/ProcessSection";
+import { Testimonials } from "@/components/Testimonials";
+import { FAQ } from "@/components/FAQ";
 import { ScrollReveal } from "@/components/animations";
 import Link from "next/link";
 import { Phone, ArrowRight, Sparkles } from "lucide-react";
@@ -13,8 +16,16 @@ export function HomePageContent() {
   return (
     <>
       <HeroSection />
+
       <ServicesGrid />
+
       <WhyChooseUs />
+
+      <ProcessSection />
+
+      <Testimonials />
+
+      <FAQ />
 
       {/* CTA Section */}
       <section className="relative py-20 lg:py-28 gradient-cta overflow-hidden">

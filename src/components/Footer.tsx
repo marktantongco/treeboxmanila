@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
-import { Phone, Mail, MapPin, Clock, Instagram, Youtube, ArrowUpRight } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Instagram, Youtube, ArrowUpRight, Heart } from "lucide-react";
+import { motion } from "framer-motion";
 
 const quickLinks = [
   { href: "/", label: "Home" },
@@ -9,12 +12,25 @@ const quickLinks = [
 ];
 
 const serviceLinks = [
-  { href: "/services", label: "Custom Boxes" },
-  { href: "/services", label: "Paper Bags" },
-  { href: "/services", label: "Calendars" },
-  { href: "/services", label: "Posters & Flyers" },
-  { href: "/services", label: "Brochures" },
-  { href: "/services", label: "Stickers & Labels" },
+  { href: "/services#custom-boxes", label: "Custom Boxes" },
+  { href: "/services#paper-bags", label: "Paper Bags" },
+  { href: "/services#calendars", label: "Calendars" },
+  { href: "/services#flyers-brochures", label: "Posters & Flyers" },
+  { href: "/services#menus-stationery", label: "Brochures" },
+  { href: "/services#stickers-labels", label: "Stickers & Labels" },
+];
+
+const socialLinks = [
+  {
+    href: "https://www.instagram.com/treeboxmanila",
+    label: "Instagram",
+    Icon: Instagram,
+  },
+  {
+    href: "https://www.youtube.com/@treeboxmanila",
+    label: "YouTube",
+    Icon: Youtube,
+  },
 ];
 
 export function Footer() {
@@ -45,25 +61,25 @@ export function Footer() {
                 Treebox Manila Co.
               </h3>
               <p className="text-green-100/80 text-sm leading-relaxed mb-5">
-                Your trusted offset lithography printing service since 1997. We
-                pride ourselves in our commitment to excellence, efficiency, and
-                client relationships built through years of outstanding service.
+                Your trusted offset lithography printing service since 1997.
+                Formerly MWC Enterprises, we pride ourselves in our commitment
+                to excellence, efficiency, and client relationships built through
+                decades of outstanding service.
               </p>
               <div className="flex gap-3">
-                {[
-                  { href: "https://www.instagram.com/treeboxmanila", label: "Instagram", Icon: Instagram },
-                  { href: "https://www.youtube.com/@treeboxmanila", label: "YouTube", Icon: Youtube },
-                ].map(({ href, label, Icon }) => (
-                  <a
+                {socialLinks.map(({ href, label, Icon }) => (
+                  <motion.a
                     key={label}
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Follow us on ${label}`}
-                    className="group inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 transition-all duration-300 hover:scale-110"
+                    whileHover={{ scale: 1.15, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 transition-all duration-300 hover:shadow-lg"
                   >
-                    <Icon className="h-4 w-4 group-hover:scale-110 transition-transform" />
-                  </a>
+                    <Icon className="h-4 w-4" />
+                  </motion.a>
                 ))}
               </div>
             </div>
@@ -79,7 +95,7 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="group text-green-100/80 hover:text-white text-sm transition-colors flex items-center gap-1"
+                      className="group text-green-100/80 hover:text-white text-sm transition-colors flex items-center gap-1.5"
                     >
                       <ArrowUpRight className="h-3 w-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                       {link.label}
@@ -100,7 +116,7 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="group text-green-100/80 hover:text-white text-sm transition-colors flex items-center gap-1"
+                      className="group text-green-100/80 hover:text-white text-sm transition-colors flex items-center gap-1.5"
                     >
                       <ArrowUpRight className="h-3 w-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                       {link.label}
@@ -118,28 +134,38 @@ export function Footer() {
               </h3>
               <ul className="space-y-3.5">
                 <li className="flex items-start gap-3 group">
-                  <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white/20 transition-colors">
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white/20 transition-colors"
+                  >
                     <MapPin className="h-3.5 w-3.5 text-green-300" />
-                  </div>
+                  </motion.div>
                   <span className="text-green-100/80 text-sm pt-1">
                     Quezon City, Metro Manila, Philippines
                   </span>
                 </li>
                 <li className="flex items-center gap-3 group">
-                  <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-[var(--color-brand-amber)] transition-all duration-300">
+                  <motion.a
+                    href="tel:+63281234567"
+                    whileHover={{ scale: 1.1 }}
+                    className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-[var(--color-brand-amber)] transition-all duration-300"
+                  >
                     <Phone className="h-3.5 w-3.5 text-green-300 group-hover:text-white transition-colors" />
-                  </div>
+                  </motion.a>
                   <a
                     href="tel:+63281234567"
-                    className="text-green-100/80 hover:text-white text-sm transition-colors"
+                    className="text-green-100/80 hover:text-white text-sm transition-colors font-medium"
                   >
                     +63 2 8123 4567
                   </a>
                 </li>
                 <li className="flex items-center gap-3 group">
-                  <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white/20 transition-colors">
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white/20 transition-colors"
+                  >
                     <Mail className="h-3.5 w-3.5 text-green-300" />
-                  </div>
+                  </motion.div>
                   <a
                     href="mailto:treeboxmanila@gmail.com"
                     className="text-green-100/80 hover:text-white text-sm transition-colors"
@@ -148,9 +174,12 @@ export function Footer() {
                   </a>
                 </li>
                 <li className="flex items-start gap-3 group">
-                  <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white/20 transition-colors">
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white/20 transition-colors"
+                  >
                     <Clock className="h-3.5 w-3.5 text-green-300" />
-                  </div>
+                  </motion.div>
                   <div className="text-green-100/80 text-sm pt-0.5">
                     <p>Mon–Sat: 8:00 AM – 5:00 PM</p>
                     <p>Sunday: Closed</p>
@@ -169,6 +198,10 @@ export function Footer() {
               <span>Established 1997</span>
               <span className="w-1 h-1 rounded-full bg-white/30" />
               <span>Formerly MWC Enterprises</span>
+              <span className="w-1 h-1 rounded-full bg-white/30" />
+              <span className="flex items-center gap-1">
+                Made with <Heart className="h-3 w-3 text-red-400 fill-red-400" /> in Quezon City
+              </span>
             </p>
           </div>
         </div>

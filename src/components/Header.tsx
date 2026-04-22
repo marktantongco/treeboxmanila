@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { Phone, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +14,7 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { motion, AnimatePresence } from "framer-motion";
+import { MagneticButton } from "@/components/animations";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -24,6 +26,7 @@ const navLinks = [
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,6 +35,16 @@ export function Header() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Close mobile nav on route change
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
+  };
 
   return (
     <motion.header
@@ -46,7 +59,7 @@ export function Header() {
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
+        <Link href="/" className="flex items-center gap-2.5 group" aria-label="Treebox Manila Home">
           <motion.div
             whileHover={{ rotate: 5, scale: 1.05 }}
             transition={{ type: "spring", stiffness: 300 }}
@@ -59,9 +72,14 @@ export function Header() {
               className="rounded-lg"
             />
           </motion.div>
-          <span className="text-lg font-bold text-[var(--color-brand-green)] group-hover:text-[var(--color-brand-green-light)] transition-colors">
-            Treebox Manila
-          </span>
+          <div className="flex flex-col">
+            <span className="text-lg font-bold text-[var(--color-brand-green)] group-hover:text-[var(--color-brand-green-light)] transition-colors leading-tight">
+              Treebox Manila
+            </span>
+            <span className="text-[10px] font-medium text-gray-400 uppercase tracking-widest leading-tight hidden sm:block">
+              Since 1997
+            </span>
+          </div>
         </Link>
 
         {/* Desktop Nav */}
@@ -75,10 +93,21 @@ export function Header() {
             >
               <Link
                 href={link.href}
-                className="relative px-3 py-2 text-sm font-medium text-gray-700 hover:text-[var(--color-brand-green)] rounded-md transition-colors group"
+                className={`relative px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${
+                  isActive(link.href)
+                    ? "text-[var(--color-brand-green)] bg-green-50"
+                    : "text-gray-600 hover:text-[var(--color-brand-green)] hover:bg-green-50/50"
+                }`}
               >
                 {link.label}
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[var(--color-brand-green)] rounded-full transition-all duration-300 group-hover:w-3/4" />
+                {/* Active indicator */}
+                {isActive(link.href) && (
+                  <motion.div
+                    layoutId="activeNav"
+                    className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-[var(--color-brand-green)] rounded-full"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
               </Link>
             </motion.div>
           ))}
@@ -91,23 +120,23 @@ export function Header() {
           transition={{ delay: 0.5 }}
           className="hidden md:flex items-center gap-3"
         >
-          <Button
-            asChild
-            className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300 relative overflow-hidden group"
-          >
-            <a href="tel:+63281234567" aria-label="Call to get a quote">
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-              <Phone className="mr-2 h-4 w-4 group-hover:animate-pulse" />
-              Call to Get a Quote
-            </a>
-          </Button>
+          <MagneticButton strength={0.15}>
+            <Button
+              asChild
+              className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300 relative overflow-hidden group"
+            >
+              <a href="tel:+63281234567" aria-label="Call to get a quote">
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                <Phone className="mr-2 h-4 w-4 group-hover:animate-pulse" />
+                Get a Quote
+              </a>
+            </Button>
+          </MagneticButton>
         </motion.div>
 
         {/* Mobile Menu */}
         <div className="flex items-center gap-2 md:hidden">
-          <motion.div
-            whileTap={{ scale: 0.9 }}
-          >
+          <motion.div whileTap={{ scale: 0.9 }}>
             <Button
               asChild
               size="sm"
@@ -150,9 +179,19 @@ export function Header() {
                         <Link
                           href={link.href}
                           onClick={() => setOpen(false)}
-                          className="flex items-center gap-3 px-4 py-3.5 text-base font-medium text-gray-700 hover:text-[var(--color-brand-green)] hover:bg-green-50 rounded-lg transition-colors"
+                          className={`flex items-center gap-3 px-4 py-3.5 text-base font-medium rounded-lg transition-colors ${
+                            isActive(link.href)
+                              ? "text-[var(--color-brand-green)] bg-green-50"
+                              : "text-gray-700 hover:text-[var(--color-brand-green)] hover:bg-green-50"
+                          }`}
                         >
-                          <div className="w-1.5 h-1.5 rounded-full bg-[var(--color-brand-amber)]" />
+                          <div
+                            className={`w-1.5 h-1.5 rounded-full ${
+                              isActive(link.href)
+                                ? "bg-[var(--color-brand-green)]"
+                                : "bg-[var(--color-brand-amber)]"
+                            }`}
+                          />
                           {link.label}
                         </Link>
                       </motion.div>
@@ -169,6 +208,9 @@ export function Header() {
                       Call to Get a Quote
                     </a>
                   </Button>
+                  <p className="text-xs text-gray-400 text-center mt-3">
+                    Mon–Sat: 8AM – 5PM
+                  </p>
                 </div>
               </div>
             </SheetContent>

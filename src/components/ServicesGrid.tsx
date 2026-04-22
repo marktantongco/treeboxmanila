@@ -12,10 +12,11 @@ const services = [
   {
     title: "Custom Boxes",
     description:
-      "Premium custom-printed boxes for every need — shoe boxes, pizza boxes, cake boxes, gift boxes, food boxes, and corrugated shipping boxes.",
+      "Premium custom-printed boxes for every need — shoe boxes, pizza boxes, cake boxes, gift boxes, food boxes, and corrugated shipping boxes with vibrant full-color printing.",
     image: "/images/products/boxes.png",
     alt: "Custom printed boxes including shoe boxes, pizza boxes, and cake boxes by Treebox Manila",
     items: ["Shoe Box", "Pizza Box", "Cake Box", "Gift Box", "Food Box", "Corrugated Box"],
+    slug: "custom-boxes",
   },
   {
     title: "Paper Bags",
@@ -24,6 +25,7 @@ const services = [
     image: "/images/products/paper-bags.png",
     alt: "Custom printed paper shopping bags with brand logos by Treebox Manila",
     items: ["Shopping Bags", "Kraft Paper Bags", "Luxury Bags", "Branded Bags"],
+    slug: "paper-bags",
   },
   {
     title: "Calendars",
@@ -32,22 +34,25 @@ const services = [
     image: "/images/products/calendars.png",
     alt: "Custom printed wall calendars and desk calendars by Treebox Manila",
     items: ["Wall Calendars", "Desk Calendars", "Company Calendars"],
+    slug: "calendars",
   },
   {
     title: "Flyers & Brochures",
     description:
-      "Eye-catching marketing materials — from real estate flyers and medical flyers to travel brochures and tri-fold brochures that drive results.",
+      "Eye-catching marketing materials — from real estate flyers and medical flyers to travel brochures and tri-fold brochures that drive results for your business.",
     image: "/images/products/flyers-brochures.png",
     alt: "Custom printed flyers, brochures, and marketing materials by Treebox Manila",
     items: ["Real Estate Flyers", "Medical Flyers", "Travel Brochures", "Tri-Fold Brochures"],
+    slug: "flyers-brochures",
   },
   {
     title: "Menus & Stationery",
     description:
-      "Complete stationery suite including restaurant menus, corporate letterheads, and envelopes — all printed with professional quality.",
+      "Complete stationery suite including restaurant menus, corporate letterheads, and envelopes — all printed with professional quality and precision.",
     image: "/images/products/menus-stationery.png",
     alt: "Custom printed restaurant menus, letterheads, and envelopes by Treebox Manila",
     items: ["Restaurant Menus", "Letterheads", "Envelopes"],
+    slug: "menus-stationery",
   },
   {
     title: "Stickers & Labels",
@@ -56,6 +61,7 @@ const services = [
     image: "/images/products/stickers-labels.png",
     alt: "Custom printed stickers and product labels by Treebox Manila",
     items: ["Product Labels", "Brand Stickers", "Packaging Labels"],
+    slug: "stickers-labels",
   },
 ];
 
@@ -63,7 +69,7 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
   return (
     <motion.div variants={fadeInUp}>
       <HoverLiftCard className="h-full">
-        <Card className="h-full overflow-hidden border border-gray-100 bg-white hover:border-[var(--color-brand-green)]/20 transition-colors duration-300">
+        <Card className="h-full overflow-hidden border border-gray-100 bg-white hover:border-[var(--color-brand-green)]/20 transition-all duration-500 group">
           <div className="relative overflow-hidden aspect-[4/3]">
             <Image
               src={service.image}
@@ -72,32 +78,38 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
               className="object-cover transition-transform duration-700 group-hover:scale-110"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            {/* Hover overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-brand-green)]/80 via-[var(--color-brand-green)]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-5">
+              <Link
+                href={`/services#${service.slug}`}
+                className="text-white text-sm font-semibold flex items-center gap-1.5 hover:gap-2.5 transition-all duration-300"
+              >
+                Learn More
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+            {/* Step number badge */}
             <div className="absolute top-3 right-3">
-              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/90 text-[var(--color-brand-green)] text-xs font-bold shadow-sm">
+              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/90 text-[var(--color-brand-green)] text-xs font-bold shadow-sm backdrop-blur-sm">
                 {String(index + 1).padStart(2, "0")}
               </span>
             </div>
           </div>
           <CardContent className="p-5">
-            <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[var(--color-brand-green)] transition-colors">
+            <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[var(--color-brand-green)] transition-colors duration-300">
               {service.title}
             </h3>
             <p className="text-sm text-gray-500 mb-3 leading-relaxed line-clamp-2">
               {service.description}
             </p>
             <div className="flex flex-wrap gap-1.5">
-              {service.items.map((item, i) => (
-                <motion.span
+              {service.items.map((item) => (
+                <span
                   key={item}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: i * 0.05 }}
-                  viewport={{ once: true }}
                   className="inline-block text-xs px-2.5 py-1 bg-green-50 text-[var(--color-brand-green)] rounded-full font-medium"
                 >
                   {item}
-                </motion.span>
+                </span>
               ))}
             </div>
           </CardContent>

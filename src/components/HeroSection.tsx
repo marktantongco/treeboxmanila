@@ -1,10 +1,24 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Phone, ArrowRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  MagneticButton,
+  FloatingElement,
+} from "@/components/animations";
+
+const rotatingWords = [
+  "Custom Boxes",
+  "Paper Bags",
+  "Calendars",
+  "Flyers & Brochures",
+  "Stickers & Labels",
+  "Menus & Stationery",
+];
 
 const textVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -25,14 +39,53 @@ const imageVariants = {
   },
 };
 
+function RotatingText({ words }: { words: string[] }) {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % words.length);
+    }, 2500);
+    return () => clearInterval(timer);
+  }, [words.length]);
+
+  return (
+    <span className="inline-block relative h-[1.2em] overflow-hidden align-bottom w-[250px] sm:w-[300px] lg:w-[360px]">
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={words[index]}
+          initial={{ y: "100%", opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: "-100%", opacity: 0 }}
+          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          className="absolute left-0 text-gradient-amber"
+        >
+          {words[index]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+}
+
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden gradient-hero">
+    <section className="relative overflow-hidden gradient-mesh">
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-[var(--color-brand-green)]/5 rounded-full blur-3xl" />
         <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-[var(--color-brand-amber)]/5 rounded-full blur-3xl" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-green-100/30 rounded-full blur-[100px]" />
+
+        {/* Floating decorative shapes */}
+        <FloatingElement className="absolute top-[15%] right-[10%]" amplitude={12} duration={4} delay={0}>
+          <div className="w-16 h-16 rounded-xl border border-[var(--color-brand-green)]/10 bg-[var(--color-brand-green)]/5 rotate-12" />
+        </FloatingElement>
+        <FloatingElement className="absolute bottom-[20%] left-[5%]" amplitude={8} duration={5} delay={1}>
+          <div className="w-10 h-10 rounded-full border border-[var(--color-brand-amber)]/10 bg-[var(--color-brand-amber)]/5" />
+        </FloatingElement>
+        <FloatingElement className="absolute top-[40%] left-[8%]" amplitude={6} duration={3.5} delay={0.5}>
+          <div className="w-6 h-6 rounded-md bg-[var(--color-brand-green)]/10 rotate-45" />
+        </FloatingElement>
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 lg:py-28">
@@ -58,8 +111,10 @@ export function HeroSection() {
               variants={textVariants}
               className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-[1.1] mb-6"
             >
-              Quality Printing{" "}
-              <span className="text-gradient-green">Services</span> in Metro Manila
+              Premium{" "}
+              <RotatingText words={rotatingWords} />
+              <br />
+              <span className="text-gradient-green">Printing Services</span> in Metro Manila
             </motion.h1>
 
             <motion.p
@@ -82,17 +137,19 @@ export function HeroSection() {
               variants={textVariants}
               className="flex flex-wrap gap-4"
             >
-              <Button
-                asChild
-                size="lg"
-                className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-semibold shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/30 transition-all duration-300 text-base group relative overflow-hidden"
-              >
-                <a href="tel:+63281234567">
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                  <Phone className="mr-2 h-4 w-4" />
-                  Get a Quote
-                </a>
-              </Button>
+              <MagneticButton strength={0.15}>
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-semibold shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/30 transition-all duration-300 text-base group relative overflow-hidden"
+                >
+                  <a href="tel:+63281234567">
+                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                    <Phone className="mr-2 h-4 w-4" />
+                    Get a Quote
+                  </a>
+                </Button>
+              </MagneticButton>
               <Button
                 asChild
                 variant="outline"
@@ -127,6 +184,13 @@ export function HeroSection() {
                 </div>
                 <span>Direct Supplier</span>
               </div>
+              <div className="w-px h-6 bg-gray-300 hidden sm:block" />
+              <div className="hidden sm:flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                  <span className="text-[var(--color-brand-green)] font-bold text-xs">50+</span>
+                </div>
+                <span>Products</span>
+              </div>
             </motion.div>
           </div>
 
@@ -153,7 +217,7 @@ export function HeroSection() {
                 {/* Overlay gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent" />
               </div>
-              {/* Floating badge */}
+              {/* Floating badge — Call Now */}
               <motion.div
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -166,6 +230,23 @@ export function HeroSection() {
                 <div>
                   <p className="text-xs text-gray-500">Call Now</p>
                   <p className="text-sm font-bold text-gray-900">+63 2 8123 4567</p>
+                </div>
+              </motion.div>
+              {/* Floating badge — Since 1997 */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1.5, type: "spring" }}
+                className="absolute -top-4 -right-4 sm:top-4 sm:right-4 bg-white rounded-xl shadow-lg p-3 ring-1 ring-black/5"
+              >
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg gradient-amber flex items-center justify-center text-white text-xs font-bold">
+                    25+
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-gray-900">Since 1997</p>
+                    <p className="text-[10px] text-gray-400">MWC Enterprises</p>
+                  </div>
                 </div>
               </motion.div>
             </div>
