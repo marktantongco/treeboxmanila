@@ -111,33 +111,26 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
       transition={{
-        duration: isMobile ? 0.45 : 0.6,
-        delay: isMobile ? index * 0.05 : index * 0.08,
-        ease: [0.25, 0.1, 0.25, 1],
+        duration: isMobile ? 0.5 : 0.7,
+        delay: isMobile ? index * 0.06 : index * 0.1,
+        ease: [0.16, 1, 0.3, 1],
       }}
       style={{ perspective: 1200, willChange: "transform, opacity" }}
     >
       <GlowCard className="h-full" glowColor="var(--color-brand-green)">
         <Card className="h-full overflow-hidden border border-gray-100 bg-white hover:border-[var(--color-brand-green)]/20 transition-all duration-500 group">
-          {/* Image - directly visible, no ImageReveal wrapper that can hide images */}
+          {/* Image - directly visible with simple opacity fade */}
           <div className="relative overflow-hidden aspect-[4/3] bg-gray-100">
-            <motion.div
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.05 }}
-              transition={{ duration: 0.6, delay: 0.15 + index * 0.05, ease: [0.25, 0.1, 0.25, 1] }}
-              className="w-full h-full"
-            >
-              <Image
-                src={service.image}
-                alt={service.alt}
-                fill
-                className="object-cover transition-transform duration-700 group-hover:scale-110"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                onLoad={() => setImgLoaded(true)}
-                onError={() => setImgError(true)}
-              />
-            </motion.div>
-            {/* Fallback placeholder while image loads or on error */}
+            <Image
+              src={service.image}
+              alt={service.alt}
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-110"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              onLoad={() => setImgLoaded(true)}
+              onError={() => setImgError(true)}
+            />
+            {/* Fallback placeholder while image loads */}
             {!imgLoaded && !imgError && (
               <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-amber-50 animate-pulse flex items-center justify-center">
                 <div className="w-12 h-12 rounded-xl bg-white/60 flex items-center justify-center">
@@ -199,10 +192,10 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
               {service.items.map((item, i) => (
                 <motion.span
                   key={item}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-                  transition={{ delay: 0.3 + i * 0.04, duration: 0.3 }}
-                  whileHover={{ scale: 1.08, y: -2 }}
+                  initial={{ opacity: 0, scale: 0.7, y: 10 }}
+                  animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.7, y: 10 }}
+                  transition={{ delay: 0.4 + i * 0.05, duration: 0.4, type: "spring", stiffness: 200, damping: 15 }}
+                  whileHover={{ scale: 1.12, y: -3, backgroundColor: "var(--color-brand-green)", color: "#fff" }}
                   className="inline-block text-xs px-2.5 py-1 bg-green-50 text-[var(--color-brand-green)] rounded-full font-medium cursor-default hover:bg-green-100 transition-colors"
                 >
                   {item}
@@ -223,9 +216,9 @@ function CustomCTACard() {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 40, scale: 0.97 }}
-      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-      transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+      initial={{ opacity: 0, y: 50, scale: 0.95, filter: "blur(6px)" }}
+      animate={isInView ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" } : {}}
+      transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
       style={{ willChange: "transform, opacity" }}
     >
       <GlowCard className="h-full" glowColor="var(--color-brand-amber)">

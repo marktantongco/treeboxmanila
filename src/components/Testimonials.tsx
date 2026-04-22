@@ -129,19 +129,22 @@ export function Testimonials() {
 
   const variants = {
     enter: (dir: number) => ({
-      x: dir > 0 ? 200 : -200,
+      x: dir > 0 ? 300 : -300,
       opacity: 0,
-      filter: "blur(4px)",
+      filter: "blur(8px)",
+      scale: 0.95,
     }),
     center: {
       x: 0,
       opacity: 1,
       filter: "blur(0px)",
+      scale: 1,
     },
     exit: (dir: number) => ({
-      x: dir > 0 ? -200 : 200,
+      x: dir > 0 ? -300 : 300,
       opacity: 0,
-      filter: "blur(4px)",
+      filter: "blur(8px)",
+      scale: 0.95,
     }),
   };
 

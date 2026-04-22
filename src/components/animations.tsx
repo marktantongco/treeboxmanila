@@ -15,43 +15,43 @@ import {
 /* ──────────────── Reusable Animation Presets ──────────────── */
 
 export const fadeInUp: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0 },
+  hidden: { opacity: 0, y: 40, filter: "blur(4px)" },
+  visible: { opacity: 1, y: 0, filter: "blur(0px)" },
 };
 
 export const fadeInDown: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, y: -30 },
-  visible: { opacity: 1, y: 0 },
+  hidden: { opacity: 0, y: -40, filter: "blur(4px)" },
+  visible: { opacity: 1, y: 0, filter: "blur(0px)" },
 };
 
 export const fadeInLeft: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, x: -30 },
-  visible: { opacity: 1, x: 0 },
+  hidden: { opacity: 0, x: -40, filter: "blur(3px)" },
+  visible: { opacity: 1, x: 0, filter: "blur(0px)" },
 };
 
 export const fadeInRight: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, x: 30 },
-  visible: { opacity: 1, x: 0 },
+  hidden: { opacity: 0, x: 40, filter: "blur(3px)" },
+  visible: { opacity: 1, x: 0, filter: "blur(0px)" },
 };
 
 export const scaleIn: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, scale: 0.9 },
-  visible: { opacity: 1, scale: 1 },
+  hidden: { opacity: 0, scale: 0.85, filter: "blur(6px)" },
+  visible: { opacity: 1, scale: 1, filter: "blur(0px)" },
 };
 
 export const rotateIn: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, rotate: -5, scale: 0.95 },
-  visible: { opacity: 1, rotate: 0, scale: 1 },
+  hidden: { opacity: 0, rotate: -8, scale: 0.9, filter: "blur(4px)" },
+  visible: { opacity: 1, rotate: 0, scale: 1, filter: "blur(0px)" },
 };
 
 export const blurIn: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, filter: "blur(8px)" },
+  hidden: { opacity: 0, filter: "blur(12px)" },
   visible: { opacity: 1, filter: "blur(0px)" },
 };
 
 export const slideInFromBottom: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, y: 60 },
-  visible: { opacity: 1, y: 0 },
+  hidden: { opacity: 0, y: 60, filter: "blur(6px)" },
+  visible: { opacity: 1, y: 0, filter: "blur(0px)" },
 };
 
 export const staggerContainer = {
@@ -65,7 +65,7 @@ export const staggerContainer = {
 
 export const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 export const EASE_OUT_QUINT = [0.22, 1, 0.36, 1] as const;
-export const EASE_SPRING = { type: "spring" as const, stiffness: 300, damping: 20 };
+export const EASE_SPRING = { type: "spring" as const, stiffness: 200, damping: 20 };
 
 /* ──────────────── ScrollReveal Wrapper ──────────────── */
 
@@ -84,7 +84,7 @@ export function ScrollReveal({
   variants = fadeInUp,
   className = "",
   delay = 0,
-  duration = 0.6,
+  duration = 0.7,
   once = true,
   margin = "-50px",
 }: ScrollRevealProps) {
@@ -104,7 +104,7 @@ export function ScrollReveal({
       initial="hidden"
       animate={controls}
       variants={variants}
-      transition={{ duration, delay, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={{ duration, delay, ease: [0.16, 1, 0.3, 1] }}
       className={className}
       style={{ willChange: "transform, opacity" }}
     >
@@ -622,7 +622,7 @@ export function SlideIn({ children, direction = "up", className = "", delay = 0,
       initial={{ opacity: 0, ...directionMap[direction] }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.7, delay, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={{ duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] }}
       className={className}
     >
       {children}
@@ -774,22 +774,22 @@ export function StaggerText({ lines, className = "", staggerDelay = 0.1 }: Stagg
 /* ──────────────── 3D Card Reveal on Scroll ──────────────── */
 
 export const cardReveal3D: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, y: 40, scale: 0.97 },
-  visible: { opacity: 1, y: 0, scale: 1 },
+  hidden: { opacity: 0, y: 50, scale: 0.95, filter: "blur(4px)" },
+  visible: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" },
 };
 
 export const cardRevealLeft: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, x: -40, scale: 0.97 },
-  visible: { opacity: 1, x: 0, scale: 1 },
+  hidden: { opacity: 0, x: -50, scale: 0.95, filter: "blur(4px)" },
+  visible: { opacity: 1, x: 0, scale: 1, filter: "blur(0px)" },
 };
 
 export const cardRevealRight: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, x: 40, scale: 0.97 },
-  visible: { opacity: 1, x: 0, scale: 1 },
+  hidden: { opacity: 0, x: 50, scale: 0.95, filter: "blur(4px)" },
+  visible: { opacity: 1, x: 0, scale: 1, filter: "blur(0px)" },
 };
 
 export const revealFromBlur: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, filter: "blur(12px)", scale: 0.96 },
+  hidden: { opacity: 0, filter: "blur(16px)", scale: 0.94 },
   visible: { opacity: 1, filter: "blur(0px)", scale: 1 },
 };
 
@@ -859,7 +859,7 @@ export function DirectionalReveal({
       ref={ref}
       initial={{ opacity: 0, ...directionMap[direction] }}
       animate={isInView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, ...directionMap[direction] }}
-      transition={{ duration, delay, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={{ duration, delay, ease: [0.16, 1, 0.3, 1] }}
       className={className}
       style={{ willChange: "transform, opacity" }}
     >
@@ -946,9 +946,9 @@ export function Card3DReveal({
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
       transition={{
-        duration: 0.6,
+        duration: 0.7,
         delay,
-        ease: [0.25, 0.1, 0.25, 1],
+        ease: [0.16, 1, 0.3, 1],
       }}
       className={className}
       style={{ willChange: "transform, opacity" }}
@@ -985,12 +985,12 @@ export function MobileSwipeReveal({
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, ...dirMap[direction], scale: 0.97 }}
+      initial={{ opacity: 0, ...dirMap[direction], scale: 0.95 }}
       animate={isInView ? { opacity: 1, x: 0, y: 0, scale: 1 } : {}}
       transition={{
-        duration: 0.5,
+        duration: 0.6,
         delay,
-        ease: [0.25, 0.1, 0.25, 1],
+        ease: [0.16, 1, 0.3, 1],
       }}
       className={className}
     >
@@ -1115,23 +1115,23 @@ export function ImageReveal({ children, className = "", delay = 0, direction = "
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-40px" });
 
-  /* Use simple opacity + transform instead of clip-path to avoid:
+  /* Simple opacity + scale reveal — no clip-path to avoid:
      1. Images permanently hidden when useInView doesn't fire
      2. Jitter from clip-path + scale combo
      3. Poor mobile performance with clip-path animations */
   const directionOffset = {
-    up: { y: 20, x: 0 },
-    down: { y: -20, x: 0 },
-    left: { x: 20, y: 0 },
-    right: { x: -20, y: 0 },
+    up: { y: 25, x: 0 },
+    down: { y: -25, x: 0 },
+    left: { x: 25, y: 0 },
+    right: { x: -25, y: 0 },
   };
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, ...directionOffset[direction], scale: 1.03 }}
-      animate={isInView ? { opacity: 1, x: 0, y: 0, scale: 1 } : { opacity: 0, ...directionOffset[direction], scale: 1.03 }}
-      transition={{ duration: 0.6, delay, ease: [0.25, 0.1, 0.25, 1] }}
+      initial={{ opacity: 0, ...directionOffset[direction], scale: 1.04, filter: "blur(4px)" }}
+      animate={isInView ? { opacity: 1, x: 0, y: 0, scale: 1, filter: "blur(0px)" } : { opacity: 0, ...directionOffset[direction], scale: 1.04, filter: "blur(4px)" }}
+      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
       className={className}
       style={{ willChange: "transform, opacity" }}
     >

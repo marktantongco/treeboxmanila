@@ -56,9 +56,9 @@ function FAQItem({ faq, index, isOpen, onToggle }: { faq: typeof faqs[0]; index:
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 20, scale: 0.98 }}
-      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-      transition={{ duration: 0.4, delay: index * 0.05, ease: [0.25, 0.1, 0.25, 1] }}
+      initial={{ opacity: 0, y: 25, scale: 0.97, filter: "blur(3px)" }}
+      animate={isInView ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" } : {}}
+      transition={{ duration: 0.5, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
     >
       <div className={`bg-white rounded-xl border shadow-sm overflow-hidden transition-all duration-300 hover-lift touch-feedback ${
         isOpen ? 'border-[var(--color-brand-green)]/20 shadow-md' : 'border-gray-100 hover:border-[var(--color-brand-green)]/20'

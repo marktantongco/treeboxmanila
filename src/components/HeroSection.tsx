@@ -23,40 +23,43 @@ const rotatingWords = [
 ];
 
 const textVariants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 40, filter: "blur(4px)" },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: 0.2 + i * 0.12, duration: 0.7, ease: [0.25, 0.1, 0.25, 1] },
+    filter: "blur(0px)",
+    transition: { delay: 0.15 + i * 0.12, duration: 0.8, ease: [0.16, 1, 0.3, 1] },
   }),
 };
 
 const mobileTextVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 25, filter: "blur(2px)" },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: 0.1 + i * 0.08, duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
+    filter: "blur(0px)",
+    transition: { delay: 0.1 + i * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] },
   }),
 };
 
 const imageVariants = {
-  hidden: { opacity: 0, scale: 0.95, x: 30 },
+  hidden: { opacity: 0, scale: 0.92, x: 50, rotateY: -8 },
   visible: {
     opacity: 1,
     scale: 1,
     x: 0,
-    transition: { delay: 0.4, duration: 0.8, ease: [0.25, 0.1, 0.25, 1] },
+    rotateY: 0,
+    transition: { delay: 0.5, duration: 1, ease: [0.16, 1, 0.3, 1] },
   },
 };
 
 const mobileImageVariants = {
-  hidden: { opacity: 0, scale: 0.97, y: 15 },
+  hidden: { opacity: 0, scale: 0.97, y: 20 },
   visible: {
     opacity: 1,
     scale: 1,
     y: 0,
-    transition: { delay: 0.2, duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
+    transition: { delay: 0.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] },
   },
 };
 
@@ -81,10 +84,10 @@ function RotatingText({ words }: { words: string[] }) {
       <AnimatePresence mode="wait">
         <motion.span
           key={words[index]}
-          initial={{ y: "100%", opacity: 0, filter: "blur(4px)" }}
-          animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-          exit={{ y: "-100%", opacity: 0, filter: "blur(4px)" }}
-          transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+          initial={{ y: "100%", opacity: 0, filter: "blur(8px)", scale: 0.9 }}
+          animate={{ y: 0, opacity: 1, filter: "blur(0px)", scale: 1 }}
+          exit={{ y: "-100%", opacity: 0, filter: "blur(8px)", scale: 0.9 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="absolute left-0 text-gradient-amber"
         >
           {words[index]}
@@ -289,15 +292,15 @@ export function HeroSection() {
             </motion.div>
           </div>
 
-          {/* Hero Image — centered, moved higher */}
+          {/* Hero Image — responsive, fills available space */}
           <motion.div
             initial="hidden"
             animate="visible"
             variants={iv}
-            className="order-1 lg:order-2 flex justify-center lg:-mt-8 xl:-mt-14"
+            className="order-1 lg:order-2 flex justify-center items-center"
           >
             <TiltCard tiltAmount={5}>
-              <div className="relative w-full max-w-[560px]">
+              <div className="relative w-full">
                 {/* Decorative shape with morph animation */}
                 <div className="absolute -inset-4 bg-gradient-to-br from-green-200/40 to-amber-200/30 rounded-3xl rotate-3 animate-morph" />
                 <div className="relative overflow-hidden rounded-2xl shadow-2xl shadow-green-900/10 ring-1 ring-black/5">
@@ -315,10 +318,11 @@ export function HeroSection() {
                 </div>
                 {/* Floating badge — Call Now with shadow pulse — positioned inside bounds */}
                 <motion.div
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1.2, type: "spring" }}
-                  className="absolute bottom-3 left-3 sm:bottom-6 sm:left-6 bg-white rounded-xl shadow-lg p-3 flex items-center gap-2 ring-1 ring-black/5 animate-shadow-pulse"
+                  initial={{ opacity: 0, scale: 0, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ delay: 1.2, type: "spring", stiffness: 200, damping: 15 }}
+                  whileHover={{ scale: 1.08, y: -2 }}
+                  className="absolute bottom-3 left-3 sm:bottom-6 sm:left-6 bg-white rounded-xl shadow-lg p-3 flex items-center gap-2 ring-1 ring-black/5 animate-shadow-pulse cursor-pointer"
                 >
                   <div className="w-10 h-10 rounded-lg gradient-green flex items-center justify-center text-white">
                     <Phone className="h-5 w-5" />
@@ -330,10 +334,11 @@ export function HeroSection() {
                 </motion.div>
                 {/* Floating badge — Since 1997 — positioned inside bounds */}
                 <motion.div
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1.5, type: "spring" }}
-                  className="absolute top-3 right-3 sm:top-6 sm:right-6 bg-white rounded-xl shadow-lg p-3 ring-1 ring-black/5"
+                  initial={{ opacity: 0, scale: 0, y: -20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ delay: 1.5, type: "spring", stiffness: 200, damping: 15 }}
+                  whileHover={{ scale: 1.08, y: -2 }}
+                  className="absolute top-3 right-3 sm:top-6 sm:right-6 bg-white rounded-xl shadow-lg p-3 ring-1 ring-black/5 cursor-pointer"
                 >
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-lg gradient-amber flex items-center justify-center text-white text-xs font-bold">
@@ -347,9 +352,10 @@ export function HeroSection() {
                 </motion.div>
                 {/* Floating badge — Free Quote — positioned inside bounds */}
                 <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 1.8, type: "spring" }}
+                  initial={{ opacity: 0, x: 30, scale: 0.8 }}
+                  animate={{ opacity: 1, x: 0, scale: 1 }}
+                  transition={{ delay: 1.8, type: "spring", stiffness: 200, damping: 15 }}
+                  whileHover={{ scale: 1.1 }}
                   className="absolute top-1/2 right-3 sm:right-6 -translate-y-1/2 hidden lg:block"
                 >
                   <div className="bg-[var(--color-brand-green)] text-white rounded-xl shadow-lg px-3 py-2 text-xs font-bold animate-pulse-badge">

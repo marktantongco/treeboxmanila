@@ -163,9 +163,9 @@ function MobileStepCard({ step, index, isActive }: { step: typeof steps[0]; inde
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, x: 25, scale: 0.97 }}
-      animate={isInView ? { opacity: 1, x: 0, scale: 1 } : {}}
-      transition={{ duration: 0.4, delay: index * 0.06, ease: [0.25, 0.1, 0.25, 1] }}
+      initial={{ opacity: 0, x: 30, scale: 0.95, filter: "blur(4px)" }}
+      animate={isInView ? { opacity: 1, x: 0, scale: 1, filter: "blur(0px)" } : {}}
+      transition={{ duration: 0.5, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
       data-step={index}
       className="relative"
     >

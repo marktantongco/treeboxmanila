@@ -52,25 +52,25 @@ function StatItem({ stat, index }: { stat: typeof stats[0]; index: number }) {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: isMobile ? 16 : 24, scale: 0.95 }}
-      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+      initial={{ opacity: 0, y: isMobile ? 16 : 30, scale: 0.9, filter: "blur(4px)" }}
+      animate={isInView ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" } : {}}
       transition={{
-        duration: isMobile ? 0.35 : 0.5,
-        delay: index * (isMobile ? 0.06 : 0.1),
-        ease: [0.25, 0.1, 0.25, 1],
+        duration: isMobile ? 0.4 : 0.6,
+        delay: index * (isMobile ? 0.08 : 0.12),
+        ease: [0.16, 1, 0.3, 1],
       }}
       className="text-center group"
     >
       <motion.div
         animate={{ rotate: 360 }}
-        transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
-        whileHover={{ scale: 1.15 }}
-        whileTap={{ scale: 0.95 }}
-        className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white/10 mb-3 group-hover:bg-white/20 transition-colors"
+        transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
+        whileHover={{ scale: 1.2 }}
+        whileTap={{ scale: 0.9, rotate: 180 }}
+        className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white/10 mb-3 group-hover:bg-white/20 transition-colors cursor-pointer"
       >
         <motion.div
           animate={{ rotate: -360 }}
-          transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
+          transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
           style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
         >
           <Icon className="h-6 w-6 text-white" />

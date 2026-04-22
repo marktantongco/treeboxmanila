@@ -83,18 +83,20 @@ function ReasonCard({ reason, index }: { reason: typeof reasons[0]; index: numbe
       ref={ref}
       initial={{
         opacity: 0,
-        y: isMobile ? 20 : 30,
-        scale: 0.97,
+        y: isMobile ? 20 : 40,
+        scale: 0.95,
+        filter: "blur(4px)",
       }}
       animate={isInView ? {
         opacity: 1,
         y: 0,
         scale: 1,
+        filter: "blur(0px)",
       } : {}}
       transition={{
-        duration: isMobile ? 0.4 : 0.5,
-        delay: index * (isMobile ? 0.05 : 0.08),
-        ease: [0.25, 0.1, 0.25, 1],
+        duration: isMobile ? 0.5 : 0.7,
+        delay: index * (isMobile ? 0.06 : 0.1),
+        ease: [0.16, 1, 0.3, 1],
       }}
     >
       <HoverLiftCard className="h-full">
@@ -102,15 +104,21 @@ function ReasonCard({ reason, index }: { reason: typeof reasons[0]; index: numbe
           {/* Icon with continuous slow rotation + speed-up on hover */}
           <motion.div
             animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
-            whileHover={{ scale: 1.15, rotate: 360 }}
-            whileTap={{ scale: 0.95 }}
-            className="relative inline-flex items-center justify-center rounded-xl gradient-green text-white mb-2 shadow-lg shadow-green-900/25 hover-glow"
+            transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.9, rotate: 180 }}
+            className="relative inline-flex items-center justify-center rounded-xl gradient-green text-white mb-2 shadow-lg shadow-green-900/25 hover-glow cursor-pointer"
             style={{ width: "4.5rem", height: "4.5rem" }}
           >
+            {/* Rotating ring decoration */}
             <motion.div
               animate={{ rotate: -360 }}
-              transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
+              transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
+              className="absolute inset-[-4px] rounded-xl border-2 border-dashed border-white/20"
+            />
+            <motion.div
+              animate={{ rotate: -360 }}
+              transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
               style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
             >
               <Icon className="h-9 w-9" />
