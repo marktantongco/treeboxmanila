@@ -160,10 +160,11 @@ export function HeroSection() {
         ))}
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center">
-          {/* Text Content */}
-          <div className="order-2 lg:order-1">
+      <div className="relative py-12 lg:py-20">
+        <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-10 xl:gap-14">
+          {/* Text Content — aligned with site max-w-7xl grid */}
+          <div className="order-2 lg:order-1 w-full px-4 sm:px-6 lg:pl-[max(2rem,calc((100vw-80rem)/2))] lg:pr-6 xl:pr-10">
+            <div className="lg:max-w-lg xl:max-w-xl">
             <motion.div
               custom={0}
               initial="hidden"
@@ -194,7 +195,7 @@ export function HeroSection() {
               initial="hidden"
               animate="visible"
               variants={tv}
-              className="text-lg text-gray-600 leading-relaxed mb-8 max-w-xl"
+              className="text-lg text-gray-600 leading-relaxed mb-8"
             >
               From custom boxes and paper bags to calendars, flyers, and
               brochures — Treebox Manila Co. delivers premium offset
@@ -290,14 +291,15 @@ export function HeroSection() {
                 );
               })}
             </motion.div>
+            </div>{/* end lg:max-w-lg wrapper */}
           </div>
 
-          {/* Hero Image — responsive, fills available space */}
+          {/* Hero Image — stretches to right edge of screen */}
           <motion.div
             initial="hidden"
             animate="visible"
             variants={iv}
-            className="order-1 lg:order-2 flex justify-center items-center"
+            className="order-1 lg:order-2 w-full lg:flex-1 px-4 sm:px-6 lg:pl-0 lg:pr-[max(1.5rem,calc((100vw-80rem)/2))] lg:pt-4 lg:pb-6"
           >
             <TiltCard tiltAmount={5}>
               <div className="relative w-full">
@@ -311,7 +313,7 @@ export function HeroSection() {
                     height={768}
                     priority
                     className="w-full h-auto object-cover"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    sizes="(max-width: 1024px) 100vw, 55vw"
                   />
                   {/* Overlay gradient */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent" />

@@ -53,3 +53,41 @@ Stage Summary:
 - "What We Print" CTA card spans full width, eliminating right-side white space
 - Hero image is centered with max-width constraint
 - All icon sections across the site now have consistent rotation animations
+---
+Task ID: 2
+Agent: Main Agent
+Task: Remove max-w-[560px] hero constraint, make hero image stretch to screen edge, enhance animations across all web components
+
+Work Log:
+- Removed max-w-[560px] constraint from hero image container
+- Restructured hero layout: replaced max-w-7xl grid with flex layout so image can stretch to screen edge
+- Text content uses lg:pl-[max(2rem,calc((100vw-80rem)/2))] to align with site's max-w-7xl grid
+- Image container uses lg:pr-[max(1.5rem,calc((100vw-80rem)/2))] for small right padding near edge
+- Added lg:max-w-lg / xl:max-w-xl wrapper to constrain text content width
+- Enhanced hero animation variants: text now has blur(4px) + y:40, image has rotateY + blur
+- Upgraded rotating text: added scale:0.9 + blur(8px) + expo easing [0.16,1,0.3,1]
+- Enhanced hero floating badges: added spring animation with y offset, whileHover interactions
+- Enhanced all animation presets in animations.tsx:
+  - fadeInUp/Down/Left/Right: added blur filter, increased distance from 30→40
+  - scaleIn: more dramatic 0.85 scale + blur(6px)
+  - rotateIn: increased rotation -8 + blur
+  - cardReveal3D/Left/Right: added blur(4px), increased distance 40→50
+  - revealFromBlur: stronger blur(16px)
+  - ScrollReveal: upgraded default duration 0.6→0.7, eased to expo
+  - All easing curves standardized to [0.16, 1, 0.3, 1] (expo out)
+- Enhanced WhyChooseUs: faster rotation (10s), added rotating dashed ring, whileHover scale:1.2, whileTap scale:0.9+rotate:180, blur reveal
+- Enhanced StatsSection icons: rotation speed 12s, blur reveal, whileTap rotate:180
+- Enhanced ServicesGrid: removed image opacity wrapper (images directly visible), spring tag animations with hover color change, blur reveal for CTA card
+- Enhanced ProcessSection mobile cards: blur reveal animation
+- Enhanced FAQ: blur reveal animation
+- Enhanced Testimonials: larger slide distance 300, blur(8px), scale(0.95) for enter/exit
+- Fixed ServicesGrid images: removed motion.div opacity wrapper that could hide images on slow connections
+- Build verified passing with no errors
+
+Stage Summary:
+- Hero image now stretches to the right edge of the screen with appropriate padding
+- Text content aligns with the rest of the site's max-w-7xl grid
+- All animations upgraded with blur filters, larger distances, expo easing
+- WhyChooseUs icons have faster rotation + dashed ring decoration
+- ServicesGrid images are directly visible without animation wrapper
+- Consistent expo easing [0.16,1,0.3,1] across all animations
