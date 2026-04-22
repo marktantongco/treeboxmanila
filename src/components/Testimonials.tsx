@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ScrollReveal, HoverLiftCard, fadeInUp } from "@/components/animations";
+import { ScrollReveal, HoverLiftCard, fadeInUp, RippleButton } from "@/components/animations";
 
 const testimonials = [
   {
@@ -78,26 +78,36 @@ export function Testimonials() {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
   const [isPaused, setIsPaused] = useState(false);
+  const [progress, setProgress] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const progressRef = useRef<NodeJS.Timeout | null>(null);
+  const AUTO_ADVANCE_DURATION = 6000;
 
   const next = useCallback(() => {
     setDirection(1);
     setCurrent((prev) => (prev + 1) % testimonials.length);
+    setProgress(0);
   }, []);
 
   const prev = useCallback(() => {
     setDirection(-1);
     setCurrent((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    setProgress(0);
   }, []);
 
   useEffect(() => {
     if (isPaused) {
       if (intervalRef.current) clearInterval(intervalRef.current);
+      if (progressRef.current) clearInterval(progressRef.current);
       return;
     }
-    intervalRef.current = setInterval(next, 6000);
+    intervalRef.current = setInterval(next, AUTO_ADVANCE_DURATION);
+    progressRef.current = setInterval(() => {
+      setProgress((p) => Math.min(p + 100 / (AUTO_ADVANCE_DURATION / 50), 100));
+    }, 50);
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
+      if (progressRef.current) clearInterval(progressRef.current);
     };
   }, [next, isPaused]);
 
@@ -207,6 +217,15 @@ export function Testimonials() {
                       </motion.div>
                     </AnimatePresence>
                   </div>
+
+                  {/* Auto-advance progress bar */}
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-200/50">
+                    <motion.div
+                      className="h-full bg-gradient-to-r from-[var(--color-brand-green)] to-[var(--color-brand-amber)]"
+                      style={{ width: `${progress}%` }}
+                      transition={{ duration: 0.05 }}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -231,6 +250,7 @@ export function Testimonials() {
                       onClick={() => {
                         setDirection(i > current ? 1 : -1);
                         setCurrent(i);
+                        setProgress(0);
                       }}
                       aria-label={`Go to testimonial ${i + 1}`}
                       className={`h-2 rounded-full transition-all duration-300 ${
@@ -244,20 +264,22 @@ export function Testimonials() {
 
                 {/* Arrow buttons */}
                 <div className="flex gap-2">
-                  <button
+                  <motion.button
+                    whileTap={{ scale: 0.85 }}
                     onClick={prev}
                     aria-label="Previous testimonial"
-                    className="w-10 h-10 rounded-full border border-gray-200 hover:border-[var(--color-brand-green)] hover:bg-green-50 flex items-center justify-center text-gray-500 hover:text-[var(--color-brand-green)] transition-all duration-300"
+                    className="w-10 h-10 rounded-full border border-gray-200 hover:border-[var(--color-brand-green)] hover:bg-green-50 flex items-center justify-center text-gray-500 hover:text-[var(--color-brand-green)] transition-all duration-300 hover-glow"
                   >
                     <ChevronLeft className="h-5 w-5" />
-                  </button>
-                  <button
+                  </motion.button>
+                  <motion.button
+                    whileTap={{ scale: 0.85 }}
                     onClick={next}
                     aria-label="Next testimonial"
-                    className="w-10 h-10 rounded-full border border-gray-200 hover:border-[var(--color-brand-green)] hover:bg-green-50 flex items-center justify-center text-gray-500 hover:text-[var(--color-brand-green)] transition-all duration-300"
+                    className="w-10 h-10 rounded-full border border-gray-200 hover:border-[var(--color-brand-green)] hover:bg-green-50 flex items-center justify-center text-gray-500 hover:text-[var(--color-brand-green)] transition-all duration-300 hover-glow"
                   >
                     <ChevronRight className="h-5 w-5" />
-                  </button>
+                  </motion.button>
                 </div>
               </div>
             </div>

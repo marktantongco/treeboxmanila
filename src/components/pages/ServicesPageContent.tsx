@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Phone, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ScrollReveal, HoverLiftCard, RevealLine, fadeInLeft, fadeInRight, fadeInUp } from "@/components/animations";
+import { ScrollReveal, HoverLiftCard, RevealLine, fadeInLeft, fadeInRight, fadeInUp, RippleButton, SlideIn, BounceIn } from "@/components/animations";
 import { motion } from "framer-motion";
 
 const allServices = [
@@ -127,7 +127,7 @@ export function ServicesPageContent() {
       {/* Hero Banner */}
       <section className="gradient-hero relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-20 -right-20 w-72 h-72 bg-[var(--color-brand-amber)]/5 rounded-full blur-3xl" />
+          <div className="absolute -top-20 -right-20 w-72 h-72 bg-[var(--color-brand-amber)]/5 rounded-full blur-3xl animate-morph" />
         </div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
           <div className="max-w-3xl">
@@ -164,8 +164,9 @@ export function ServicesPageContent() {
             >
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
                 {/* Image */}
-                <ScrollReveal
-                  variants={index % 2 === 0 ? fadeInLeft : fadeInRight}
+                <SlideIn
+                  direction={index % 2 === 0 ? "left" : "right"}
+                  delay={0.1}
                   className={index % 2 === 1 ? "lg:order-2" : ""}
                 >
                   <HoverLiftCard lift={12}>
@@ -186,11 +187,11 @@ export function ServicesPageContent() {
                       </div>
                     </div>
                   </HoverLiftCard>
-                </ScrollReveal>
+                </SlideIn>
 
                 {/* Content */}
-                <ScrollReveal
-                  variants={index % 2 === 0 ? fadeInRight : fadeInLeft}
+                <SlideIn
+                  direction={index % 2 === 0 ? "right" : "left"}
                   delay={0.15}
                   className={index % 2 === 1 ? "lg:order-1" : ""}
                 >
@@ -233,17 +234,19 @@ export function ServicesPageContent() {
                   </div>
 
                   <div className="mt-6">
-                    <Button
-                      asChild
-                      className="bg-[var(--color-brand-green)] hover:bg-[var(--color-brand-green-light)] text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300 group btn-shine"
-                    >
-                      <Link href="/contact">
-                        Request Quote
-                        <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                      </Link>
-                    </Button>
+                    <RippleButton className="inline-block">
+                      <Button
+                        asChild
+                        className="bg-[var(--color-brand-green)] hover:bg-[var(--color-brand-green-light)] text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300 group btn-shine"
+                      >
+                        <Link href="/contact">
+                          Request Quote
+                          <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                      </Button>
+                    </RippleButton>
                   </div>
-                </ScrollReveal>
+                </SlideIn>
               </div>
             </div>
           ))}
@@ -256,12 +259,12 @@ export function ServicesPageContent() {
           <motion.div
             animate={{ y: [-10, 10, -10] }}
             transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-            className="absolute top-10 left-10 w-20 h-20 border border-white/10 rounded-xl"
+            className="absolute top-10 left-10 w-20 h-20 border border-white/10 rounded-xl animate-morph"
           />
           <motion.div
             animate={{ y: [10, -10, 10] }}
             transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
-            className="absolute bottom-10 right-10 w-16 h-16 border border-white/10 rounded-full"
+            className="absolute bottom-10 right-10 w-16 h-16 border border-white/10 rounded-full animate-morph"
           />
         </div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
@@ -282,7 +285,7 @@ export function ServicesPageContent() {
               <Button
                 asChild
                 size="lg"
-                className="bg-white text-[var(--color-brand-green)] hover:bg-green-50 font-bold shadow-xl shadow-black/20 hover:shadow-2xl transition-all duration-300 text-base group h-14 px-8 btn-shine"
+                className="bg-white text-[var(--color-brand-green)] hover:bg-green-50 font-bold shadow-xl shadow-black/20 hover:shadow-2xl transition-all duration-300 text-base group h-14 px-8 btn-shine hover-glow"
               >
                 <Link href="/contact">
                   Get a Quote Now
@@ -292,7 +295,7 @@ export function ServicesPageContent() {
               <Button
                 asChild
                 size="lg"
-                className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-xl shadow-amber-500/30 hover:shadow-2xl hover:shadow-amber-500/40 transition-all duration-300 text-base group h-14 px-8 btn-shine"
+                className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-xl shadow-amber-500/30 hover:shadow-2xl hover:shadow-amber-500/40 transition-all duration-300 text-base group h-14 px-8 btn-shine hover-glow"
               >
                 <a href="tel:+63281234567">
                   <Phone className="mr-2 h-5 w-5" />

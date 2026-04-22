@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ScrollReveal, AnimatedCounter } from "@/components/animations";
+import { ScrollReveal, CountUp } from "@/components/animations";
 import { Building2, Users, Package, Clock } from "lucide-react";
 
 const stats = [
@@ -69,7 +69,7 @@ export function StatsSection() {
                     <Icon className="h-6 w-6 text-white" />
                   </motion.div>
                   <div className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-none tracking-tight">
-                    <AnimatedCounter target={stat.value} suffix={stat.suffix} duration={2.5} />
+                    <CountUp target={stat.value} suffix={stat.suffix} duration={2} />
                   </div>
                   <p className="text-white font-semibold text-sm sm:text-base mt-2">
                     {stat.label}

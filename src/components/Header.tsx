@@ -123,10 +123,10 @@ export function Header() {
           <MagneticButton strength={0.15}>
             <Button
               asChild
-              className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300 btn-shine"
+              className="group/cta bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300 btn-shine"
             >
               <a href="tel:+63281234567" aria-label="Call to get a quote">
-                <Phone className="mr-2 h-4 w-4 group-hover:animate-pulse" />
+                <Phone className="mr-2 h-4 w-4 group-hover/cta:animate-pulse" />
                 Get a Quote
               </a>
             </Button>

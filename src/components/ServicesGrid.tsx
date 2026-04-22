@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Sparkles, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ScrollReveal, StaggerReveal, HoverLiftCard, fadeInUp } from "@/components/animations";
+import { ScrollReveal, StaggerReveal, GlowCard, fadeInUp, RippleButton } from "@/components/animations";
 
 const services = [
   {
@@ -74,8 +74,8 @@ const services = [
 function ServiceCard({ service, index }: { service: typeof services[0]; index: number }) {
   return (
     <motion.div variants={fadeInUp}>
-      <HoverLiftCard className="h-full">
-        <Card className={`h-full overflow-hidden border border-gray-100 bg-white hover:border-[var(--color-brand-green)]/20 transition-all duration-500 group ${service.popular ? 'popular-badge' : ''}`}>
+      <GlowCard className="h-full" glowColor="var(--color-brand-green)">
+        <Card className="h-full overflow-hidden border border-gray-100 bg-white hover:border-[var(--color-brand-green)]/20 transition-all duration-500 group">
           <div className="relative overflow-hidden aspect-[4/3]">
             <Image
               src={service.image}
@@ -84,6 +84,10 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
               className="object-cover transition-transform duration-700 group-hover:scale-110"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
+            {/* Shimmer overlay on hover */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+            </div>
             {/* Gradient overlay on hover */}
             <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-brand-green)]/80 via-[var(--color-brand-green)]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-5">
               <Link
@@ -124,17 +128,18 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
             </p>
             <div className="flex flex-wrap gap-1.5">
               {service.items.map((item) => (
-                <span
+                <motion.span
                   key={item}
-                  className="inline-block text-xs px-2.5 py-1 bg-green-50 text-[var(--color-brand-green)] rounded-full font-medium"
+                  whileHover={{ scale: 1.08, y: -2 }}
+                  className="inline-block text-xs px-2.5 py-1 bg-green-50 text-[var(--color-brand-green)] rounded-full font-medium cursor-default hover:bg-green-100 transition-colors"
                 >
                   {item}
-                </span>
+                </motion.span>
               ))}
             </div>
           </CardContent>
         </Card>
-      </HoverLiftCard>
+      </GlowCard>
     </motion.div>
   );
 }
@@ -142,7 +147,7 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
 function CustomCTACard() {
   return (
     <motion.div variants={fadeInUp}>
-      <HoverLiftCard className="h-full" lift={12}>
+      <GlowCard className="h-full" glowColor="var(--color-brand-amber)">
         <div className="relative h-full min-h-[380px] rounded-2xl overflow-hidden group">
           {/* Green gradient background */}
           <div className="absolute inset-0 gradient-cta-card" />
@@ -213,7 +218,7 @@ function CustomCTACard() {
             </div>
           </div>
         </div>
-      </HoverLiftCard>
+      </GlowCard>
     </motion.div>
   );
 }

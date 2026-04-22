@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Award, Users, Target, Heart, ArrowRight, Phone } from "lucide-react";
 import { motion } from "framer-motion";
-import { ScrollReveal, StaggerReveal, AnimatedCounter, fadeInUp, fadeInRight, fadeInLeft, HoverLiftCard, ParallaxSection } from "@/components/animations";
+import { ScrollReveal, StaggerReveal, AnimatedCounter, fadeInUp, fadeInRight, fadeInLeft, HoverLiftCard, ParallaxSection, BounceIn, SlideIn, TiltCard } from "@/components/animations";
 
 const milestones = [
   { year: "1997", title: "Founded as MWC Enterprises", description: "Our journey began in Quezon City as MWC Enterprises, providing offset lithography printing services to local businesses with a focus on quality and reliability." },
@@ -35,7 +35,7 @@ export function AboutPageContent() {
       {/* Page Header */}
       <section className="gradient-hero relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-20 -right-20 w-72 h-72 bg-[var(--color-brand-green)]/5 rounded-full blur-3xl" />
+          <div className="absolute -top-20 -right-20 w-72 h-72 bg-[var(--color-brand-green)]/5 rounded-full blur-3xl animate-morph" />
         </div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
           <div className="max-w-3xl">
@@ -62,15 +62,15 @@ export function AboutPageContent() {
       <section className="bg-white border-b border-gray-100">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {stats.map((stat) => (
-              <ScrollReveal key={stat.label}>
+            {stats.map((stat, idx) => (
+              <BounceIn key={stat.label} delay={idx * 0.1}>
                 <div className="text-center">
                   <div className="text-3xl sm:text-4xl font-extrabold text-gradient-green">
                     <AnimatedCounter target={stat.value} suffix={stat.suffix} />
                   </div>
                   <p className="text-sm text-gray-500 mt-1 font-medium">{stat.label}</p>
                 </div>
-              </ScrollReveal>
+              </BounceIn>
             ))}
           </div>
         </div>
@@ -100,6 +100,7 @@ export function AboutPageContent() {
             </div>
             <ScrollReveal variants={fadeInRight} delay={0.2}>
               <ParallaxSection speed={0.15}>
+                <TiltCard tiltAmount={4}>
                 <div className="relative">
                   <div className="absolute -inset-4 bg-gradient-to-br from-green-100/60 to-amber-100/40 rounded-3xl rotate-2" />
                   <div className="relative overflow-hidden rounded-2xl shadow-2xl shadow-green-900/10 ring-1 ring-black/5">
@@ -113,6 +114,7 @@ export function AboutPageContent() {
                     />
                   </div>
                 </div>
+                </TiltCard>
               </ParallaxSection>
             </ScrollReveal>
           </div>
@@ -122,7 +124,7 @@ export function AboutPageContent() {
       {/* Values Section */}
       <section className="py-20 lg:py-28 bg-[var(--color-brand-cream)] relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--color-brand-green)]/3 rounded-full blur-3xl" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--color-brand-green)]/3 rounded-full blur-3xl animate-morph" />
         </div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
@@ -182,7 +184,7 @@ export function AboutPageContent() {
       {/* Timeline */}
       <section className="py-20 lg:py-28 bg-[var(--color-brand-cream)] relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-[var(--color-brand-amber)]/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-[var(--color-brand-amber)]/5 rounded-full blur-3xl animate-morph" />
         </div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
@@ -193,7 +195,7 @@ export function AboutPageContent() {
           </ScrollReveal>
           <div className="max-w-3xl mx-auto">
             {milestones.map((milestone, index) => (
-              <ScrollReveal key={milestone.year} delay={index * 0.1}>
+              <SlideIn key={milestone.year} direction={index % 2 === 0 ? "left" : "right"} delay={index * 0.1}>
                 <div className="flex gap-6 group">
                   <div className="flex flex-col items-center">
                     <motion.div whileHover={{ scale: 1.15 }} className="flex items-center justify-center w-16 h-16 rounded-2xl gradient-green text-white font-bold text-sm shrink-0 shadow-lg shadow-green-900/20 group-hover:shadow-xl transition-shadow">
@@ -208,7 +210,7 @@ export function AboutPageContent() {
                     <p className="text-sm text-gray-500 leading-relaxed">{milestone.description}</p>
                   </div>
                 </div>
-              </ScrollReveal>
+              </SlideIn>
             ))}
           </div>
         </div>
@@ -218,8 +220,8 @@ export function AboutPageContent() {
       <section className="py-20 lg:py-28 relative overflow-hidden">
         <div className="gradient-cta absolute inset-0" />
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-20 -right-20 w-72 h-72 bg-white/5 rounded-full blur-3xl" />
-          <div className="absolute -bottom-16 -left-16 w-56 h-56 bg-white/5 rounded-full blur-3xl" />
+          <div className="absolute -top-20 -right-20 w-72 h-72 bg-white/5 rounded-full blur-3xl animate-morph" />
+          <div className="absolute -bottom-16 -left-16 w-56 h-56 bg-white/5 rounded-full blur-3xl animate-morph" />
           <motion.div
             animate={{ rotate: [0, 360] }}
             transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
@@ -255,14 +257,14 @@ export function AboutPageContent() {
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center gap-2 bg-white text-[var(--color-brand-green)] hover:bg-green-50 font-bold px-10 py-4 rounded-xl shadow-xl shadow-black/20 hover:shadow-2xl transition-all duration-300 text-lg group relative overflow-hidden action-button-prominent"
+                className="inline-flex items-center justify-center gap-2 bg-white text-[var(--color-brand-green)] hover:bg-green-50 font-bold px-10 py-4 rounded-xl shadow-xl shadow-black/20 hover:shadow-2xl transition-all duration-300 text-lg group relative overflow-hidden action-button-prominent hover-glow"
               >
                 Get a Free Quote
                 <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <a
                 href="tel:+63281234567"
-                className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold px-10 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl transition-all duration-300 text-lg btn-shine"
+                className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold px-10 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl transition-all duration-300 text-lg btn-shine hover-glow"
               >
                 <Phone className="h-5 w-5" />
                 Call Us Now

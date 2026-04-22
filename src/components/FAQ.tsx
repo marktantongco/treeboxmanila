@@ -75,16 +75,20 @@ export function FAQ() {
         <div className="space-y-3">
           {faqs.map((faq, i) => (
             <ScrollReveal key={i} delay={i * 0.05}>
-              <div className={`bg-white rounded-xl border shadow-sm overflow-hidden transition-colors duration-300 ${openIndex === i ? 'border-[var(--color-brand-green)]/20 shadow-md' : 'border-gray-100 hover:border-[var(--color-brand-green)]/20'}`}>
+              <div className={`bg-white rounded-xl border shadow-sm overflow-hidden transition-colors duration-300 hover-lift ${openIndex === i ? 'border-[var(--color-brand-green)]/20 shadow-md' : 'border-gray-100 hover:border-[var(--color-brand-green)]/20'}`}>
                 <button
                   onClick={() => setOpenIndex(openIndex === i ? null : i)}
                   className="w-full flex items-center justify-between p-5 sm:p-6 text-left group"
                   aria-expanded={openIndex === i}
                 >
                   <div className="flex items-center gap-3 pr-4">
-                    <span className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold transition-colors duration-300 ${openIndex === i ? 'bg-[var(--color-brand-green)] text-white' : 'bg-green-50 text-[var(--color-brand-green)]'}`}>
+                    <motion.span
+                      animate={{ rotate: openIndex === i ? 360 : 0 }}
+                      transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
+                      className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold transition-colors duration-300 ${openIndex === i ? 'bg-[var(--color-brand-green)] text-white' : 'bg-green-50 text-[var(--color-brand-green)]'}`}
+                    >
                       {String(i + 1).padStart(2, "0")}
-                    </span>
+                    </motion.span>
                     <span className="font-semibold text-gray-900 group-hover:text-[var(--color-brand-green)] transition-colors text-sm sm:text-base">
                       {faq.question}
                     </span>

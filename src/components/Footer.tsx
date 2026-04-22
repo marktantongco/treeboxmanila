@@ -15,8 +15,8 @@ const serviceLinks = [
   { href: "/services#custom-boxes", label: "Custom Boxes" },
   { href: "/services#paper-bags", label: "Paper Bags" },
   { href: "/services#calendars", label: "Calendars" },
-  { href: "/services#flyers-brochures", label: "Posters & Flyers" },
-  { href: "/services#menus-stationery", label: "Brochures" },
+  { href: "/services#flyers-brochures", label: "Flyers & Brochures" },
+  { href: "/services#menus-stationery", label: "Menus & Stationery" },
   { href: "/services#stickers-labels", label: "Stickers & Labels" },
 ];
 

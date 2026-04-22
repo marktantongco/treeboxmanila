@@ -99,23 +99,15 @@ export function WhyChooseUs() {
               <motion.div key={reason.title} variants={fadeInUp}>
                 <HoverLiftCard className="h-full">
                   <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-full text-center group hover:shadow-xl hover:shadow-green-900/5 transition-all duration-500">
-                    {/* Icon with enhanced glow and pulse on hover */}
-                    <div className="relative inline-block mb-2">
-                      {/* Multi-layer glow ring behind icon */}
-                      <div className="absolute inset-[-8px] rounded-2xl bg-[var(--color-brand-green)]/0 group-hover:bg-[var(--color-brand-green)]/10 blur-xl transition-all duration-500 scale-100 group-hover:scale-175" />
-                      <div className="absolute inset-[-4px] rounded-xl bg-[var(--color-brand-green)]/0 group-hover:bg-[var(--color-brand-green)]/20 blur-md transition-all duration-400 scale-100 group-hover:scale-140" />
-                      <motion.div
-                        whileHover={{ rotate: 360, scale: 1.15 }}
-                        transition={{ duration: 0.6 }}
-                        className="relative icon-glow-enhanced inline-flex items-center justify-center rounded-xl gradient-green text-white mb-2 shadow-lg shadow-green-900/25"
-                        style={{ width: "4.5rem", height: "4.5rem" }}
-                      >
-                        <Icon className="h-9 w-9" />
-                        {/* Pulse rings on hover */}
-                        <span className="absolute inset-0 rounded-xl bg-[var(--color-brand-green)]/40 opacity-0 group-hover:opacity-100 animate-pulse-badge" />
-                        <span className="absolute inset-[-6px] rounded-2xl border-2 border-[var(--color-brand-green)]/20 opacity-0 group-hover:opacity-100 animate-pulse-ring transition-opacity duration-500" />
-                      </motion.div>
-                    </div>
+                    {/* Simplified icon with hover-glow */}
+                    <motion.div
+                      whileHover={{ rotate: 360, scale: 1.1 }}
+                      transition={{ duration: 0.6 }}
+                      className="relative inline-flex items-center justify-center rounded-xl gradient-green text-white mb-2 shadow-lg shadow-green-900/25 hover-glow"
+                      style={{ width: "4.5rem", height: "4.5rem" }}
+                    >
+                      <Icon className="h-9 w-9" />
+                    </motion.div>
 
                     <StatDisplay stat={reason.stat} suffix={reason.statSuffix} label={reason.statLabel} />
 

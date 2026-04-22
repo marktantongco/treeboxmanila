@@ -15,6 +15,7 @@ import {
 import { toast } from "sonner";
 import { Send, Loader2, CheckCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { RippleButton } from "@/components/animations";
 
 const serviceOptions = [
   "Custom Boxes",
@@ -153,19 +154,17 @@ export function ContactForm() {
             <Label htmlFor="name" className="text-sm font-medium text-gray-700">
               Full Name <span className="text-red-500">*</span>
             </Label>
-            <motion.div whileFocus={{ scale: 1.01 }}>
-              <Input
-                id="name"
-                name="name"
-                type="text"
-                placeholder="Juan Dela Cruz"
-                value={formData.name}
-                onChange={handleChange}
-                className={`transition-all duration-200 ${errors.name ? "border-red-400 focus-visible:ring-red-400" : "focus-visible:ring-[var(--color-brand-green)]"}`}
-                aria-invalid={!!errors.name}
-                aria-describedby={errors.name ? "name-error" : undefined}
-              />
-            </motion.div>
+            <Input
+              id="name"
+              name="name"
+              type="text"
+              placeholder="Juan Dela Cruz"
+              value={formData.name}
+              onChange={handleChange}
+              className={`transition-all duration-200 focus:scale-[1.01] ${errors.name ? "border-red-400 focus-visible:ring-red-400" : "focus-visible:ring-[var(--color-brand-green)]"}`}
+              aria-invalid={!!errors.name}
+              aria-describedby={errors.name ? "name-error" : undefined}
+            />
             <AnimatePresence>
               {errors.name && (
                 <motion.p
@@ -193,7 +192,7 @@ export function ContactForm() {
                 placeholder="you@example.com"
                 value={formData.email}
                 onChange={handleChange}
-                className={`transition-all duration-200 ${errors.email ? "border-red-400 focus-visible:ring-red-400" : "focus-visible:ring-[var(--color-brand-green)]"}`}
+                className={`transition-all duration-200 focus:scale-[1.01] ${errors.email ? "border-red-400 focus-visible:ring-red-400" : "focus-visible:ring-[var(--color-brand-green)]"}`}
                 aria-invalid={!!errors.email}
                 aria-describedby={errors.email ? "email-error" : undefined}
               />
@@ -222,7 +221,7 @@ export function ContactForm() {
                 placeholder="+63 917 123 4567"
                 value={formData.phone}
                 onChange={handleChange}
-                className={`transition-all duration-200 ${errors.phone ? "border-red-400 focus-visible:ring-red-400" : "focus-visible:ring-[var(--color-brand-green)]"}`}
+                className={`transition-all duration-200 focus:scale-[1.01] ${errors.phone ? "border-red-400 focus-visible:ring-red-400" : "focus-visible:ring-[var(--color-brand-green)]"}`}
                 aria-invalid={!!errors.phone}
                 aria-describedby={errors.phone ? "phone-error" : undefined}
               />
@@ -257,7 +256,7 @@ export function ContactForm() {
             >
               <SelectTrigger
                 id="service"
-                className={`transition-all duration-200 ${errors.service ? "border-red-400 focus:ring-red-400" : "focus:ring-[var(--color-brand-green)]"}`}
+                className={`transition-all duration-200 focus:scale-[1.01] ${errors.service ? "border-red-400 focus:ring-red-400" : "focus:ring-[var(--color-brand-green)]"}`}
                 aria-invalid={!!errors.service}
                 aria-describedby={errors.service ? "service-error" : undefined}
               >
@@ -297,7 +296,7 @@ export function ContactForm() {
               rows={5}
               value={formData.message}
               onChange={handleChange}
-              className={`transition-all duration-200 resize-none ${errors.message ? "border-red-400 focus-visible:ring-red-400" : "focus-visible:ring-[var(--color-brand-green)]"}`}
+              className={`transition-all duration-200 resize-none focus:scale-[1.01] ${errors.message ? "border-red-400 focus-visible:ring-red-400" : "focus-visible:ring-[var(--color-brand-green)]"}`}
               aria-invalid={!!errors.message}
               aria-describedby={errors.message ? "message-error" : undefined}
             />
@@ -316,12 +315,12 @@ export function ContactForm() {
             </AnimatePresence>
           </div>
 
-          <motion.div whileTap={{ scale: 0.98 }}>
+          <RippleButton className="inline-block">
             <Button
               type="submit"
               size="lg"
               disabled={isSubmitting}
-              className="w-full sm:w-auto gradient-green hover:opacity-90 text-white font-semibold shadow-lg shadow-green-900/20 transition-all duration-300"
+              className="w-full sm:w-auto gradient-green hover:opacity-90 text-white font-semibold shadow-lg shadow-green-900/20 transition-all duration-300 hover-glow"
             >
               {isSubmitting ? (
                 <>
@@ -335,7 +334,7 @@ export function ContactForm() {
                 </>
               )}
             </Button>
-          </motion.div>
+          </RippleButton>
         </motion.form>
       )}
     </AnimatePresence>

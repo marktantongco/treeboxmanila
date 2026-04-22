@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useInView, useAnimation } from "framer-motion";
 import {
   MessageSquare,
@@ -14,6 +14,8 @@ import Link from "next/link";
 import {
   ScrollReveal,
   StaggerReveal,
+  SlideIn,
+  BounceIn,
   fadeInUp,
 } from "@/components/animations";
 
@@ -131,15 +133,15 @@ function StepBadge({ number }: { number: number }) {
   );
 }
 
-/* ──── Progress indicator for mobile ──── */
-function MobileProgressIndicator({ currentStep }: { currentStep: number }) {
+/* ──── Progress indicator for mobile with scroll-based active state ──── */
+function MobileProgressIndicator({ activeStep }: { activeStep: number }) {
   return (
     <div className="flex items-center justify-center gap-2 mb-8 sm:hidden">
       {steps.map((_, i) => (
         <div
           key={i}
           className={`h-1.5 rounded-full transition-all duration-500 ${
-            i <= currentStep
+            i <= activeStep
               ? "bg-[var(--color-brand-green)] w-8"
               : "bg-gray-200 w-4"
           }`}
@@ -150,8 +152,33 @@ function MobileProgressIndicator({ currentStep }: { currentStep: number }) {
 }
 
 export function ProcessSection() {
+  const [activeStep, setActiveStep] = useState(0);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const el = entry.target as HTMLElement;
+            const step = Number(el.dataset.step);
+            if (!isNaN(step)) {
+              setActiveStep(step);
+            }
+          }
+        });
+      },
+      { root: null, rootMargin: "-40% 0px -40% 0px", threshold: 0 }
+    );
+
+    const stepElements = sectionRef.current?.querySelectorAll("[data-step]");
+    stepElements?.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="py-20 lg:py-28 bg-white relative overflow-hidden">
+    <section className="py-20 lg:py-28 bg-white relative overflow-hidden" ref={sectionRef}>
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none grid-pattern" />
       <div className="absolute inset-0 pointer-events-none">
@@ -182,7 +209,7 @@ export function ProcessSection() {
           <AnimatedConnectingLine />
 
           {/* Mobile progress indicator */}
-          <MobileProgressIndicator currentStep={3} />
+          <MobileProgressIndicator activeStep={activeStep} />
 
           <StaggerReveal
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6"
@@ -192,9 +219,10 @@ export function ProcessSection() {
               const Icon = step.icon;
               return (
                 <motion.div key={step.title} variants={fadeInUp}>
-                  <div className="relative text-center group">
+                  <div className="relative text-center group" data-step={i}>
                     {/* Step icon container */}
                     <div className="relative z-10 mx-auto mb-6">
+                      <BounceIn delay={i * 0.1}>
                       <motion.div
                         whileHover={{ scale: 1.1, rotate: 5 }}
                         transition={{ type: "spring", stiffness: 300, damping: 15 }}
@@ -204,14 +232,17 @@ export function ProcessSection() {
                         {/* Step badge with enhanced pulse */}
                         <StepBadge number={i + 1} />
                       </motion.div>
+                      </BounceIn>
                     </div>
 
                     <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-[var(--color-brand-green)] transition-colors">
                       {step.title}
                     </h3>
-                    <p className="text-sm text-gray-500 leading-relaxed max-w-xs mx-auto mb-4">
-                      {step.description}
-                    </p>
+                    <SlideIn direction="up" delay={i * 0.1}>
+                      <p className="text-sm text-gray-500 leading-relaxed max-w-xs mx-auto mb-4">
+                        {step.description}
+                      </p>
+                    </SlideIn>
                     <span className="inline-block text-xs font-semibold px-3 py-1.5 rounded-full bg-green-50 text-[var(--color-brand-green)] border border-green-100">
                       {step.detail}
                     </span>

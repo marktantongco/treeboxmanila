@@ -3,7 +3,7 @@
 import { Phone, Mail, MapPin, Clock, MessageCircle, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { ContactForm } from "@/components/ContactForm";
-import { ScrollReveal, fadeInUp, fadeInRight, fadeInLeft } from "@/components/animations";
+import { ScrollReveal, fadeInUp, fadeInRight, fadeInLeft, BounceIn, SlideIn } from "@/components/animations";
 import { motion } from "framer-motion";
 
 const contactInfo = [
@@ -49,7 +49,7 @@ export function ContactPageContent() {
       {/* Page Header */}
       <section className="gradient-hero relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-20 -left-20 w-72 h-72 bg-[var(--color-brand-green)]/5 rounded-full blur-3xl" />
+          <div className="absolute -top-20 -left-20 w-72 h-72 bg-[var(--color-brand-green)]/5 rounded-full blur-3xl animate-morph" />
         </div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
           <div className="max-w-3xl">
@@ -78,24 +78,24 @@ export function ContactPageContent() {
       {/* Prominent CTA Buttons */}
       <section className="bg-white border-b border-gray-100">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-          <ScrollReveal>
+          <BounceIn>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <a
                 href="#quote-form"
-                className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand-green)] hover:bg-[var(--color-brand-green-light)] text-white font-bold px-8 py-4 rounded-xl shadow-xl shadow-green-900/20 hover:shadow-2xl transition-all duration-300 text-lg group relative overflow-hidden action-button-prominent w-full sm:w-auto"
+                className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand-green)] hover:bg-[var(--color-brand-green-light)] text-white font-bold px-8 py-4 rounded-xl shadow-xl shadow-green-900/20 hover:shadow-2xl transition-all duration-300 text-lg group relative overflow-hidden action-button-prominent w-full sm:w-auto hover-glow"
               >
                 Get a Quote Now
                 <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </a>
               <a
                 href="tel:+63281234567"
-                className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl transition-all duration-300 text-lg btn-shine w-full sm:w-auto"
+                className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl transition-all duration-300 text-lg btn-shine w-full sm:w-auto hover-glow"
               >
                 <Phone className="h-5 w-5" />
                 Call Us: +63 2 8123 4567
               </a>
             </div>
-          </ScrollReveal>
+          </BounceIn>
         </div>
       </section>
 
@@ -104,7 +104,7 @@ export function ContactPageContent() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Form */}
-            <ScrollReveal variants={fadeInLeft} className="lg:col-span-2">
+            <SlideIn direction="left" className="lg:col-span-2">
               <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
                   Request a Free Quote
@@ -115,10 +115,10 @@ export function ContactPageContent() {
                 </p>
                 <ContactForm />
               </div>
-            </ScrollReveal>
+            </SlideIn>
 
             {/* Sidebar */}
-            <ScrollReveal variants={fadeInRight} delay={0.15}>
+            <SlideIn direction="right" delay={0.15}>
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
                   Contact Information
@@ -213,7 +213,7 @@ export function ContactPageContent() {
                   </div>
                 </div>
               </div>
-            </ScrollReveal>
+            </SlideIn>
           </div>
         </div>
       </section>
@@ -240,7 +240,7 @@ export function ContactPageContent() {
             <motion.div
               whileHover={{ scale: 1.01 }}
               transition={{ type: "spring", stiffness: 200 }}
-              className="rounded-2xl overflow-hidden shadow-2xl shadow-green-900/5 bg-gradient-to-br from-green-50 to-amber-50/50 aspect-[16/7] flex items-center justify-center border border-gray-200"
+              className="rounded-2xl overflow-hidden shadow-2xl shadow-green-900/5 bg-gradient-to-br from-green-50 to-amber-50/50 aspect-[16/7] flex items-center justify-center border border-gray-200 spotlight-hover"
             >
               <div className="text-center p-8">
                 <motion.div

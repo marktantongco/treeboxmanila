@@ -9,6 +9,7 @@ import {
   useSpring,
   useTransform,
   type Variant,
+  AnimatePresence,
 } from "framer-motion";
 
 /* ──────────────── Reusable Animation Presets ──────────────── */
@@ -483,5 +484,279 @@ export function ScaleOnScroll({
     >
       {children}
     </motion.div>
+  );
+}
+
+/* ──────────────── Ripple Button ──────────────── */
+
+interface RippleButtonProps {
+  children: ReactNode;
+  className?: string;
+  color?: string;
+}
+
+export function RippleButton({ children, className = "", color = "rgba(255,255,255,0.3)" }: RippleButtonProps) {
+  const [ripples, setRipples] = useState<Array<{ x: number; y: number; id: number }>>([]);
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const id = Date.now();
+    setRipples((prev) => [...prev, { x, y, id }]);
+    setTimeout(() => setRipples((prev) => prev.filter((r) => r.id !== id)), 600);
+  };
+
+  return (
+    <motion.div onClick={handleClick} className={`relative overflow-hidden ${className}`} whileTap={{ scale: 0.98 }}>
+      {children}
+      {ripples.map((ripple) => (
+        <motion.span
+          key={ripple.id}
+          initial={{ scale: 0, opacity: 0.5 }}
+          animate={{ scale: 4, opacity: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            left: ripple.x,
+            top: ripple.y,
+            width: 10,
+            height: 10,
+            marginLeft: -5,
+            marginTop: -5,
+            backgroundColor: color,
+          }}
+        />
+      ))}
+    </motion.div>
+  );
+}
+
+/* ──────────────── Glow Card ──────────────── */
+
+interface GlowCardProps {
+  children: ReactNode;
+  className?: string;
+  glowColor?: string;
+}
+
+export function GlowCard({ children, className = "", glowColor = "var(--color-brand-green)" }: GlowCardProps) {
+  return (
+    <motion.div
+      whileHover={{ y: -6 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      className={`relative group ${className}`}
+    >
+      <div
+        className="absolute -inset-0.5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"
+        style={{ background: `linear-gradient(135deg, ${glowColor}, transparent, ${glowColor})` }}
+      />
+      <div className="relative bg-white rounded-2xl">{children}</div>
+    </motion.div>
+  );
+}
+
+/* ──────────────── Count Up (spring-based) ──────────────── */
+
+interface CountUpProps {
+  target: number;
+  suffix?: string;
+  prefix?: string;
+  duration?: number;
+  className?: string;
+}
+
+export function CountUp({ target, suffix = "", prefix = "", duration = 2, className = "" }: CountUpProps) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true });
+  const motionValue = useMotionValue(0);
+  const springValue = useSpring(motionValue, { stiffness: 50, damping: 20 });
+  const [display, setDisplay] = useState(0);
+
+  useEffect(() => {
+    if (isInView) {
+      motionValue.set(target);
+    }
+  }, [isInView, target, motionValue]);
+
+  useEffect(() => {
+    const unsubscribe = springValue.on("change", (latest) => {
+      setDisplay(Math.floor(latest));
+    });
+    return unsubscribe;
+  }, [springValue]);
+
+  return (
+    <span ref={ref} className={className}>
+      {prefix}{display}{suffix}
+    </span>
+  );
+}
+
+/* ──────────────── Slide In ──────────────── */
+
+interface SlideInProps {
+  children: ReactNode;
+  direction?: "left" | "right" | "up" | "down";
+  className?: string;
+  delay?: number;
+  distance?: number;
+}
+
+export function SlideIn({ children, direction = "up", className = "", delay = 0, distance = 60 }: SlideInProps) {
+  const directionMap = {
+    left: { x: -distance, y: 0 },
+    right: { x: distance, y: 0 },
+    up: { x: 0, y: distance },
+    down: { x: 0, y: -distance },
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, ...directionMap[direction] }}
+      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.7, delay, ease: [0.25, 0.1, 0.25, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ──────────────── Bounce In ──────────────── */
+
+interface BounceInProps {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+}
+
+export function BounceIn({ children, className = "", delay = 0 }: BounceInProps) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.3 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ delay, type: "spring", stiffness: 260, damping: 20 }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ──────────────── Tilt Card (3D hover) ──────────────── */
+
+interface TiltCardProps {
+  children: ReactNode;
+  className?: string;
+  tiltAmount?: number;
+}
+
+export function TiltCard({ children, className = "", tiltAmount = 10 }: TiltCardProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent) => {
+      if (!ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      x.set(((e.clientY - centerY) / rect.height) * -tiltAmount);
+      y.set(((e.clientX - centerX) / rect.width) * tiltAmount);
+    },
+    [tiltAmount, x, y]
+  );
+
+  const handleMouseLeave = useCallback(() => {
+    x.set(0);
+    y.set(0);
+  }, [x, y]);
+
+  const rotateX = useSpring(x, { stiffness: 200, damping: 20 });
+  const rotateY = useSpring(y, { stiffness: 200, damping: 20 });
+
+  return (
+    <motion.div
+      ref={ref}
+      style={{ rotateX, rotateY, perspective: 1000 }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ──────────────── Typing Effect ──────────────── */
+
+interface TypingEffectProps {
+  text: string;
+  className?: string;
+  speed?: number;
+  delay?: number;
+  cursor?: boolean;
+}
+
+export function TypingEffect({ text, className = "", speed = 50, delay = 0, cursor = true }: TypingEffectProps) {
+  const [displayedText, setDisplayedText] = useState("");
+  const [isComplete, setIsComplete] = useState(false);
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (!isInView) return;
+    let i = 0;
+    const timeout = setTimeout(() => {
+      const interval = setInterval(() => {
+        if (i < text.length) {
+          setDisplayedText(text.slice(0, i + 1));
+          i++;
+        } else {
+          setIsComplete(true);
+          clearInterval(interval);
+        }
+      }, speed);
+      return () => clearInterval(interval);
+    }, delay * 1000);
+    return () => clearTimeout(timeout);
+  }, [isInView, text, speed, delay]);
+
+  return (
+    <span ref={ref} className={className}>
+      {displayedText}
+      {cursor && !isComplete && <span className="animate-typing-cursor">|</span>}
+    </span>
+  );
+}
+
+/* ──────────────── Stagger Text Lines ──────────────── */
+
+interface StaggerTextProps {
+  lines: string[];
+  className?: string;
+  staggerDelay?: number;
+}
+
+export function StaggerText({ lines, className = "", staggerDelay = 0.1 }: StaggerTextProps) {
+  return (
+    <div className={className}>
+      {lines.map((line, i) => (
+        <div key={i} className="overflow-hidden">
+          <motion.div
+            initial={{ y: "100%" }}
+            whileInView={{ y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, delay: i * staggerDelay, ease: EASE_OUT_EXPO }}
+          >
+            {line}
+          </motion.div>
+        </div>
+      ))}
+    </div>
   );
 }
