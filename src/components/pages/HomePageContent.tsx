@@ -8,7 +8,7 @@ import { ClientLogoMarquee } from "@/components/ClientLogoMarquee";
 import { ProcessSection } from "@/components/ProcessSection";
 import { Testimonials } from "@/components/Testimonials";
 import { FAQ } from "@/components/FAQ";
-import { ScrollReveal, RippleButton } from "@/components/animations";
+import { ScrollReveal, MagneticButton } from "@/components/animations";
 import Link from "next/link";
 import { Phone, ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -78,7 +78,7 @@ export function HomePageContent() {
 
           <ScrollReveal delay={0.3}>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <RippleButton className="inline-flex">
+              <MagneticButton strength={0.12} className="inline-flex">
                 <Button
                   asChild
                   className="bg-white text-[var(--color-brand-green)] hover:bg-green-50 font-bold shadow-xl shadow-black/20 hover:shadow-2xl transition-all duration-300 text-base group h-14 px-8 btn-shine"
@@ -88,7 +88,7 @@ export function HomePageContent() {
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </Button>
-              </RippleButton>
+              </MagneticButton>
               <Button
                 asChild
                 className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-xl shadow-amber-500/30 hover:shadow-2xl hover:shadow-amber-500/40 transition-all duration-300 text-base group h-14 px-8 btn-shine hover-glow-amber"

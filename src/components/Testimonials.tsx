@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
-import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from "framer-motion";
-import { ScrollReveal, HoverLiftCard, fadeInUp, RippleButton } from "@/components/animations";
+import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo, useInView } from "framer-motion";
+import { ScrollReveal, HoverLiftCard, fadeInUp, MagneticButton } from "@/components/animations";
 
 const testimonials = [
   {
@@ -81,6 +81,8 @@ export function Testimonials() {
   const [progress, setProgress] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const progressRef = useRef<NodeJS.Timeout | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const isSectionInView = useInView(sectionRef, { once: true, margin: "-100px" });
   const AUTO_ADVANCE_DURATION = 6000;
 
   /* Swipe tracking for mobile */
@@ -100,7 +102,7 @@ export function Testimonials() {
   }, []);
 
   useEffect(() => {
-    if (isPaused) {
+    if (isPaused || !isSectionInView) {
       if (intervalRef.current) clearInterval(intervalRef.current);
       if (progressRef.current) clearInterval(progressRef.current);
       return;
@@ -113,7 +115,7 @@ export function Testimonials() {
       if (intervalRef.current) clearInterval(intervalRef.current);
       if (progressRef.current) clearInterval(progressRef.current);
     };
-  }, [next, isPaused]);
+  }, [next, isPaused, isSectionInView]);
 
   /* Handle swipe end */
   const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
@@ -129,21 +131,24 @@ export function Testimonials() {
     enter: (dir: number) => ({
       x: dir > 0 ? 200 : -200,
       opacity: 0,
+      filter: "blur(4px)",
     }),
     center: {
       x: 0,
       opacity: 1,
+      filter: "blur(0px)",
     },
     exit: (dir: number) => ({
       x: dir > 0 ? -200 : 200,
       opacity: 0,
+      filter: "blur(4px)",
     }),
   };
 
   const t = testimonials[current];
 
   return (
-    <section className="py-20 lg:py-28 bg-white relative overflow-hidden">
+    <section className="py-20 lg:py-28 bg-white relative overflow-hidden" ref={sectionRef}>
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-0 w-64 h-64 bg-[var(--color-brand-green)]/3 rounded-full blur-3xl" />
@@ -168,155 +173,162 @@ export function Testimonials() {
         </ScrollReveal>
 
         {/* Testimonial Card with Swipe Support */}
-        <div className="max-w-4xl mx-auto">
-          <ScrollReveal>
-            <div
-              className="relative"
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
-            >
-              {/* Quote icon */}
-              <div className="absolute -top-6 left-8 sm:left-12 z-10">
-                <motion.div
-                  animate={{ rotate: [0, 5, -5, 0] }}
-                  transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                  className="w-14 h-14 rounded-xl gradient-green flex items-center justify-center shadow-lg shadow-green-900/20"
-                >
-                  <Quote className="h-7 w-7 text-white" />
-                </motion.div>
-              </div>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={isSectionInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+          className="max-w-4xl mx-auto"
+        >
+          <div
+            className="relative"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
+            {/* Quote icon */}
+            <div className="absolute -top-6 left-8 sm:left-12 z-10">
+              <motion.div
+                animate={{ rotate: [0, 5, -5, 0] }}
+                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                className="w-14 h-14 rounded-xl gradient-green flex items-center justify-center shadow-lg shadow-green-900/20"
+              >
+                <Quote className="h-7 w-7 text-white" />
+              </motion.div>
+            </div>
 
-              {/* Card with animated gradient border */}
-              <div className="gradient-border-card rounded-2xl p-[3px]">
-                <div className="bg-[var(--color-brand-cream)] rounded-2xl p-8 sm:p-12 pt-16 relative overflow-hidden">
-                  {/* Decorative */}
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--color-brand-green)]/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-[var(--color-brand-amber)]/5 rounded-full translate-y-1/2 -translate-x-1/2" />
+            {/* Card with animated gradient border */}
+            <div className="gradient-border-card rounded-2xl p-[3px]">
+              <div className="bg-[var(--color-brand-cream)] rounded-2xl p-8 sm:p-12 pt-16 relative overflow-hidden">
+                {/* Decorative */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--color-brand-green)]/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-[var(--color-brand-amber)]/5 rounded-full translate-y-1/2 -translate-x-1/2" />
 
-                  <div className="relative">
-                    <AnimatePresence mode="wait" custom={direction}>
-                      <motion.div
-                        key={current}
-                        custom={direction}
-                        variants={variants}
-                        initial="enter"
-                        animate="center"
-                        exit="exit"
-                        transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-                        drag="x"
-                        dragConstraints={{ left: 0, right: 0 }}
-                        dragElastic={0.15}
-                        onDragEnd={handleDragEnd}
-                        style={{ opacity: dragOpacity }}
-                        className="cursor-grab active:cursor-grabbing"
-                      >
-                        {/* Star rating */}
-                        <div className="bg-white/60 inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-sm shadow-sm mb-6">
-                          <StarRating rating={t.rating} />
-                        </div>
-
-                        <blockquote className="mt-2 text-lg sm:text-xl text-gray-700 leading-relaxed font-medium">
-                          &ldquo;{t.content}&rdquo;
-                        </blockquote>
-
-                        <div className="mt-8 flex items-center gap-4">
-                          {/* Avatar with gradient */}
-                          <div className="w-14 h-14 rounded-full gradient-green flex items-center justify-center text-white font-bold text-xl shadow-md ring-3 ring-white">
-                            {t.name.charAt(0)}
-                          </div>
-                          <div>
-                            <p className="font-bold text-gray-900">{t.name}</p>
-                            <p className="text-sm text-gray-500">{t.role}</p>
-                          </div>
-                          <div className="ml-auto hidden sm:block">
-                            <span className="inline-block text-xs font-semibold px-3 py-1.5 rounded-full bg-green-50 text-[var(--color-brand-green)] border border-green-100">
-                              {t.service}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Mobile-only swipe hint */}
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 1.5 }}
-                          className="mt-6 flex items-center justify-center gap-2 text-gray-400 text-xs sm:hidden"
-                        >
-                          <ChevronLeft className="h-3 w-3" />
-                          Swipe to see more
-                          <ChevronRight className="h-3 w-3" />
-                        </motion.div>
-                      </motion.div>
-                    </AnimatePresence>
-                  </div>
-
-                  {/* Auto-advance progress bar */}
-                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-200/50">
+                <div className="relative">
+                  <AnimatePresence mode="wait" custom={direction}>
                     <motion.div
-                      className="h-full bg-gradient-to-r from-[var(--color-brand-green)] to-[var(--color-brand-amber)]"
-                      style={{ width: `${progress}%` }}
-                      transition={{ duration: 0.05 }}
-                    />
-                  </div>
-                </div>
-              </div>
+                      key={current}
+                      custom={direction}
+                      variants={variants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                      drag="x"
+                      dragConstraints={{ left: 0, right: 0 }}
+                      dragElastic={0.15}
+                      onDragEnd={handleDragEnd}
+                      style={{ opacity: dragOpacity }}
+                      className="cursor-grab active:cursor-grabbing"
+                    >
+                      {/* Star rating */}
+                      <div className="bg-white/60 inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-sm shadow-sm mb-6">
+                        <StarRating rating={t.rating} />
+                      </div>
 
-              {/* Navigation */}
-              <div className="flex items-center justify-between mt-8">
-                {/* Counter */}
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl font-extrabold text-[var(--color-brand-green)] tabular-nums">
-                    {String(current + 1).padStart(2, "0")}
-                  </span>
-                  <div className="w-10 h-0.5 bg-[var(--color-brand-green)]/30 rounded-full" />
-                  <span className="text-lg text-gray-400 font-bold tabular-nums">
-                    {String(testimonials.length).padStart(2, "0")}
-                  </span>
+                      <blockquote className="mt-2 text-lg sm:text-xl text-gray-700 leading-relaxed font-medium">
+                        &ldquo;{t.content}&rdquo;
+                      </blockquote>
+
+                      <div className="mt-8 flex items-center gap-4">
+                        {/* Avatar with gradient */}
+                        <motion.div
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="w-14 h-14 rounded-full gradient-green flex items-center justify-center text-white font-bold text-xl shadow-md ring-3 ring-white"
+                        >
+                          {t.name.charAt(0)}
+                        </motion.div>
+                        <div>
+                          <p className="font-bold text-gray-900">{t.name}</p>
+                          <p className="text-sm text-gray-500">{t.role}</p>
+                        </div>
+                        <div className="ml-auto hidden sm:block">
+                          <span className="inline-block text-xs font-semibold px-3 py-1.5 rounded-full bg-green-50 text-[var(--color-brand-green)] border border-green-100">
+                            {t.service}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Mobile-only swipe hint */}
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 1.5 }}
+                        className="mt-6 flex items-center justify-center gap-2 text-gray-400 text-xs sm:hidden"
+                      >
+                        <ChevronLeft className="h-3 w-3" />
+                        Swipe to see more
+                        <ChevronRight className="h-3 w-3" />
+                      </motion.div>
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
 
-                {/* Dot indicators */}
-                <div className="flex gap-2">
-                  {testimonials.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => {
-                        setDirection(i > current ? 1 : -1);
-                        setCurrent(i);
-                        setProgress(0);
-                      }}
-                      aria-label={`Go to testimonial ${i + 1}`}
-                      className={`h-2 rounded-full transition-all duration-300 ${
-                        i === current
-                          ? "bg-[var(--color-brand-green)] w-8"
-                          : "bg-gray-300 hover:bg-gray-400 w-2"
-                      }`}
-                    />
-                  ))}
-                </div>
-
-                {/* Arrow buttons */}
-                <div className="flex gap-2">
-                  <motion.button
-                    whileTap={{ scale: 0.85 }}
-                    onClick={prev}
-                    aria-label="Previous testimonial"
-                    className="w-10 h-10 rounded-full border border-gray-200 hover:border-[var(--color-brand-green)] hover:bg-green-50 flex items-center justify-center text-gray-500 hover:text-[var(--color-brand-green)] transition-all duration-300 hover-glow"
-                  >
-                    <ChevronLeft className="h-5 w-5" />
-                  </motion.button>
-                  <motion.button
-                    whileTap={{ scale: 0.85 }}
-                    onClick={next}
-                    aria-label="Next testimonial"
-                    className="w-10 h-10 rounded-full border border-gray-200 hover:border-[var(--color-brand-green)] hover:bg-green-50 flex items-center justify-center text-gray-500 hover:text-[var(--color-brand-green)] transition-all duration-300 hover-glow"
-                  >
-                    <ChevronRight className="h-5 w-5" />
-                  </motion.button>
+                {/* Auto-advance progress bar */}
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-200/50">
+                  <motion.div
+                    className="h-full bg-gradient-to-r from-[var(--color-brand-green)] to-[var(--color-brand-amber)]"
+                    style={{ width: `${progress}%` }}
+                    transition={{ duration: 0.05 }}
+                  />
                 </div>
               </div>
             </div>
-          </ScrollReveal>
-        </div>
+
+            {/* Navigation */}
+            <div className="flex items-center justify-between mt-8">
+              {/* Counter */}
+              <div className="flex items-center gap-3">
+                <span className="text-2xl font-extrabold text-[var(--color-brand-green)] tabular-nums">
+                  {String(current + 1).padStart(2, "0")}
+                </span>
+                <div className="w-10 h-0.5 bg-[var(--color-brand-green)]/30 rounded-full" />
+                <span className="text-lg text-gray-400 font-bold tabular-nums">
+                  {String(testimonials.length).padStart(2, "0")}
+                </span>
+              </div>
+
+              {/* Dot indicators */}
+              <div className="flex gap-2">
+                {testimonials.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => {
+                      setDirection(i > current ? 1 : -1);
+                      setCurrent(i);
+                      setProgress(0);
+                    }}
+                    aria-label={`Go to testimonial ${i + 1}`}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      i === current
+                        ? "bg-[var(--color-brand-green)] w-8"
+                        : "bg-gray-300 hover:bg-gray-400 w-2"
+                    }`}
+                  />
+                ))}
+              </div>
+
+              {/* Arrow buttons */}
+              <div className="flex gap-2">
+                <motion.button
+                  whileTap={{ scale: 0.85 }}
+                  onClick={prev}
+                  aria-label="Previous testimonial"
+                  className="w-10 h-10 rounded-full border border-gray-200 hover:border-[var(--color-brand-green)] hover:bg-green-50 flex items-center justify-center text-gray-500 hover:text-[var(--color-brand-green)] transition-all duration-300 hover-glow"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </motion.button>
+                <motion.button
+                  whileTap={{ scale: 0.85 }}
+                  onClick={next}
+                  aria-label="Next testimonial"
+                  className="w-10 h-10 rounded-full border border-gray-200 hover:border-[var(--color-brand-green)] hover:bg-green-50 flex items-center justify-center text-gray-500 hover:text-[var(--color-brand-green)] transition-all duration-300 hover-glow"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </motion.button>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

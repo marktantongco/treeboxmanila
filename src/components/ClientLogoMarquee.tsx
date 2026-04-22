@@ -1,6 +1,7 @@
 "use client";
 
 import { Marquee, ScrollReveal } from "@/components/animations";
+import { motion, useInView } from "framer-motion";
 import {
   UtensilsCrossed,
   Building2,
@@ -11,6 +12,7 @@ import {
   GraduationCap,
   Briefcase,
 } from "lucide-react";
+import { useRef } from "react";
 
 const industries = [
   { name: "Food & Beverage", Icon: UtensilsCrossed },
@@ -23,22 +25,31 @@ const industries = [
   { name: "Corporate", Icon: Briefcase },
 ];
 
-function IndustryCard({ name, Icon }: { name: string; Icon: React.ComponentType<{ className?: string }> }) {
+function IndustryCard({ name, Icon, index }: { name: string; Icon: React.ComponentType<{ className?: string }>; index: number }) {
   return (
-    <div className="inline-flex items-center gap-3 px-6 py-3.5 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[var(--color-brand-green)]/20 transition-all duration-300 group cursor-default shrink-0">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.05, duration: 0.3 }}
+      className="inline-flex items-center gap-3 px-6 py-3.5 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[var(--color-brand-green)]/20 transition-all duration-300 group cursor-default shrink-0 hover-lift"
+    >
       <div className="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center group-hover:bg-[var(--color-brand-green)] transition-colors duration-300">
         <Icon className="h-4.5 w-4.5 text-[var(--color-brand-green)] group-hover:text-white transition-colors duration-300" />
       </div>
       <span className="text-sm font-semibold text-gray-700 group-hover:text-[var(--color-brand-green)] transition-colors whitespace-nowrap">
         {name}
       </span>
-    </div>
+    </motion.div>
   );
 }
 
 export function ClientLogoMarquee() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-80px" });
+
   return (
-    <section className="py-16 bg-white border-y border-gray-100 relative overflow-hidden">
+    <section className="py-16 bg-white border-y border-gray-100 relative overflow-hidden" ref={sectionRef}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
           <div className="text-center mb-10">
@@ -55,21 +66,26 @@ export function ClientLogoMarquee() {
         </ScrollReveal>
       </div>
 
-      {/* Marquee row with fade edges */}
-      <div className="marquee-fade">
+      {/* Marquee row with fade edges — only animates when in view */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="marquee-fade"
+      >
         <Marquee speed={40} pauseOnHover>
           <div className="flex gap-4">
-            {industries.map((industry) => (
-              <IndustryCard key={industry.name} name={industry.name} Icon={industry.Icon} />
+            {industries.map((industry, i) => (
+              <IndustryCard key={industry.name} name={industry.name} Icon={industry.Icon} index={i} />
             ))}
           </div>
           <div className="flex gap-4">
-            {industries.map((industry) => (
-              <IndustryCard key={`${industry.name}-dup`} name={industry.name} Icon={industry.Icon} />
+            {industries.map((industry, i) => (
+              <IndustryCard key={`${industry.name}-dup`} name={industry.name} Icon={industry.Icon} index={i} />
             ))}
           </div>
         </Marquee>
-      </div>
+      </motion.div>
     </section>
   );
 }

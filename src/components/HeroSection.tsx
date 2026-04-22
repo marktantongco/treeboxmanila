@@ -9,7 +9,6 @@ import { motion, AnimatePresence, useInView } from "framer-motion";
 import {
   MagneticButton,
   FloatingElement,
-  RippleButton,
   TiltCard,
   ScrollReveal,
   MobileSwipeReveal,
@@ -161,10 +160,10 @@ export function HeroSection() {
         ))}
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 lg:py-28">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
           {/* Text Content */}
-          <div className="order-2 lg:order-1">
+          <div className="order-2 lg:order-1 lg:pt-6">
             <motion.div
               custom={0}
               initial="hidden"
@@ -210,20 +209,18 @@ export function HeroSection() {
               variants={tv}
               className="flex flex-col sm:flex-row gap-4"
             >
-              <RippleButton className="inline-flex">
-                <MagneticButton strength={0.15}>
-                  <Button
-                    asChild
-                    className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/30 transition-all duration-300 text-base group h-14 px-8 btn-shine"
-                  >
-                    <Link href="/contact">
-                      Get a Quote Now
-                      <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                  </Button>
-                </MagneticButton>
-              </RippleButton>
-              <MagneticButton strength={0.1}>
+              <MagneticButton strength={0.15} className="inline-flex">
+                <Button
+                  asChild
+                  className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/30 transition-all duration-300 text-base group h-14 px-8 btn-shine"
+                >
+                  <Link href="/contact">
+                    Get a Quote Now
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </Button>
+              </MagneticButton>
+              <MagneticButton strength={0.1} className="inline-flex">
                 <Button
                   asChild
                   className="bg-[var(--color-brand-green)] hover:bg-[var(--color-brand-green-light)] text-white font-bold text-base group transition-all duration-300 h-14 px-8 shadow-lg shadow-green-900/20 btn-shine"
@@ -274,7 +271,7 @@ export function HeroSection() {
             initial="hidden"
             animate="visible"
             variants={iv}
-            className="order-1 lg:order-2"
+            className="order-1 lg:order-2 lg:-mt-6"
           >
             <TiltCard tiltAmount={5}>
               <div className="relative">

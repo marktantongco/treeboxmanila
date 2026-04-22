@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { ChevronDown, HelpCircle } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { ScrollReveal, StaggerReveal, fadeInUp, SectionHeadingReveal } from "@/components/animations";
+import { useRef } from "react";
 
 const faqs = [
   {
@@ -49,11 +50,14 @@ const faqs = [
 ];
 
 function FAQItem({ faq, index, isOpen, onToggle }: { faq: typeof faqs[0]; index: number; isOpen: boolean; onToggle: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
+      ref={ref}
+      initial={{ opacity: 0, y: 20, scale: 0.98 }}
+      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
       transition={{ duration: 0.4, delay: index * 0.05, ease: [0.25, 0.1, 0.25, 1] }}
     >
       <div className={`bg-white rounded-xl border shadow-sm overflow-hidden transition-all duration-300 hover-lift touch-feedback ${

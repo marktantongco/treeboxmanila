@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { ScrollReveal, CountUp, MobileSwipeReveal } from "@/components/animations";
 import { Building2, Users, Package, Clock } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 
 const stats = [
   {
@@ -40,15 +40,23 @@ function StatItem({ stat, index }: { stat: typeof stats[0]; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
   const Icon = stat.Icon;
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 30, scale: 0.9 }}
+      initial={{ opacity: 0, y: isMobile ? 20 : 30, scale: 0.9 }}
       animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
       transition={{
-        duration: 0.6,
-        delay: index * 0.12,
+        duration: isMobile ? 0.4 : 0.6,
+        delay: index * (isMobile ? 0.08 : 0.12),
         ease: [0.25, 0.1, 0.25, 1],
       }}
       className="text-center group"
@@ -77,10 +85,17 @@ function StatItem({ stat, index }: { stat: typeof stats[0]; index: number }) {
 export function StatsSection() {
   const sectionRef = useRef<HTMLElement>(null);
 
+  /* Parallax background effect */
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const bgScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.05, 1, 1.05]);
+
   return (
     <section className="relative py-14 lg:py-16 gradient-stats overflow-hidden" ref={sectionRef}>
-      {/* Decorative elements */}
-      <div className="absolute inset-0 pointer-events-none">
+      {/* Decorative elements with subtle parallax */}
+      <motion.div className="absolute inset-0 pointer-events-none" style={{ scale: bgScale }}>
         <div className="absolute -top-20 -right-20 w-72 h-72 bg-white/5 rounded-full blur-3xl" />
         <div className="absolute -bottom-16 -left-16 w-56 h-56 bg-white/5 rounded-full blur-3xl" />
         <motion.div
@@ -93,15 +108,16 @@ export function StatsSection() {
           transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
           className="absolute bottom-4 left-12 w-14 h-14 border border-white/5 rounded-full"
         />
-        {/* Mobile-only subtle animated line */}
-        <motion.div
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
-          className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white/10 to-transparent origin-left sm:hidden"
-        />
-      </div>
+      </motion.div>
+
+      {/* Mobile-only subtle animated line */}
+      <motion.div
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
+        className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white/10 to-transparent origin-left sm:hidden"
+      />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">

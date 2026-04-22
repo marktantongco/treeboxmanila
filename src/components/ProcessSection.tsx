@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView, useAnimation } from "framer-motion";
+import { motion, useInView, useAnimation, useScroll, useTransform } from "framer-motion";
 import {
   MessageSquare,
   FileText,
@@ -138,8 +138,11 @@ function MobileProgressIndicator({ activeStep }: { activeStep: number }) {
   return (
     <div className="flex items-center justify-center gap-2 mb-8 sm:hidden">
       {steps.map((_, i) => (
-        <div
+        <motion.div
           key={i}
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ delay: i * 0.15, duration: 0.4 }}
           className={`h-1.5 rounded-full transition-all duration-500 ${
             i <= activeStep
               ? "bg-[var(--color-brand-green)] w-8"
@@ -151,9 +154,60 @@ function MobileProgressIndicator({ activeStep }: { activeStep: number }) {
   );
 }
 
+/* ──── Mobile step card with swipe-style reveal ──── */
+function MobileStepCard({ step, index, isActive }: { step: typeof steps[0]; index: number; isActive: boolean }) {
+  const Icon = step.icon;
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, x: 30, scale: 0.95 }}
+      animate={isInView ? { opacity: 1, x: 0, scale: 1 } : {}}
+      transition={{ duration: 0.45, delay: index * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
+      data-step={index}
+      className="relative"
+    >
+      <div className={`bg-white rounded-xl p-5 shadow-sm border transition-all duration-300 ${
+        isActive ? 'border-[var(--color-brand-green)]/30 shadow-md' : 'border-gray-100'
+      }`}>
+        <div className="flex items-start gap-4">
+          <motion.div
+            whileTap={{ scale: 0.95 }}
+            className="relative shrink-0"
+          >
+            <div className="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center">
+              <Icon className="h-6 w-6 text-[var(--color-brand-green)]" />
+            </div>
+            <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full gradient-green text-white text-[10px] font-bold flex items-center justify-center shadow-md">
+              {index + 1}
+            </span>
+          </motion.div>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-base font-bold text-gray-900 mb-1">{step.title}</h3>
+            <p className="text-xs text-gray-500 leading-relaxed mb-2">{step.description}</p>
+            <span className="inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-50 text-[var(--color-brand-green)] border border-green-100">
+              {step.detail}
+            </span>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 export function ProcessSection() {
   const [activeStep, setActiveStep] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -211,46 +265,60 @@ export function ProcessSection() {
           {/* Mobile progress indicator */}
           <MobileProgressIndicator activeStep={activeStep} />
 
-          <StaggerReveal
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6"
-            staggerDelay={0.15}
-          >
-            {steps.map((step, i) => {
-              const Icon = step.icon;
-              return (
-                <motion.div key={step.title} variants={fadeInUp}>
-                  <div className="relative text-center group" data-step={i}>
-                    {/* Step icon container */}
-                    <div className="relative z-10 mx-auto mb-6">
-                      <BounceIn delay={i * 0.1}>
-                      <motion.div
-                        whileHover={{ scale: 1.1, rotate: 5 }}
-                        transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                        className="relative inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white border-2 border-[var(--color-brand-green)]/10 shadow-lg shadow-green-900/5 group-hover:border-[var(--color-brand-green)]/30 group-hover:shadow-xl group-hover:shadow-green-900/10 transition-all duration-500"
-                      >
-                        <Icon className="h-8 w-8 text-[var(--color-brand-green)]" />
-                        {/* Step badge with enhanced pulse */}
-                        <StepBadge number={i + 1} />
-                      </motion.div>
-                      </BounceIn>
-                    </div>
+          {/* Mobile: stacked card layout */}
+          {isMobile ? (
+            <div className="space-y-3 sm:hidden">
+              {steps.map((step, i) => (
+                <MobileStepCard
+                  key={step.title}
+                  step={step}
+                  index={i}
+                  isActive={activeStep >= i}
+                />
+              ))}
+            </div>
+          ) : (
+            <StaggerReveal
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6"
+              staggerDelay={0.15}
+            >
+              {steps.map((step, i) => {
+                const Icon = step.icon;
+                return (
+                  <motion.div key={step.title} variants={fadeInUp}>
+                    <div className="relative text-center group" data-step={i}>
+                      {/* Step icon container */}
+                      <div className="relative z-10 mx-auto mb-6">
+                        <BounceIn delay={i * 0.1}>
+                        <motion.div
+                          whileHover={{ scale: 1.1, rotate: 5 }}
+                          transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                          className="relative inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white border-2 border-[var(--color-brand-green)]/10 shadow-lg shadow-green-900/5 group-hover:border-[var(--color-brand-green)]/30 group-hover:shadow-xl group-hover:shadow-green-900/10 transition-all duration-500"
+                        >
+                          <Icon className="h-8 w-8 text-[var(--color-brand-green)]" />
+                          {/* Step badge with enhanced pulse */}
+                          <StepBadge number={i + 1} />
+                        </motion.div>
+                        </BounceIn>
+                      </div>
 
-                    <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-[var(--color-brand-green)] transition-colors">
-                      {step.title}
-                    </h3>
-                    <SlideIn direction="up" delay={i * 0.1}>
-                      <p className="text-sm text-gray-500 leading-relaxed max-w-xs mx-auto mb-4">
-                        {step.description}
-                      </p>
-                    </SlideIn>
-                    <span className="inline-block text-xs font-semibold px-3 py-1.5 rounded-full bg-green-50 text-[var(--color-brand-green)] border border-green-100">
-                      {step.detail}
-                    </span>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </StaggerReveal>
+                      <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-[var(--color-brand-green)] transition-colors">
+                        {step.title}
+                      </h3>
+                      <SlideIn direction="up" delay={i * 0.1}>
+                        <p className="text-sm text-gray-500 leading-relaxed max-w-xs mx-auto mb-4">
+                          {step.description}
+                        </p>
+                      </SlideIn>
+                      <span className="inline-block text-xs font-semibold px-3 py-1.5 rounded-full bg-green-50 text-[var(--color-brand-green)] border border-green-100">
+                        {step.detail}
+                      </span>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </StaggerReveal>
+          )}
         </div>
 
         {/* Prominent CTA */}

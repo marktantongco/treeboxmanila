@@ -5,22 +5,18 @@ import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Sparkles, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import {
   ScrollReveal,
-  StaggerGridReveal,
   GlowCard,
-  fadeInUp,
-  fadeInUpBounce,
-  RippleButton,
+  MagneticButton,
   SectionHeadingReveal,
   cardReveal3D,
   cardRevealLeft,
   cardRevealRight,
-  MobileSwipeReveal,
   ImageReveal,
 } from "@/components/animations";
-import { useRef, useEffect, useAnimation } from "react";
+import { useRef, useEffect, useState } from "react";
 
 const services = [
   {
@@ -85,13 +81,45 @@ const services = [
   },
 ];
 
-/* ──── Enhanced Service Card with 3D scroll-triggered reveal ──── */
+/* ──── Section Reveal Mask — reveals the heading area with a dramatic clip ──── */
+function SectionRevealMask({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ clipPath: "inset(0 100% 0 0)", opacity: 0 }}
+      animate={isInView ? { clipPath: "inset(0 0% 0 0)", opacity: 1 } : {}}
+      transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ──── Enhanced Service Card with scroll-triggered reveal ──── */
 function ServiceCard({ service, index }: { service: typeof services[0]; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const [isMobile, setIsMobile] = useState(false);
 
-  /* Alternate reveal direction for visual variety */
-  const revealDirection = index % 3 === 0 ? cardReveal3D : index % 3 === 1 ? cardRevealLeft : cardRevealRight;
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  /* On mobile: simple fade-up; on web: alternating 3D reveals */
+  const revealDirection = isMobile
+    ? cardReveal3D
+    : index % 3 === 0
+      ? cardReveal3D
+      : index % 3 === 1
+        ? cardRevealLeft
+        : cardRevealRight;
 
   return (
     <motion.div
@@ -100,23 +128,25 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
       transition={{
-        duration: 0.7,
-        delay: index * 0.08,
+        duration: isMobile ? 0.5 : 0.7,
+        delay: isMobile ? index * 0.06 : index * 0.1,
         ease: [0.25, 0.1, 0.25, 1],
       }}
       style={{ perspective: 1200 }}
     >
       <GlowCard className="h-full" glowColor="var(--color-brand-green)">
         <Card className="h-full overflow-hidden border border-gray-100 bg-white hover:border-[var(--color-brand-green)]/20 transition-all duration-500 group">
-          {/* Image with scroll-triggered reveal mask */}
+          {/* Image with clip-path reveal mask */}
           <div className="relative overflow-hidden aspect-[4/3]">
-            <Image
-              src={service.image}
-              alt={service.alt}
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-110"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            />
+            <ImageReveal direction={index % 2 === 0 ? "left" : "right"} delay={0.2 + index * 0.06}>
+              <Image
+                src={service.image}
+                alt={service.alt}
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-110"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              />
+            </ImageReveal>
             {/* Shimmer overlay on hover */}
             <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
@@ -165,7 +195,7 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
                   key={item}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-                  transition={{ delay: 0.3 + i * 0.06, duration: 0.3 }}
+                  transition={{ delay: 0.4 + i * 0.05, duration: 0.3 }}
                   whileHover={{ scale: 1.08, y: -2 }}
                   className="inline-block text-xs px-2.5 py-1 bg-green-50 text-[var(--color-brand-green)] rounded-full font-medium cursor-default hover:bg-green-100 transition-colors"
                 >
@@ -267,31 +297,70 @@ function CustomCTACard() {
   );
 }
 
+/* ──── Animated divider line between heading and grid ──── */
+function AnimatedDivider() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
+
+  return (
+    <div ref={ref} className="flex items-center justify-center my-4 mb-12">
+      <motion.div
+        initial={{ width: 0, opacity: 0 }}
+        animate={isInView ? { width: 80, opacity: 1 } : {}}
+        transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1], delay: 0.3 }}
+        className="h-1 rounded-full bg-gradient-to-r from-[var(--color-brand-green)] to-[var(--color-brand-amber)]"
+      />
+      <motion.div
+        initial={{ scale: 0, opacity: 0 }}
+        animate={isInView ? { scale: 1, opacity: 1 } : {}}
+        transition={{ duration: 0.5, delay: 0.8, type: "spring", stiffness: 200 }}
+        className="mx-3 w-2 h-2 rounded-full bg-[var(--color-brand-amber)]"
+      />
+      <motion.div
+        initial={{ width: 0, opacity: 0 }}
+        animate={isInView ? { width: 80, opacity: 1 } : {}}
+        transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1], delay: 0.3 }}
+        className="h-1 rounded-full bg-gradient-to-r from-[var(--color-brand-amber)] to-[var(--color-brand-green)]"
+      />
+    </div>
+  );
+}
+
 export function ServicesGrid() {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const isHeadingInView = useInView(headingRef, { once: true, margin: "-80px" });
 
+  /* Parallax-like scroll effect for the section background */
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const bgY = useTransform(scrollYProgress, [0, 1], [40, -40]);
+  const bgY2 = useTransform(scrollYProgress, [0, 1], [-30, 30]);
+
   return (
-    <section className="py-20 lg:py-28 bg-white wave-divider relative" ref={sectionRef}>
-      {/* Animated background decoration that appears on scroll */}
+    <section className="py-20 lg:py-28 bg-white wave-divider relative overflow-hidden" ref={sectionRef}>
+      {/* Animated background decoration that appears on scroll — with parallax */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={isHeadingInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
           transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
+          style={{ y: bgY }}
           className="absolute top-0 right-0 w-96 h-96 bg-[var(--color-brand-green)]/3 rounded-full blur-3xl"
         />
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={isHeadingInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
           transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+          style={{ y: bgY2 }}
           className="absolute bottom-0 left-0 w-72 h-72 bg-[var(--color-brand-amber)]/3 rounded-full blur-3xl"
         />
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Enhanced heading with staggered reveal */}
+        {/* Enhanced heading with staggered reveal and clip-path animation */}
         <div ref={headingRef}>
           <SectionHeadingReveal
             badge="What We Print"
@@ -305,6 +374,9 @@ export function ServicesGrid() {
           />
         </div>
 
+        {/* Animated divider line */}
+        <AnimatedDivider />
+
         {/* Service Cards Grid with staggered 3D reveals */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {services.map((service, index) => (
@@ -316,15 +388,17 @@ export function ServicesGrid() {
 
         <ScrollReveal delay={0.3}>
           <div className="text-center mt-12">
-            <Button
-              asChild
-              className="border-2 border-[var(--color-brand-green)] text-[var(--color-brand-green)] hover:bg-[var(--color-brand-green)] hover:text-white font-semibold group transition-all duration-300 bg-transparent btn-shine"
-            >
-              <Link href="/services">
-                View All Services
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </Button>
+            <MagneticButton strength={0.12} className="inline-flex">
+              <Button
+                asChild
+                className="border-2 border-[var(--color-brand-green)] text-[var(--color-brand-green)] hover:bg-[var(--color-brand-green)] hover:text-white font-semibold group transition-all duration-300 bg-transparent btn-shine"
+              >
+                <Link href="/services">
+                  View All Services
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+            </MagneticButton>
           </div>
         </ScrollReveal>
       </div>

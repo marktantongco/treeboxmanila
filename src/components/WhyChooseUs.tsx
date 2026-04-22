@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { Award, Truck, Clock, Layers } from "lucide-react";
-import { ScrollReveal, StaggerGridReveal, AnimatedCounter, fadeInUp, HoverLiftCard, SectionHeadingReveal, cardReveal3D, MobileSwipeReveal } from "@/components/animations";
-import { useRef } from "react";
+import { ScrollReveal, StaggerGridReveal, AnimatedCounter, fadeInUp, HoverLiftCard, SectionHeadingReveal, cardReveal3D, MobileSwipeReveal, ImageReveal } from "@/components/animations";
+import { useRef, useState, useEffect } from "react";
 
 const reasons = [
   {
@@ -69,17 +69,37 @@ function ReasonCard({ reason, index }: { reason: typeof reasons[0]; index: numbe
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
   const Icon = reason.icon;
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 40, scale: 0.95 }}
-      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+      initial={{
+        opacity: 0,
+        y: isMobile ? 24 : 40,
+        scale: 0.95,
+        ...(index % 2 === 0 && !isMobile ? { rotateX: 5 } : { rotateY: index % 2 === 1 ? 5 : 0 }),
+      }}
+      animate={isInView ? {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        rotateX: 0,
+        rotateY: 0,
+      } : {}}
       transition={{
-        duration: 0.6,
-        delay: index * 0.1,
+        duration: isMobile ? 0.4 : 0.6,
+        delay: index * (isMobile ? 0.06 : 0.1),
         ease: [0.25, 0.1, 0.25, 1],
       }}
+      style={{ perspective: 1000 }}
     >
       <HoverLiftCard className="h-full">
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-full text-center group hover:shadow-xl hover:shadow-green-900/5 transition-all duration-500">
@@ -109,15 +129,25 @@ function ReasonCard({ reason, index }: { reason: typeof reasons[0]; index: numbe
 }
 
 export function WhyChooseUs() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  /* Subtle parallax for background decorations */
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const decorY1 = useTransform(scrollYProgress, [0, 1], [20, -20]);
+  const decorY2 = useTransform(scrollYProgress, [0, 1], [-20, 20]);
+
   return (
-    <section className="py-20 lg:py-28 bg-[var(--color-brand-cream)] relative overflow-hidden">
+    <section className="py-20 lg:py-28 bg-[var(--color-brand-cream)] relative overflow-hidden" ref={sectionRef}>
       {/* Dot pattern background */}
       <div className="absolute inset-0 pointer-events-none dot-pattern opacity-60" />
 
-      {/* Background decoration */}
+      {/* Background decoration with parallax */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-72 h-72 bg-[var(--color-brand-green)]/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-[var(--color-brand-amber)]/5 rounded-full blur-3xl" />
+        <motion.div style={{ y: decorY1 }} className="absolute top-0 right-0 w-72 h-72 bg-[var(--color-brand-green)]/5 rounded-full blur-3xl" />
+        <motion.div style={{ y: decorY2 }} className="absolute bottom-0 left-0 w-96 h-96 bg-[var(--color-brand-amber)]/5 rounded-full blur-3xl" />
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

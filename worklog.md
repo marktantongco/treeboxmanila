@@ -1,31 +1,32 @@
 ---
 Task ID: 1
 Agent: Main Agent
-Task: Comprehensive animation upgrade for treeboxmanila.com
+Task: Fix hero alignment, modify "What we print" reveal animation, enhance comprehensive animations
 
 Work Log:
-- Audited all component files (Header, Footer, HeroSection, ServicesGrid, StatsSection, WhyChooseUs, ProcessSection, Testimonials, FAQ, ClientLogoMarquee, MobileCTA, ScrollToTop, all page content components)
-- Fixed "Get a Quote Now" button visibility bug — changed RippleButton from `inline-block` to `inline-flex` and added `style={{ display: "inline-flex" }}` to the RippleButton component
-- Enhanced animations.tsx with 10+ new components: DirectionalReveal, StaggerGridReveal, Card3DReveal, MobileSwipeReveal, PulseRing, ScrollProgress, StaggerCounter, ImageReveal, SectionHeadingReveal, HoverTilt, StaggerList
-- Added new animation variants: cardReveal3D, cardRevealLeft, cardRevealRight, revealFromBlur, revealFromClip, fadeInUpMobile, fadeInUpBounce
-- Upgraded ServicesGrid with 3D scroll-triggered card reveals (alternating directions), SectionHeadingReveal, and animated background decorations
-- Enhanced HeroSection with mobile-responsive animation variants (shorter distance, faster duration), reduced particle count on mobile, conditional floating elements
-- Enhanced StatsSection with individual StatItem components featuring scroll-triggered scale animations and mobile animated line
-- Enhanced Testimonials with swipe gesture support (drag="x"), mobile swipe hint, and improved drag physics
-- Enhanced FAQ with spring-based accordion animations, touch-feedback class, and FAQItem component with individual scroll reveals
-- Enhanced WhyChooseUs with individual ReasonCard components featuring scroll-triggered animations and SectionHeadingReveal
-- Enhanced AboutPageContent with StatCard components, SectionHeadingReveal, and staggered industry tag animations
-- Enhanced ContactPageContent with ContactInfoCard components featuring hover micro-interactions and staggered city tag animations
-- Enhanced MobileCTA with pulse indicator, touch-feedback, and better transition timing
-- Enhanced ScrollToTop with whileHover/whileTap micro-interactions
-- Enhanced Header with whileTap on mobile buttons and spring transitions for mobile nav
-- Added comprehensive globals.css mobile-optimized utilities: touch-feedback, mobile scroll snap, page-enter, perspective-container, card-flip-inner, clip-path reveal animations, staggered entrance delays, reduced motion preference, and mobile-specific animation duration reductions
+- Analyzed uploaded screenshot via VLM to identify current visual issues
+- Read and audited all component files: HeroSection, ServicesGrid, StatsSection, WhyChooseUs, ProcessSection, Testimonials, FAQ, ClientLogoMarquee, animations.tsx, globals.css
+- Fixed hero alignment: changed grid from items-center to items-start, added lg:pt-6 to text content, added lg:-mt-6 to hero image to move it higher on web
+- Fixed "Get a Quote Now" button visibility bug: removed problematic double-wrapping (RippleButton + MagneticButton) that caused overflow:hidden clipping. Replaced with clean MagneticButton-only wrapper
+- Enhanced "What We Print" (ServicesGrid) section:
+  - Added ImageReveal with clip-path mask for each card image (alternating left/right direction)
+  - Added parallax scroll effect for section background decorations
+  - Added animated divider line between heading and card grid
+  - Improved mobile-specific animation timings (shorter delays, faster durations)
+  - Added MagneticButton to "View All Services" button
+- Enhanced StatsSection: added parallax background scale effect, mobile-optimized animation distances
+- Enhanced WhyChooseUs: added parallax scroll for background decorations, 3D card reveals with rotateX/rotateY, mobile-optimized animation timing
+- Enhanced ProcessSection: added mobile-specific stacked card layout (MobileStepCard), mobile progress indicator with staggered entrance, conditionally renders mobile vs desktop layouts
+- Enhanced Testimonials: added blur filter to slide transitions, section in-view check to pause auto-advance when off-screen, improved card entrance animation
+- Enhanced FAQ: added scale animation to FAQ items on reveal
+- Enhanced ClientLogoMarquee: added section in-view check before starting marquee, hover-lift on industry cards
+- Fixed React hooks violation: moved useTransform call from JSX to component top level in ServicesGrid
+- Cleaned up unused imports across multiple files
+- Build verified: successful with no errors
 
 Stage Summary:
-- Build passes successfully (Next.js 16.1.3 with Turbopack)
-- All 9 routes compile and generate correctly
-- "Get a Quote Now" button visibility bug fixed
-- Comprehensive animation system with 20+ reusable components
-- Mobile-optimized: shorter animation distances, fewer particles, touch feedback, swipe support, reduced motion preference
-- Scroll-triggered reveals with 3D card effects across ServicesGrid "What We Print" section
-- Enhanced micro-interactions: whileTap, whileHover, spring physics on all interactive elements
+- Hero alignment fixed with image moved higher on web via items-start + negative margins
+- "Get a Quote Now" button visibility fixed by removing RippleButton overflow:hidden wrapper
+- "What we print" section now has dramatic scroll-triggered reveals with clip-path ImageReveal, parallax backgrounds, and animated divider
+- All components enhanced with mobile-optimized animations, parallax effects, and better scroll reveals
+- Production build passes successfully
