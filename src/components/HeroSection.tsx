@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Phone, ArrowRight, ChevronDown } from "lucide-react";
+import { Phone, ArrowRight, ChevronDown, Shield, Truck, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -38,6 +38,12 @@ const imageVariants = {
     transition: { delay: 0.6, duration: 0.8, ease: [0.25, 0.1, 0.25, 1] },
   },
 };
+
+const trustBadges = [
+  { icon: Shield, text: "25+ Years", subtext: "Experience" },
+  { icon: Truck, text: "Direct", subtext: "Supplier" },
+  { icon: Award, text: "50+", subtext: "Products" },
+];
 
 function RotatingText({ words }: { words: string[] }) {
   const [index, setIndex] = useState(0);
@@ -85,6 +91,12 @@ export function HeroSection() {
         </FloatingElement>
         <FloatingElement className="absolute top-[40%] left-[8%]" amplitude={6} duration={3.5} delay={0.5}>
           <div className="w-6 h-6 rounded-md bg-[var(--color-brand-green)]/10 rotate-45" />
+        </FloatingElement>
+        <FloatingElement className="absolute top-[20%] left-[40%]" amplitude={10} duration={4.5} delay={2}>
+          <div className="w-4 h-4 rounded-full bg-[var(--color-brand-amber)]/15" />
+        </FloatingElement>
+        <FloatingElement className="absolute bottom-[30%] right-[15%]" amplitude={7} duration={3} delay={1.5}>
+          <div className="w-8 h-8 rounded-lg border border-[var(--color-brand-green)]/8 bg-[var(--color-brand-green)]/3 -rotate-12" />
         </FloatingElement>
       </div>
 
@@ -140,11 +152,9 @@ export function HeroSection() {
               <MagneticButton strength={0.15}>
                 <Button
                   asChild
-                  size="lg"
-                  className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/30 transition-all duration-300 text-base group relative overflow-hidden h-14 px-8"
+                  className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/30 transition-all duration-300 text-base group h-14 px-8 btn-shine"
                 >
                   <Link href="/contact">
-                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
                     Get a Quote Now
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -152,44 +162,40 @@ export function HeroSection() {
               </MagneticButton>
               <Button
                 asChild
-                size="lg"
-                className="bg-[var(--color-brand-green)] hover:bg-[var(--color-brand-green-light)] text-white font-bold text-base group transition-all duration-300 h-14 px-8 shadow-lg shadow-green-900/20"
+                className="bg-[var(--color-brand-green)] hover:bg-[var(--color-brand-green-light)] text-white font-bold text-base group transition-all duration-300 h-14 px-8 shadow-lg shadow-green-900/20 btn-shine"
               >
                 <a href="tel:+63281234567">
-                  <Phone className="mr-2 h-5 w-4" />
+                  <Phone className="mr-2 h-5 w-5" />
                   Call +63 2 8123 4567
                 </a>
               </Button>
             </motion.div>
 
-            {/* Trust badges */}
+            {/* Trust badges - Enhanced */}
             <motion.div
               custom={4}
               initial="hidden"
               animate="visible"
               variants={textVariants}
-              className="mt-10 flex items-center gap-6 text-sm text-gray-500"
+              className="mt-10 flex items-center gap-4 sm:gap-6"
             >
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                  <span className="text-[var(--color-brand-green)] font-bold text-xs">25+</span>
-                </div>
-                <span>Years Experience</span>
-              </div>
-              <div className="w-px h-6 bg-gray-300" />
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
-                  <span className="text-[var(--color-brand-amber-dark)] font-bold text-xs">DS</span>
-                </div>
-                <span>Direct Supplier</span>
-              </div>
-              <div className="w-px h-6 bg-gray-300 hidden sm:block" />
-              <div className="hidden sm:flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                  <span className="text-[var(--color-brand-green)] font-bold text-xs">50+</span>
-                </div>
-                <span>Products</span>
-              </div>
+              {trustBadges.map((badge, i) => {
+                const Icon = badge.icon;
+                return (
+                  <div key={badge.text} className="flex items-center gap-2.5">
+                    <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center group hover:bg-green-100 transition-colors">
+                      <Icon className="h-5 w-5 text-[var(--color-brand-green)]" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-gray-900 leading-tight">{badge.text}</p>
+                      <p className="text-xs text-gray-500 leading-tight">{badge.subtext}</p>
+                    </div>
+                    {i < trustBadges.length - 1 && (
+                      <div className="w-px h-8 bg-gray-200 ml-2 sm:ml-4" />
+                    )}
+                  </div>
+                );
+              })}
             </motion.div>
           </div>
 
@@ -246,6 +252,17 @@ export function HeroSection() {
                     <p className="text-xs font-bold text-gray-900">Since 1997</p>
                     <p className="text-[10px] text-gray-400">MWC Enterprises</p>
                   </div>
+                </div>
+              </motion.div>
+              {/* Floating badge — Free Quote */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.8, type: "spring" }}
+                className="absolute top-1/2 -right-2 sm:right-0 -translate-y-1/2 hidden lg:block"
+              >
+                <div className="bg-[var(--color-brand-green)] text-white rounded-xl shadow-lg px-3 py-2 text-xs font-bold animate-pulse-badge">
+                  Free Quote
                 </div>
               </motion.div>
             </div>

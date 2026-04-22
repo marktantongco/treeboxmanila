@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ScrollReveal, HoverLiftCard, fadeInUp } from "@/components/animations";
@@ -77,6 +77,8 @@ function StarRating({ rating }: { rating: number }) {
 export function Testimonials() {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
+  const [isPaused, setIsPaused] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const next = useCallback(() => {
     setDirection(1);
@@ -89,9 +91,15 @@ export function Testimonials() {
   }, []);
 
   useEffect(() => {
-    const timer = setInterval(next, 6000);
-    return () => clearInterval(timer);
-  }, [next]);
+    if (isPaused) {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      return;
+    }
+    intervalRef.current = setInterval(next, 6000);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [next, isPaused]);
 
   const variants = {
     enter: (dir: number) => ({
@@ -138,7 +146,11 @@ export function Testimonials() {
         {/* Testimonial Card */}
         <div className="max-w-4xl mx-auto">
           <ScrollReveal>
-            <div className="relative">
+            <div
+              className="relative"
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+            >
               {/* Quote icon */}
               <div className="absolute -top-6 left-8 sm:left-12 z-10">
                 <motion.div
@@ -168,7 +180,7 @@ export function Testimonials() {
                         exit="exit"
                         transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
                       >
-                        {/* Star rating - more prominent */}
+                        {/* Star rating */}
                         <div className="bg-white/60 inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-sm shadow-sm mb-6">
                           <StarRating rating={t.rating} />
                         </div>
@@ -200,7 +212,7 @@ export function Testimonials() {
 
               {/* Navigation */}
               <div className="flex items-center justify-between mt-8">
-                {/* Counter - more prominent */}
+                {/* Counter */}
                 <div className="flex items-center gap-3">
                   <span className="text-2xl font-extrabold text-[var(--color-brand-green)] tabular-nums">
                     {String(current + 1).padStart(2, "0")}

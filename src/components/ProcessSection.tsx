@@ -131,6 +131,24 @@ function StepBadge({ number }: { number: number }) {
   );
 }
 
+/* ──── Progress indicator for mobile ──── */
+function MobileProgressIndicator({ currentStep }: { currentStep: number }) {
+  return (
+    <div className="flex items-center justify-center gap-2 mb-8 sm:hidden">
+      {steps.map((_, i) => (
+        <div
+          key={i}
+          className={`h-1.5 rounded-full transition-all duration-500 ${
+            i <= currentStep
+              ? "bg-[var(--color-brand-green)] w-8"
+              : "bg-gray-200 w-4"
+          }`}
+        />
+      ))}
+    </div>
+  );
+}
+
 export function ProcessSection() {
   return (
     <section className="py-20 lg:py-28 bg-white relative overflow-hidden">
@@ -162,6 +180,9 @@ export function ProcessSection() {
         <div className="relative">
           {/* Animated connecting line (desktop) */}
           <AnimatedConnectingLine />
+
+          {/* Mobile progress indicator */}
+          <MobileProgressIndicator currentStep={3} />
 
           <StaggerReveal
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6"
@@ -238,7 +259,7 @@ export function ProcessSection() {
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
                   <Link
                     href="/contact"
-                    className="inline-flex items-center justify-center gap-2 bg-white text-[var(--color-brand-green)] hover:bg-green-50 font-bold px-10 py-4 rounded-xl shadow-xl shadow-black/20 hover:shadow-2xl transition-all duration-300 text-lg group relative overflow-hidden action-button-prominent"
+                    className="inline-flex items-center justify-center gap-2 bg-white text-[var(--color-brand-green)] hover:bg-green-50 font-bold px-10 py-4 rounded-xl shadow-xl shadow-black/20 hover:shadow-2xl transition-all duration-300 text-lg group btn-shine"
                   >
                     Get a Free Quote
                     <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />

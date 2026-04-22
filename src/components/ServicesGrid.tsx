@@ -17,6 +17,7 @@ const services = [
     alt: "Custom printed boxes including shoe boxes, pizza boxes, and cake boxes by Treebox Manila",
     items: ["Shoe Box", "Pizza Box", "Cake Box", "Gift Box", "Food Box", "Corrugated Box"],
     slug: "custom-boxes",
+    popular: true,
   },
   {
     title: "Paper Bags",
@@ -26,6 +27,7 @@ const services = [
     alt: "Custom printed paper shopping bags with brand logos by Treebox Manila",
     items: ["Shopping Bags", "Kraft Paper Bags", "Luxury Bags", "Branded Bags"],
     slug: "paper-bags",
+    popular: false,
   },
   {
     title: "Calendars",
@@ -35,6 +37,7 @@ const services = [
     alt: "Custom printed wall calendars and desk calendars by Treebox Manila",
     items: ["Wall Calendars", "Desk Calendars", "Company Calendars"],
     slug: "calendars",
+    popular: false,
   },
   {
     title: "Flyers & Brochures",
@@ -44,6 +47,7 @@ const services = [
     alt: "Custom printed flyers, brochures, and marketing materials by Treebox Manila",
     items: ["Real Estate Flyers", "Medical Flyers", "Travel Brochures", "Tri-Fold Brochures"],
     slug: "flyers-brochures",
+    popular: false,
   },
   {
     title: "Menus & Stationery",
@@ -53,6 +57,7 @@ const services = [
     alt: "Custom printed restaurant menus, letterheads, and envelopes by Treebox Manila",
     items: ["Restaurant Menus", "Letterheads", "Envelopes"],
     slug: "menus-stationery",
+    popular: false,
   },
   {
     title: "Stickers & Labels",
@@ -62,6 +67,7 @@ const services = [
     alt: "Custom printed stickers and product labels by Treebox Manila",
     items: ["Product Labels", "Brand Stickers", "Packaging Labels"],
     slug: "stickers-labels",
+    popular: false,
   },
 ];
 
@@ -69,7 +75,7 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
   return (
     <motion.div variants={fadeInUp}>
       <HoverLiftCard className="h-full">
-        <Card className="h-full overflow-hidden border border-gray-100 bg-white hover:border-[var(--color-brand-green)]/20 transition-all duration-500 group">
+        <Card className={`h-full overflow-hidden border border-gray-100 bg-white hover:border-[var(--color-brand-green)]/20 transition-all duration-500 group ${service.popular ? 'popular-badge' : ''}`}>
           <div className="relative overflow-hidden aspect-[4/3]">
             <Image
               src={service.image}
@@ -78,7 +84,7 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
               className="object-cover transition-transform duration-700 group-hover:scale-110"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
-            {/* Hover overlay */}
+            {/* Gradient overlay on hover */}
             <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-brand-green)]/80 via-[var(--color-brand-green)]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-5">
               <Link
                 href={`/services#${service.slug}`}
@@ -88,6 +94,15 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
+            {/* Popular badge */}
+            {service.popular && (
+              <div className="absolute top-3 left-3 z-10">
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[var(--color-brand-amber)] text-white text-xs font-bold shadow-lg shadow-amber-500/30 animate-pulse-badge">
+                  <Sparkles className="h-3 w-3" />
+                  Popular
+                </span>
+              </div>
+            )}
             {/* Step number badge */}
             <div className="absolute top-3 right-3">
               <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/90 text-[var(--color-brand-green)] text-xs font-bold shadow-sm backdrop-blur-sm">
@@ -96,8 +111,13 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
             </div>
           </div>
           <CardContent className="p-5">
-            <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[var(--color-brand-green)] transition-colors duration-300">
+            <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[var(--color-brand-green)] transition-colors duration-300 flex items-center gap-2">
               {service.title}
+              {service.popular && (
+                <span className="text-[10px] px-2 py-0.5 bg-amber-50 text-[var(--color-brand-amber-dark)] rounded-full font-semibold border border-amber-100">
+                  Most Requested
+                </span>
+              )}
             </h3>
             <p className="text-sm text-gray-500 mb-3 leading-relaxed line-clamp-2">
               {service.description}
@@ -174,22 +194,18 @@ function CustomCTACard() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button
                 asChild
-                size="lg"
-                className="bg-white text-[var(--color-brand-green)] hover:bg-green-50 font-bold shadow-xl shadow-black/20 hover:shadow-2xl transition-all duration-300 text-base group/btn relative overflow-hidden h-12 px-6"
+                className="bg-white text-[var(--color-brand-green)] hover:bg-green-50 font-bold shadow-xl shadow-black/20 hover:shadow-2xl transition-all duration-300 text-base group/btn h-12 px-6 btn-shine"
               >
                 <Link href="/contact">
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-green-100/40 to-transparent translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700" />
                   Get a Quote
                   <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
                 </Link>
               </Button>
               <Button
                 asChild
-                size="lg"
-                className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-xl shadow-amber-500/30 hover:shadow-2xl transition-all duration-300 text-base group/btn relative overflow-hidden h-12 px-6"
+                className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-xl shadow-amber-500/30 hover:shadow-2xl transition-all duration-300 text-base group/btn h-12 px-6 btn-shine"
               >
                 <a href="tel:+63281234567">
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700" />
                   <MessageSquare className="mr-2 h-4 w-4" />
                   Call Us Now
                 </a>
@@ -238,8 +254,7 @@ export function ServicesGrid() {
           <div className="text-center mt-12">
             <Button
               asChild
-              size="lg"
-              className="border-2 border-[var(--color-brand-green)] text-[var(--color-brand-green)] hover:bg-[var(--color-brand-green)] hover:text-white font-semibold group transition-all duration-300 bg-transparent"
+              className="border-2 border-[var(--color-brand-green)] text-[var(--color-brand-green)] hover:bg-[var(--color-brand-green)] hover:text-white font-semibold group transition-all duration-300 bg-transparent btn-shine"
             >
               <Link href="/services">
                 View All Services

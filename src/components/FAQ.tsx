@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, HelpCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ScrollReveal, StaggerReveal, fadeInUp } from "@/components/animations";
 
@@ -75,21 +75,26 @@ export function FAQ() {
         <div className="space-y-3">
           {faqs.map((faq, i) => (
             <ScrollReveal key={i} delay={i * 0.05}>
-              <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:border-[var(--color-brand-green)]/20 transition-colors duration-300">
+              <div className={`bg-white rounded-xl border shadow-sm overflow-hidden transition-colors duration-300 ${openIndex === i ? 'border-[var(--color-brand-green)]/20 shadow-md' : 'border-gray-100 hover:border-[var(--color-brand-green)]/20'}`}>
                 <button
                   onClick={() => setOpenIndex(openIndex === i ? null : i)}
                   className="w-full flex items-center justify-between p-5 sm:p-6 text-left group"
                   aria-expanded={openIndex === i}
                 >
-                  <span className="font-semibold text-gray-900 pr-4 group-hover:text-[var(--color-brand-green)] transition-colors text-sm sm:text-base">
-                    {faq.question}
-                  </span>
+                  <div className="flex items-center gap-3 pr-4">
+                    <span className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold transition-colors duration-300 ${openIndex === i ? 'bg-[var(--color-brand-green)] text-white' : 'bg-green-50 text-[var(--color-brand-green)]'}`}>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="font-semibold text-gray-900 group-hover:text-[var(--color-brand-green)] transition-colors text-sm sm:text-base">
+                      {faq.question}
+                    </span>
+                  </div>
                   <motion.div
                     animate={{ rotate: openIndex === i ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
                     className="shrink-0"
                   >
-                    <ChevronDown className="h-5 w-5 text-gray-400 group-hover:text-[var(--color-brand-green)] transition-colors" />
+                    <ChevronDown className={`h-5 w-5 transition-colors ${openIndex === i ? 'text-[var(--color-brand-green)]' : 'text-gray-400 group-hover:text-[var(--color-brand-green)]'}`} />
                   </motion.div>
                 </button>
                 <AnimatePresence initial={false}>
@@ -100,7 +105,7 @@ export function FAQ() {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                     >
-                      <div className="px-5 sm:px-6 pb-5 sm:pb-6 text-sm text-gray-500 leading-relaxed border-t border-gray-50 pt-4">
+                      <div className="px-5 sm:px-6 pb-5 sm:pb-6 text-sm text-gray-500 leading-relaxed border-t border-gray-50 pt-4 pl-14 sm:pl-16">
                         {faq.answer}
                       </div>
                     </motion.div>

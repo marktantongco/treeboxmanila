@@ -107,7 +107,7 @@ export function WhyChooseUs() {
                       <motion.div
                         whileHover={{ rotate: 360, scale: 1.15 }}
                         transition={{ duration: 0.6 }}
-                        className="relative icon-glow-enhanced inline-flex items-center justify-center w-18 h-18 rounded-xl gradient-green text-white mb-2 shadow-lg shadow-green-900/25"
+                        className="relative icon-glow-enhanced inline-flex items-center justify-center rounded-xl gradient-green text-white mb-2 shadow-lg shadow-green-900/25"
                         style={{ width: "4.5rem", height: "4.5rem" }}
                       >
                         <Icon className="h-9 w-9" />

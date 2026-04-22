@@ -123,10 +123,9 @@ export function Header() {
           <MagneticButton strength={0.15}>
             <Button
               asChild
-              className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300 relative overflow-hidden group"
+              className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300 btn-shine"
             >
               <a href="tel:+63281234567" aria-label="Call to get a quote">
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
                 <Phone className="mr-2 h-4 w-4 group-hover:animate-pulse" />
                 Get a Quote
               </a>
@@ -140,7 +139,7 @@ export function Header() {
             <Button
               asChild
               size="sm"
-              className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold"
+              className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold btn-shine"
             >
               <Link href="/contact" aria-label="Get a quote">
                 Get a Quote
@@ -201,7 +200,7 @@ export function Header() {
                 <div className="p-4 border-t space-y-3">
                   <Button
                     asChild
-                    className="w-full bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold h-12"
+                    className="w-full bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold h-12 btn-shine"
                   >
                     <Link href="/contact">
                       Get a Quote Now
