@@ -83,27 +83,22 @@ function ReasonCard({ reason, index }: { reason: typeof reasons[0]; index: numbe
       ref={ref}
       initial={{
         opacity: 0,
-        y: isMobile ? 24 : 40,
-        scale: 0.95,
-        ...(index % 2 === 0 && !isMobile ? { rotateX: 5 } : { rotateY: index % 2 === 1 ? 5 : 0 }),
+        y: isMobile ? 20 : 30,
+        scale: 0.97,
       }}
       animate={isInView ? {
         opacity: 1,
         y: 0,
         scale: 1,
-        rotateX: 0,
-        rotateY: 0,
       } : {}}
       transition={{
-        duration: isMobile ? 0.4 : 0.6,
-        delay: index * (isMobile ? 0.06 : 0.1),
+        duration: isMobile ? 0.4 : 0.5,
+        delay: index * (isMobile ? 0.05 : 0.08),
         ease: [0.25, 0.1, 0.25, 1],
       }}
-      style={{ perspective: 1000 }}
     >
       <HoverLiftCard className="h-full">
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-full text-center group hover:shadow-xl hover:shadow-green-900/5 transition-all duration-500">
-          {/* Icon with hover-glow and micro-interaction */}
           <motion.div
             whileHover={{ rotate: 360, scale: 1.1 }}
             whileTap={{ scale: 0.95 }}

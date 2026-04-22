@@ -15,42 +15,42 @@ import {
 /* ──────────────── Reusable Animation Presets ──────────────── */
 
 export const fadeInUp: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0 },
 };
 
 export const fadeInDown: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, y: -40 },
+  hidden: { opacity: 0, y: -30 },
   visible: { opacity: 1, y: 0 },
 };
 
 export const fadeInLeft: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, x: -40 },
+  hidden: { opacity: 0, x: -30 },
   visible: { opacity: 1, x: 0 },
 };
 
 export const fadeInRight: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, x: 40 },
+  hidden: { opacity: 0, x: 30 },
   visible: { opacity: 1, x: 0 },
 };
 
 export const scaleIn: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, scale: 0.85 },
+  hidden: { opacity: 0, scale: 0.9 },
   visible: { opacity: 1, scale: 1 },
 };
 
 export const rotateIn: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, rotate: -10, scale: 0.9 },
+  hidden: { opacity: 0, rotate: -5, scale: 0.95 },
   visible: { opacity: 1, rotate: 0, scale: 1 },
 };
 
 export const blurIn: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, filter: "blur(10px)" },
+  hidden: { opacity: 0, filter: "blur(8px)" },
   visible: { opacity: 1, filter: "blur(0px)" },
 };
 
 export const slideInFromBottom: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, y: 80 },
+  hidden: { opacity: 0, y: 60 },
   visible: { opacity: 1, y: 0 },
 };
 
@@ -86,10 +86,10 @@ export function ScrollReveal({
   delay = 0,
   duration = 0.6,
   once = true,
-  margin = "-80px",
+  margin = "-50px",
 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once, margin: margin as `-80px` });
+  const isInView = useInView(ref, { once, margin: margin as `-50px` });
   const controls = useAnimation();
 
   useEffect(() => {
@@ -106,6 +106,7 @@ export function ScrollReveal({
       variants={variants}
       transition={{ duration, delay, ease: [0.25, 0.1, 0.25, 1] }}
       className={className}
+      style={{ willChange: "transform, opacity" }}
     >
       {children}
     </motion.div>
@@ -773,18 +774,18 @@ export function StaggerText({ lines, className = "", staggerDelay = 0.1 }: Stagg
 /* ──────────────── 3D Card Reveal on Scroll ──────────────── */
 
 export const cardReveal3D: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, y: 60, rotateX: 8, scale: 0.95 },
-  visible: { opacity: 1, y: 0, rotateX: 0, scale: 1 },
+  hidden: { opacity: 0, y: 40, scale: 0.97 },
+  visible: { opacity: 1, y: 0, scale: 1 },
 };
 
 export const cardRevealLeft: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, x: -60, rotateY: 6, scale: 0.95 },
-  visible: { opacity: 1, x: 0, rotateY: 0, scale: 1 },
+  hidden: { opacity: 0, x: -40, scale: 0.97 },
+  visible: { opacity: 1, x: 0, scale: 1 },
 };
 
 export const cardRevealRight: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, x: 60, rotateY: -6, scale: 0.95 },
-  visible: { opacity: 1, x: 0, rotateY: 0, scale: 1 },
+  hidden: { opacity: 0, x: 40, scale: 0.97 },
+  visible: { opacity: 1, x: 0, scale: 1 },
 };
 
 export const revealFromBlur: { hidden: Variant; visible: Variant } = {
@@ -793,22 +794,22 @@ export const revealFromBlur: { hidden: Variant; visible: Variant } = {
 };
 
 export const revealFromClip: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, clipPath: "inset(100% 0 0 0)" },
-  visible: { opacity: 1, clipPath: "inset(0% 0 0 0)" },
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0 },
 };
 
 /* Mobile-optimized variant — shorter distance, faster */
 export const fadeInUpMobile: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 },
 };
 
 export const fadeInUpBounce: { hidden: Variant; visible: Variant } = {
-  hidden: { opacity: 0, y: 50 },
+  hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { type: "spring", stiffness: 200, damping: 15 },
+    transition: { type: "spring", stiffness: 200, damping: 20 },
   },
 };
 
@@ -831,15 +832,19 @@ export function DirectionalReveal({
   className = "",
   delay = 0,
   duration = 0.65,
-  distance = 50,
+  distance = 40,
   once = true,
   mobileDistance,
 }: DirectionalRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once, margin: "-60px" });
+  const isInView = useInView(ref, { once, margin: "-40px" });
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
 
   /* Use smaller distance on mobile for snappier feel */
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
   const effectiveDistance = mobileDistance ? (isMobile ? mobileDistance : distance) : (isMobile ? distance * 0.5 : distance);
 
   const directionMap = {
@@ -856,6 +861,7 @@ export function DirectionalReveal({
       animate={isInView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, ...directionMap[direction] }}
       transition={{ duration, delay, ease: [0.25, 0.1, 0.25, 1] }}
       className={className}
+      style={{ willChange: "transform, opacity" }}
     >
       {children}
     </motion.div>
@@ -925,7 +931,7 @@ export function Card3DReveal({
   direction = "up",
 }: Card3DRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
 
   const variantsMap = {
     up: cardReveal3D,
@@ -940,12 +946,12 @@ export function Card3DReveal({
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
       transition={{
-        duration: 0.7,
+        duration: 0.6,
         delay,
         ease: [0.25, 0.1, 0.25, 1],
       }}
-      style={{ perspective: 1200 }}
       className={className}
+      style={{ willChange: "transform, opacity" }}
     >
       {children}
     </motion.div>
@@ -1107,30 +1113,29 @@ interface ImageRevealProps {
 
 export function ImageReveal({ children, className = "", delay = 0, direction = "up" }: ImageRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
 
-  const clipPaths = {
-    up: { hidden: "inset(100% 0 0 0)", visible: "inset(0% 0 0 0)" },
-    down: { hidden: "inset(0 0 100% 0)", visible: "inset(0% 0 0 0)" },
-    left: { hidden: "inset(0 100% 0 0)", visible: "inset(0% 0 0 0)" },
-    right: { hidden: "inset(0 0 0 100%)", visible: "inset(0% 0 0 0)" },
+  /* Use simple opacity + transform instead of clip-path to avoid:
+     1. Images permanently hidden when useInView doesn't fire
+     2. Jitter from clip-path + scale combo
+     3. Poor mobile performance with clip-path animations */
+  const directionOffset = {
+    up: { y: 20, x: 0 },
+    down: { y: -20, x: 0 },
+    left: { x: 20, y: 0 },
+    right: { x: -20, y: 0 },
   };
 
   return (
     <motion.div
       ref={ref}
-      initial={{ clipPath: clipPaths[direction].hidden, opacity: 0 }}
-      animate={isInView ? { clipPath: clipPaths[direction].visible, opacity: 1 } : {}}
-      transition={{ duration: 0.8, delay, ease: [0.25, 0.1, 0.25, 1] }}
+      initial={{ opacity: 0, ...directionOffset[direction], scale: 1.03 }}
+      animate={isInView ? { opacity: 1, x: 0, y: 0, scale: 1 } : { opacity: 0, ...directionOffset[direction], scale: 1.03 }}
+      transition={{ duration: 0.6, delay, ease: [0.25, 0.1, 0.25, 1] }}
       className={className}
+      style={{ willChange: "transform, opacity" }}
     >
-      <motion.div
-        initial={{ scale: 1.15 }}
-        animate={isInView ? { scale: 1 } : { scale: 1.15 }}
-        transition={{ duration: 1.2, delay, ease: [0.25, 0.1, 0.25, 1] }}
-      >
-        {children}
-      </motion.div>
+      {children}
     </motion.div>
   );
 }

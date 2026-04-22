@@ -81,29 +81,13 @@ const services = [
   },
 ];
 
-/* ──── Section Reveal Mask — reveals the heading area with a dramatic clip ──── */
-function SectionRevealMask({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ clipPath: "inset(0 100% 0 0)", opacity: 0 }}
-      animate={isInView ? { clipPath: "inset(0 0% 0 0)", opacity: 1 } : {}}
-      transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
 /* ──── Enhanced Service Card with scroll-triggered reveal ──── */
 function ServiceCard({ service, index }: { service: typeof services[0]; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
   const [isMobile, setIsMobile] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -128,25 +112,43 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
       transition={{
-        duration: isMobile ? 0.5 : 0.7,
-        delay: isMobile ? index * 0.06 : index * 0.1,
+        duration: isMobile ? 0.45 : 0.6,
+        delay: isMobile ? index * 0.05 : index * 0.08,
         ease: [0.25, 0.1, 0.25, 1],
       }}
-      style={{ perspective: 1200 }}
+      style={{ perspective: 1200, willChange: "transform, opacity" }}
     >
       <GlowCard className="h-full" glowColor="var(--color-brand-green)">
         <Card className="h-full overflow-hidden border border-gray-100 bg-white hover:border-[var(--color-brand-green)]/20 transition-all duration-500 group">
-          {/* Image with clip-path reveal mask */}
-          <div className="relative overflow-hidden aspect-[4/3]">
-            <ImageReveal direction={index % 2 === 0 ? "left" : "right"} delay={0.2 + index * 0.06}>
+          {/* Image with smooth fade-in reveal */}
+          <div className="relative overflow-hidden aspect-[4/3] bg-gray-100">
+            <ImageReveal direction={index % 2 === 0 ? "left" : "right"} delay={0.15 + index * 0.05}>
               <Image
                 src={service.image}
                 alt={service.alt}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                onLoad={() => setImgLoaded(true)}
+                onError={() => setImgError(true)}
               />
             </ImageReveal>
+            {/* Fallback placeholder while image loads or on error */}
+            {!imgLoaded && !imgError && (
+              <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-amber-50 animate-pulse flex items-center justify-center">
+                <div className="w-12 h-12 rounded-xl bg-white/60 flex items-center justify-center">
+                  <Sparkles className="h-6 w-6 text-[var(--color-brand-green)]/30" />
+                </div>
+              </div>
+            )}
+            {imgError && (
+              <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-amber-50 flex items-center justify-center">
+                <div className="text-center">
+                  <Sparkles className="h-8 w-8 text-[var(--color-brand-green)]/40 mx-auto mb-2" />
+                  <p className="text-xs text-[var(--color-brand-green)]/60 font-medium">{service.title}</p>
+                </div>
+              </div>
+            )}
             {/* Shimmer overlay on hover */}
             <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
@@ -195,7 +197,7 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
                   key={item}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-                  transition={{ delay: 0.4 + i * 0.05, duration: 0.3 }}
+                  transition={{ delay: 0.3 + i * 0.04, duration: 0.3 }}
                   whileHover={{ scale: 1.08, y: -2 }}
                   className="inline-block text-xs px-2.5 py-1 bg-green-50 text-[var(--color-brand-green)] rounded-full font-medium cursor-default hover:bg-green-100 transition-colors"
                 >
@@ -212,14 +214,15 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
 
 function CustomCTACard() {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 50, scale: 0.95 }}
+      initial={{ opacity: 0, y: 40, scale: 0.97 }}
       animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-      transition={{ duration: 0.7, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+      style={{ willChange: "transform, opacity" }}
     >
       <GlowCard className="h-full" glowColor="var(--color-brand-amber)">
         <div className="relative h-full min-h-[380px] rounded-2xl overflow-hidden group">
@@ -329,19 +332,19 @@ function AnimatedDivider() {
 export function ServicesGrid() {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
-  const isHeadingInView = useInView(headingRef, { once: true, margin: "-80px" });
+  const isHeadingInView = useInView(headingRef, { once: true, margin: "-60px" });
 
-  /* Parallax-like scroll effect for the section background */
+  /* Subtle parallax for background decorations */
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   });
-  const bgY = useTransform(scrollYProgress, [0, 1], [40, -40]);
-  const bgY2 = useTransform(scrollYProgress, [0, 1], [-30, 30]);
+  const bgY = useTransform(scrollYProgress, [0, 1], [30, -30]);
+  const bgY2 = useTransform(scrollYProgress, [0, 1], [-20, 20]);
 
   return (
     <section className="py-20 lg:py-28 bg-white wave-divider relative overflow-hidden" ref={sectionRef}>
-      {/* Animated background decoration that appears on scroll — with parallax */}
+      {/* Animated background decoration — with parallax */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -360,7 +363,7 @@ export function ServicesGrid() {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Enhanced heading with staggered reveal and clip-path animation */}
+        {/* Enhanced heading with staggered reveal */}
         <div ref={headingRef}>
           <SectionHeadingReveal
             badge="What We Print"
@@ -377,7 +380,7 @@ export function ServicesGrid() {
         {/* Animated divider line */}
         <AnimatedDivider />
 
-        {/* Service Cards Grid with staggered 3D reveals */}
+        {/* Service Cards Grid with staggered reveals */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {services.map((service, index) => (
             <ServiceCard key={service.title} service={service} index={index} />

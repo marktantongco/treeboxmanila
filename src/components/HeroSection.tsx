@@ -44,22 +44,22 @@ const mobileTextVariants = {
 };
 
 const imageVariants = {
-  hidden: { opacity: 0, scale: 0.9, x: 40 },
+  hidden: { opacity: 0, scale: 0.95, x: 30 },
   visible: {
     opacity: 1,
     scale: 1,
     x: 0,
-    transition: { delay: 0.5, duration: 0.9, ease: [0.25, 0.1, 0.25, 1] },
+    transition: { delay: 0.4, duration: 0.8, ease: [0.25, 0.1, 0.25, 1] },
   },
 };
 
 const mobileImageVariants = {
-  hidden: { opacity: 0, scale: 0.95, y: 20 },
+  hidden: { opacity: 0, scale: 0.97, y: 15 },
   visible: {
     opacity: 1,
     scale: 1,
     y: 0,
-    transition: { delay: 0.3, duration: 0.6, ease: [0.25, 0.1, 0.25, 1] },
+    transition: { delay: 0.2, duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
   },
 };
 
@@ -160,10 +160,10 @@ export function HeroSection() {
         ))}
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center">
           {/* Text Content */}
-          <div className="order-2 lg:order-1 lg:pt-6">
+          <div className="order-2 lg:order-1">
             <motion.div
               custom={0}
               initial="hidden"
@@ -202,6 +202,7 @@ export function HeroSection() {
               businesses across Metro Manila.
             </motion.p>
 
+            {/* CTA Buttons — always visible, not wrapped in MagneticButton on mobile */}
             <motion.div
               custom={3}
               initial="hidden"
@@ -209,28 +210,53 @@ export function HeroSection() {
               variants={tv}
               className="flex flex-col sm:flex-row gap-4"
             >
-              <MagneticButton strength={0.15} className="inline-flex">
-                <Button
-                  asChild
-                  className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/30 transition-all duration-300 text-base group h-14 px-8 btn-shine"
-                >
-                  <Link href="/contact">
-                    Get a Quote Now
-                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </Button>
-              </MagneticButton>
-              <MagneticButton strength={0.1} className="inline-flex">
-                <Button
-                  asChild
-                  className="bg-[var(--color-brand-green)] hover:bg-[var(--color-brand-green-light)] text-white font-bold text-base group transition-all duration-300 h-14 px-8 shadow-lg shadow-green-900/20 btn-shine"
-                >
-                  <a href="tel:+63281234567">
-                    <Phone className="mr-2 h-5 w-5" />
-                    Call +63 2 8123 4567
-                  </a>
-                </Button>
-              </MagneticButton>
+              {isMobile ? (
+                <>
+                  <Button
+                    asChild
+                    className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-lg shadow-amber-500/25 transition-all duration-300 text-base group h-14 px-8 btn-shine w-full"
+                  >
+                    <Link href="/contact">
+                      Get a Quote Now
+                      <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </Button>
+                  <Button
+                    asChild
+                    className="bg-[var(--color-brand-green)] hover:bg-[var(--color-brand-green-light)] text-white font-bold text-base group transition-all duration-300 h-14 px-8 shadow-lg shadow-green-900/20 btn-shine w-full"
+                  >
+                    <a href="tel:+63281234567">
+                      <Phone className="mr-2 h-5 w-5" />
+                      Call +63 2 8123 4567
+                    </a>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <MagneticButton strength={0.15} className="inline-flex">
+                    <Button
+                      asChild
+                      className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/30 transition-all duration-300 text-base group h-14 px-8 btn-shine"
+                    >
+                      <Link href="/contact">
+                        Get a Quote Now
+                        <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                      </Link>
+                    </Button>
+                  </MagneticButton>
+                  <MagneticButton strength={0.1} className="inline-flex">
+                    <Button
+                      asChild
+                      className="bg-[var(--color-brand-green)] hover:bg-[var(--color-brand-green-light)] text-white font-bold text-base group transition-all duration-300 h-14 px-8 shadow-lg shadow-green-900/20 btn-shine"
+                    >
+                      <a href="tel:+63281234567">
+                        <Phone className="mr-2 h-5 w-5" />
+                        Call +63 2 8123 4567
+                      </a>
+                    </Button>
+                  </MagneticButton>
+                </>
+              )}
             </motion.div>
 
             {/* Trust badges with enhanced micro-interactions */}
@@ -266,12 +292,12 @@ export function HeroSection() {
             </motion.div>
           </div>
 
-          {/* Hero Image with 3D Tilt */}
+          {/* Hero Image with 3D Tilt — moved higher with negative margin */}
           <motion.div
             initial="hidden"
             animate="visible"
             variants={iv}
-            className="order-1 lg:order-2 lg:-mt-6"
+            className="order-1 lg:order-2 lg:-mt-10 xl:-mt-16"
           >
             <TiltCard tiltAmount={5}>
               <div className="relative">
@@ -290,12 +316,12 @@ export function HeroSection() {
                   {/* Overlay gradient */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent" />
                 </div>
-                {/* Floating badge — Call Now with shadow pulse */}
+                {/* Floating badge — Call Now with shadow pulse — positioned inside bounds */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 1.2, type: "spring" }}
-                  className="absolute -bottom-4 -left-4 sm:bottom-4 sm:left-4 bg-white rounded-xl shadow-lg p-3 flex items-center gap-2 ring-1 ring-black/5 animate-shadow-pulse"
+                  className="absolute bottom-3 left-3 sm:bottom-6 sm:left-6 bg-white rounded-xl shadow-lg p-3 flex items-center gap-2 ring-1 ring-black/5 animate-shadow-pulse"
                 >
                   <div className="w-10 h-10 rounded-lg gradient-green flex items-center justify-center text-white">
                     <Phone className="h-5 w-5" />
@@ -305,12 +331,12 @@ export function HeroSection() {
                     <p className="text-sm font-bold text-gray-900">+63 2 8123 4567</p>
                   </div>
                 </motion.div>
-                {/* Floating badge — Since 1997 */}
+                {/* Floating badge — Since 1997 — positioned inside bounds */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 1.5, type: "spring" }}
-                  className="absolute -top-4 -right-4 sm:top-4 sm:right-4 bg-white rounded-xl shadow-lg p-3 ring-1 ring-black/5"
+                  className="absolute top-3 right-3 sm:top-6 sm:right-6 bg-white rounded-xl shadow-lg p-3 ring-1 ring-black/5"
                 >
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-lg gradient-amber flex items-center justify-center text-white text-xs font-bold">
@@ -322,12 +348,12 @@ export function HeroSection() {
                     </div>
                   </div>
                 </motion.div>
-                {/* Floating badge — Free Quote with pulse */}
+                {/* Floating badge — Free Quote — positioned inside bounds */}
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 1.8, type: "spring" }}
-                  className="absolute top-1/2 -right-2 sm:right-0 -translate-y-1/2 hidden lg:block"
+                  className="absolute top-1/2 right-3 sm:right-6 -translate-y-1/2 hidden lg:block"
                 >
                   <div className="bg-[var(--color-brand-green)] text-white rounded-xl shadow-lg px-3 py-2 text-xs font-bold animate-pulse-badge">
                     Free Quote

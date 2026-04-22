@@ -52,11 +52,11 @@ function StatItem({ stat, index }: { stat: typeof stats[0]; index: number }) {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: isMobile ? 20 : 30, scale: 0.9 }}
+      initial={{ opacity: 0, y: isMobile ? 16 : 24, scale: 0.95 }}
       animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
       transition={{
-        duration: isMobile ? 0.4 : 0.6,
-        delay: index * (isMobile ? 0.08 : 0.12),
+        duration: isMobile ? 0.35 : 0.5,
+        delay: index * (isMobile ? 0.06 : 0.1),
         ease: [0.25, 0.1, 0.25, 1],
       }}
       className="text-center group"
