@@ -5,13 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { Phone, ArrowRight, ChevronDown, Shield, Truck, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import {
   MagneticButton,
   FloatingElement,
   RippleButton,
   TiltCard,
+  ScrollReveal,
+  MobileSwipeReveal,
+  DirectionalReveal,
 } from "@/components/animations";
+import { useRef } from "react";
 
 const rotatingWords = [
   "Custom Boxes",
@@ -31,6 +35,15 @@ const textVariants = {
   }),
 };
 
+const mobileTextVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: 0.1 + i * 0.08, duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
+  }),
+};
+
 const imageVariants = {
   hidden: { opacity: 0, scale: 0.9, x: 40 },
   visible: {
@@ -38,6 +51,16 @@ const imageVariants = {
     scale: 1,
     x: 0,
     transition: { delay: 0.5, duration: 0.9, ease: [0.25, 0.1, 0.25, 1] },
+  },
+};
+
+const mobileImageVariants = {
+  hidden: { opacity: 0, scale: 0.95, y: 20 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { delay: 0.3, duration: 0.6, ease: [0.25, 0.1, 0.25, 1] },
   },
 };
 
@@ -76,33 +99,46 @@ function RotatingText({ words }: { words: string[] }) {
 }
 
 export function HeroSection() {
+  const [isMobile, setIsMobile] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  const tv = isMobile ? mobileTextVariants : textVariants;
+  const iv = isMobile ? mobileImageVariants : imageVariants;
+
   return (
-    <section className="relative overflow-hidden gradient-mesh">
+    <section className="relative overflow-hidden gradient-mesh" ref={heroRef}>
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-[var(--color-brand-green)]/5 rounded-full blur-3xl animate-morph" />
         <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-[var(--color-brand-amber)]/5 rounded-full blur-3xl animate-color-shift" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-green-100/30 rounded-full blur-[100px]" />
 
-        {/* Floating decorative shapes with enhanced morph animations */}
-        <FloatingElement className="absolute top-[15%] right-[10%]" amplitude={12} duration={4} delay={0}>
+        {/* Floating decorative shapes — fewer on mobile */}
+        <FloatingElement className="absolute top-[15%] right-[10%] hidden sm:block" amplitude={12} duration={4} delay={0}>
           <div className="w-16 h-16 rounded-xl border border-[var(--color-brand-green)]/10 bg-[var(--color-brand-green)]/5 rotate-12 animate-morph" />
         </FloatingElement>
         <FloatingElement className="absolute bottom-[20%] left-[5%]" amplitude={8} duration={5} delay={1}>
           <div className="w-10 h-10 rounded-full border border-[var(--color-brand-amber)]/10 bg-[var(--color-brand-amber)]/5 animate-color-shift" />
         </FloatingElement>
-        <FloatingElement className="absolute top-[40%] left-[8%]" amplitude={6} duration={3.5} delay={0.5}>
+        <FloatingElement className="absolute top-[40%] left-[8%] hidden sm:block" amplitude={6} duration={3.5} delay={0.5}>
           <div className="w-6 h-6 rounded-md bg-[var(--color-brand-green)]/10 rotate-45" />
         </FloatingElement>
-        <FloatingElement className="absolute top-[20%] left-[40%]" amplitude={10} duration={4.5} delay={2}>
+        <FloatingElement className="absolute top-[20%] left-[40%] hidden md:block" amplitude={10} duration={4.5} delay={2}>
           <div className="w-4 h-4 rounded-full bg-[var(--color-brand-amber)]/15" />
         </FloatingElement>
-        <FloatingElement className="absolute bottom-[30%] right-[15%]" amplitude={7} duration={3} delay={1.5}>
+        <FloatingElement className="absolute bottom-[30%] right-[15%] hidden sm:block" amplitude={7} duration={3} delay={1.5}>
           <div className="w-8 h-8 rounded-lg border border-[var(--color-brand-green)]/8 bg-[var(--color-brand-green)]/3 -rotate-12" />
         </FloatingElement>
 
-        {/* Animated particle dots */}
-        {[...Array(6)].map((_, i) => (
+        {/* Animated particle dots — fewer on mobile for performance */}
+        {[...Array(isMobile ? 3 : 6)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute w-1.5 h-1.5 rounded-full bg-[var(--color-brand-green)]/20"
@@ -133,7 +169,7 @@ export function HeroSection() {
               custom={0}
               initial="hidden"
               animate="visible"
-              variants={textVariants}
+              variants={tv}
             >
               <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--color-brand-amber)]/10 text-[var(--color-brand-amber-dark)] font-semibold text-sm">
                 <span className="w-2 h-2 rounded-full bg-[var(--color-brand-amber)] animate-pulse" />
@@ -145,7 +181,7 @@ export function HeroSection() {
               custom={1}
               initial="hidden"
               animate="visible"
-              variants={textVariants}
+              variants={tv}
               className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-[1.1] mb-6"
             >
               Premium{" "}
@@ -158,7 +194,7 @@ export function HeroSection() {
               custom={2}
               initial="hidden"
               animate="visible"
-              variants={textVariants}
+              variants={tv}
               className="text-lg text-gray-600 leading-relaxed mb-8 max-w-xl"
             >
               From custom boxes and paper bags to calendars, flyers, and
@@ -171,10 +207,10 @@ export function HeroSection() {
               custom={3}
               initial="hidden"
               animate="visible"
-              variants={textVariants}
+              variants={tv}
               className="flex flex-col sm:flex-row gap-4"
             >
-              <RippleButton>
+              <RippleButton className="inline-flex">
                 <MagneticButton strength={0.15}>
                   <Button
                     asChild
@@ -200,12 +236,12 @@ export function HeroSection() {
               </MagneticButton>
             </motion.div>
 
-            {/* Trust badges with micro-interactions */}
+            {/* Trust badges with enhanced micro-interactions */}
             <motion.div
               custom={4}
               initial="hidden"
               animate="visible"
-              variants={textVariants}
+              variants={tv}
               className="mt-10 flex items-center gap-4 sm:gap-6"
             >
               {trustBadges.map((badge, i) => {
@@ -214,6 +250,7 @@ export function HeroSection() {
                   <div key={badge.text} className="flex items-center gap-2.5 group/badge">
                     <motion.div
                       whileHover={{ scale: 1.1, rotate: 5 }}
+                      whileTap={{ scale: 0.95 }}
                       transition={{ type: "spring", stiffness: 300 }}
                       className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center group-hover/badge:bg-green-100 transition-colors"
                     >
@@ -236,7 +273,7 @@ export function HeroSection() {
           <motion.div
             initial="hidden"
             animate="visible"
-            variants={imageVariants}
+            variants={iv}
             className="order-1 lg:order-2"
           >
             <TiltCard tiltAmount={5}>

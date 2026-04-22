@@ -3,8 +3,9 @@
 import { Phone, Mail, MapPin, Clock, MessageCircle, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { ContactForm } from "@/components/ContactForm";
-import { ScrollReveal, fadeInUp, fadeInRight, fadeInLeft, BounceIn, SlideIn } from "@/components/animations";
-import { motion } from "framer-motion";
+import { ScrollReveal, fadeInUp, fadeInRight, fadeInLeft, BounceIn, SlideIn, SectionHeadingReveal } from "@/components/animations";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 
 const contactInfo = [
   {
@@ -42,6 +43,47 @@ const cities = [
   "San Juan", "Caloocan", "Valenzuela", "Manila",
   "Taguig", "Paranaque",
 ];
+
+function ContactInfoCard({ info, index }: { info: typeof contactInfo[0]; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
+  const Icon = info.icon;
+
+  const content = (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.5, delay: index * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
+      whileHover={{ x: 4, boxShadow: "0 4px 12px rgba(0,0,0,0.06)" }}
+      className="flex items-start gap-4 p-4 rounded-xl border border-gray-100 hover:border-[var(--color-brand-green)]/20 hover:shadow-sm transition-all bg-white"
+    >
+      <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl gradient-green text-white shrink-0 shadow-md shadow-green-900/10">
+        <Icon className="h-5 w-5" />
+      </div>
+      <div>
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+          {info.label}
+        </p>
+        <p className="font-semibold text-gray-900 text-sm mt-0.5">
+          {info.value}
+        </p>
+        <p className="text-xs text-gray-400 mt-0.5">
+          {info.description}
+        </p>
+      </div>
+    </motion.div>
+  );
+
+  if (info.href) {
+    return (
+      <a key={info.label} href={info.href} className="block" aria-label={`${info.label}: ${info.value}`}>
+        {content}
+      </a>
+    );
+  }
+  return <div key={info.label}>{content}</div>;
+}
 
 export function ContactPageContent() {
   return (
@@ -128,40 +170,9 @@ export function ContactPageContent() {
                 </p>
 
                 <div className="space-y-3">
-                  {contactInfo.map((info, i) => {
-                    const Icon = info.icon;
-                    const content = (
-                      <motion.div
-                        whileHover={{ x: 4 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                        className="flex items-start gap-4 p-4 rounded-xl border border-gray-100 hover:border-[var(--color-brand-green)]/20 hover:shadow-sm transition-all bg-white"
-                      >
-                        <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl gradient-green text-white shrink-0 shadow-md shadow-green-900/10">
-                          <Icon className="h-5 w-5" />
-                        </div>
-                        <div>
-                          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                            {info.label}
-                          </p>
-                          <p className="font-semibold text-gray-900 text-sm mt-0.5">
-                            {info.value}
-                          </p>
-                          <p className="text-xs text-gray-400 mt-0.5">
-                            {info.description}
-                          </p>
-                        </div>
-                      </motion.div>
-                    );
-
-                    if (info.href) {
-                      return (
-                        <a key={info.label} href={info.href} className="block" aria-label={`${info.label}: ${info.value}`}>
-                          {content}
-                        </a>
-                      );
-                    }
-                    return <div key={info.label}>{content}</div>;
-                  })}
+                  {contactInfo.map((info, i) => (
+                    <ContactInfoCard key={info.label} info={info} index={i} />
+                  ))}
                 </div>
 
                 {/* Quick Call CTA */}
@@ -201,9 +212,13 @@ export function ContactPageContent() {
                     We serve businesses across Metro Manila and surrounding areas:
                   </p>
                   <div className="flex flex-wrap gap-1.5">
-                    {cities.map((city) => (
+                    {cities.map((city, i) => (
                       <motion.span
                         key={city}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true, margin: "-40px" }}
+                        transition={{ duration: 0.3, delay: i * 0.04 }}
                         whileHover={{ scale: 1.08 }}
                         className="inline-block text-xs px-2.5 py-1 bg-green-50 text-[var(--color-brand-green)] rounded-full font-medium cursor-default hover:bg-green-100 transition-colors"
                       >
@@ -221,20 +236,15 @@ export function ContactPageContent() {
       {/* Map Section */}
       <section className="bg-[var(--color-brand-cream)] py-20 lg:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal>
-            <div className="text-center mb-10">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-green-100 text-[var(--color-brand-green)] font-semibold text-sm mb-4">
-                Find Us
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+          <SectionHeadingReveal
+            badge="Find Us"
+            title={
+              <>
                 Visit Us in <span className="text-gradient-green">Quezon City</span>
-              </h2>
-              <p className="text-gray-500">
-                Located in Quezon City, Metro Manila — easily accessible from all
-                major business districts.
-              </p>
-            </div>
-          </ScrollReveal>
+              </>
+            }
+            subtitle="Located in Quezon City, Metro Manila — easily accessible from all major business districts."
+          />
 
           <ScrollReveal delay={0.2}>
             <motion.div

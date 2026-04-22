@@ -62,6 +62,7 @@ export function Header() {
         <Link href="/" className="flex items-center gap-2.5 group" aria-label="Treebox Manila Home">
           <motion.div
             whileHover={{ rotate: 5, scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
             <Image
@@ -173,12 +174,12 @@ export function Header() {
                         initial={{ opacity: 0, x: 40 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: 40 }}
-                        transition={{ delay: i * 0.08 }}
+                        transition={{ delay: i * 0.08, type: "spring", stiffness: 200, damping: 20 }}
                       >
                         <Link
                           href={link.href}
                           onClick={() => setOpen(false)}
-                          className={`flex items-center gap-3 px-4 py-3.5 text-base font-medium rounded-lg transition-colors ${
+                          className={`flex items-center gap-3 px-4 py-3.5 text-base font-medium rounded-lg transition-colors touch-feedback ${
                             isActive(link.href)
                               ? "text-[var(--color-brand-green)] bg-green-50"
                               : "text-gray-700 hover:text-[var(--color-brand-green)] hover:bg-green-50"

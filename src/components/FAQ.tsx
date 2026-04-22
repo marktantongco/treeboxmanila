@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ChevronDown, HelpCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ScrollReveal, StaggerReveal, fadeInUp } from "@/components/animations";
+import { ScrollReveal, StaggerReveal, fadeInUp, SectionHeadingReveal } from "@/components/animations";
 
 const faqs = [
   {
@@ -48,6 +48,65 @@ const faqs = [
   },
 ];
 
+function FAQItem({ faq, index, isOpen, onToggle }: { faq: typeof faqs[0]; index: number; isOpen: boolean; onToggle: () => void }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.4, delay: index * 0.05, ease: [0.25, 0.1, 0.25, 1] }}
+    >
+      <div className={`bg-white rounded-xl border shadow-sm overflow-hidden transition-all duration-300 hover-lift touch-feedback ${
+        isOpen ? 'border-[var(--color-brand-green)]/20 shadow-md' : 'border-gray-100 hover:border-[var(--color-brand-green)]/20'
+      }`}>
+        <button
+          onClick={onToggle}
+          className="w-full flex items-center justify-between p-5 sm:p-6 text-left group"
+          aria-expanded={isOpen}
+        >
+          <div className="flex items-center gap-3 pr-4">
+            <motion.span
+              animate={{ rotate: isOpen ? 360 : 0, scale: isOpen ? 1.05 : 1 }}
+              transition={{ duration: 0.5, type: "spring", stiffness: 200, damping: 15 }}
+              className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold transition-colors duration-300 ${
+                isOpen ? 'bg-[var(--color-brand-green)] text-white shadow-md shadow-green-900/20' : 'bg-green-50 text-[var(--color-brand-green)]'
+              }`}
+            >
+              {String(index + 1).padStart(2, "0")}
+            </motion.span>
+            <span className="font-semibold text-gray-900 group-hover:text-[var(--color-brand-green)] transition-colors text-sm sm:text-base">
+              {faq.question}
+            </span>
+          </div>
+          <motion.div
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: 0.3, type: "spring", stiffness: 200, damping: 15 }}
+            className="shrink-0"
+          >
+            <ChevronDown className={`h-5 w-5 transition-colors ${
+              isOpen ? 'text-[var(--color-brand-green)]' : 'text-gray-400 group-hover:text-[var(--color-brand-green)]'
+            }`} />
+          </motion.div>
+        </button>
+        <AnimatePresence initial={false}>
+          {isOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+            >
+              <div className="px-5 sm:px-6 pb-5 sm:pb-6 text-sm text-gray-500 leading-relaxed border-t border-gray-50 pt-4 pl-14 sm:pl-16">
+                {faq.answer}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
+  );
+}
+
 export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
@@ -56,67 +115,27 @@ export function FAQ() {
       <div className="absolute inset-0 pointer-events-none dot-pattern" />
 
       <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <ScrollReveal>
-          <div className="text-center mb-14">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-green-100 text-[var(--color-brand-green)] font-semibold text-sm mb-4">
-              FAQ
-            </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+        <SectionHeadingReveal
+          badge="FAQ"
+          title={
+            <>
               Frequently Asked{" "}
               <span className="text-gradient-green">Questions</span>
-            </h2>
-            <p className="text-lg text-gray-500 max-w-2xl mx-auto">
-              Everything you need to know about our printing services. Cannot find
-              the answer you are looking for? Contact us directly.
-            </p>
-          </div>
-        </ScrollReveal>
+            </>
+          }
+          subtitle="Everything you need to know about our printing services. Cannot find the answer you are looking for? Contact us directly."
+          badgeColor="green"
+        />
 
         <div className="space-y-3">
           {faqs.map((faq, i) => (
-            <ScrollReveal key={i} delay={i * 0.05}>
-              <div className={`bg-white rounded-xl border shadow-sm overflow-hidden transition-colors duration-300 hover-lift ${openIndex === i ? 'border-[var(--color-brand-green)]/20 shadow-md' : 'border-gray-100 hover:border-[var(--color-brand-green)]/20'}`}>
-                <button
-                  onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                  className="w-full flex items-center justify-between p-5 sm:p-6 text-left group"
-                  aria-expanded={openIndex === i}
-                >
-                  <div className="flex items-center gap-3 pr-4">
-                    <motion.span
-                      animate={{ rotate: openIndex === i ? 360 : 0 }}
-                      transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
-                      className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold transition-colors duration-300 ${openIndex === i ? 'bg-[var(--color-brand-green)] text-white' : 'bg-green-50 text-[var(--color-brand-green)]'}`}
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </motion.span>
-                    <span className="font-semibold text-gray-900 group-hover:text-[var(--color-brand-green)] transition-colors text-sm sm:text-base">
-                      {faq.question}
-                    </span>
-                  </div>
-                  <motion.div
-                    animate={{ rotate: openIndex === i ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="shrink-0"
-                  >
-                    <ChevronDown className={`h-5 w-5 transition-colors ${openIndex === i ? 'text-[var(--color-brand-green)]' : 'text-gray-400 group-hover:text-[var(--color-brand-green)]'}`} />
-                  </motion.div>
-                </button>
-                <AnimatePresence initial={false}>
-                  {openIndex === i && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-                    >
-                      <div className="px-5 sm:px-6 pb-5 sm:pb-6 text-sm text-gray-500 leading-relaxed border-t border-gray-50 pt-4 pl-14 sm:pl-16">
-                        {faq.answer}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </ScrollReveal>
+            <FAQItem
+              key={i}
+              faq={faq}
+              index={i}
+              isOpen={openIndex === i}
+              onToggle={() => setOpenIndex(openIndex === i ? null : i)}
+            />
           ))}
         </div>
       </div>

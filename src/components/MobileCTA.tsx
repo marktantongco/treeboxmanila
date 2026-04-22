@@ -7,6 +7,7 @@ import Link from "next/link";
 
 export function MobileCTA() {
   const [visible, setVisible] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,15 +33,24 @@ export function MobileCTA() {
             <div className="flex gap-3">
               <Link
                 href="/contact"
-                className="flex-1 flex items-center justify-center gap-2 bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold py-3.5 rounded-xl shadow-lg shadow-amber-500/25 active:scale-[0.98] transition-all duration-200"
+                onClick={() => setHasInteracted(true)}
+                className="flex-1 flex items-center justify-center gap-2 bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold py-3.5 rounded-xl shadow-lg shadow-amber-500/25 active:scale-[0.97] transition-transform duration-150 touch-feedback relative overflow-hidden"
               >
                 <MessageSquare className="h-5 w-5" />
                 <span>Get a Quote</span>
+                {/* Pulse indicator when not yet interacted */}
+                {!hasInteracted && (
+                  <motion.span
+                    animate={{ scale: [1, 1.5, 1], opacity: [0.6, 0, 0.6] }}
+                    transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                    className="absolute top-2 right-2 w-2 h-2 rounded-full bg-white"
+                  />
+                )}
               </Link>
               <a
                 href="tel:+63281234567"
                 aria-label="Call Treebox Manila now"
-                className="flex items-center justify-center gap-2 bg-[var(--color-brand-green)] hover:bg-[var(--color-brand-green-light)] text-white font-bold py-3.5 px-5 rounded-xl shadow-lg shadow-green-900/20 active:scale-[0.98] transition-all duration-200"
+                className="flex items-center justify-center gap-2 bg-[var(--color-brand-green)] hover:bg-[var(--color-brand-green-light)] text-white font-bold py-3.5 px-5 rounded-xl shadow-lg shadow-green-900/20 active:scale-[0.97] transition-transform duration-150 touch-feedback"
               >
                 <Phone className="h-5 w-5" />
                 <span className="hidden xs:inline">Call Us</span>

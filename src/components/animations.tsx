@@ -508,7 +508,12 @@ export function RippleButton({ children, className = "", color = "rgba(255,255,2
   };
 
   return (
-    <motion.div onClick={handleClick} className={`relative overflow-hidden ${className}`} whileTap={{ scale: 0.98 }}>
+    <motion.div
+      onClick={handleClick}
+      className={`relative overflow-hidden ${className}`}
+      whileTap={{ scale: 0.97 }}
+      style={{ display: "inline-flex" }}
+    >
       {children}
       {ripples.map((ripple) => (
         <motion.span
@@ -760,3 +765,471 @@ export function StaggerText({ lines, className = "", staggerDelay = 0.1 }: Stagg
     </div>
   );
 }
+
+/* ══════════════════════════════════════════════════════════════
+   ENHANCED ANIMATION COMPONENTS — Scroll Reveals & Mobile
+   ══════════════════════════════════════════════════════════════ */
+
+/* ──────────────── 3D Card Reveal on Scroll ──────────────── */
+
+export const cardReveal3D: { hidden: Variant; visible: Variant } = {
+  hidden: { opacity: 0, y: 60, rotateX: 8, scale: 0.95 },
+  visible: { opacity: 1, y: 0, rotateX: 0, scale: 1 },
+};
+
+export const cardRevealLeft: { hidden: Variant; visible: Variant } = {
+  hidden: { opacity: 0, x: -60, rotateY: 6, scale: 0.95 },
+  visible: { opacity: 1, x: 0, rotateY: 0, scale: 1 },
+};
+
+export const cardRevealRight: { hidden: Variant; visible: Variant } = {
+  hidden: { opacity: 0, x: 60, rotateY: -6, scale: 0.95 },
+  visible: { opacity: 1, x: 0, rotateY: 0, scale: 1 },
+};
+
+export const revealFromBlur: { hidden: Variant; visible: Variant } = {
+  hidden: { opacity: 0, filter: "blur(12px)", scale: 0.96 },
+  visible: { opacity: 1, filter: "blur(0px)", scale: 1 },
+};
+
+export const revealFromClip: { hidden: Variant; visible: Variant } = {
+  hidden: { opacity: 0, clipPath: "inset(100% 0 0 0)" },
+  visible: { opacity: 1, clipPath: "inset(0% 0 0 0)" },
+};
+
+/* Mobile-optimized variant — shorter distance, faster */
+export const fadeInUpMobile: { hidden: Variant; visible: Variant } = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0 },
+};
+
+export const fadeInUpBounce: { hidden: Variant; visible: Variant } = {
+  hidden: { opacity: 0, y: 50 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 200, damping: 15 },
+  },
+};
+
+/* ──────────────── Scroll-Reveal with Direction ──────────────── */
+
+interface DirectionalRevealProps {
+  children: ReactNode;
+  direction?: "up" | "down" | "left" | "right";
+  className?: string;
+  delay?: number;
+  duration?: number;
+  distance?: number;
+  once?: boolean;
+  mobileDistance?: number;
+}
+
+export function DirectionalReveal({
+  children,
+  direction = "up",
+  className = "",
+  delay = 0,
+  duration = 0.65,
+  distance = 50,
+  once = true,
+  mobileDistance,
+}: DirectionalRevealProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once, margin: "-60px" });
+
+  /* Use smaller distance on mobile for snappier feel */
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const effectiveDistance = mobileDistance ? (isMobile ? mobileDistance : distance) : (isMobile ? distance * 0.5 : distance);
+
+  const directionMap = {
+    up: { x: 0, y: effectiveDistance },
+    down: { x: 0, y: -effectiveDistance },
+    left: { x: -effectiveDistance, y: 0 },
+    right: { x: effectiveDistance, y: 0 },
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, ...directionMap[direction] }}
+      animate={isInView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, ...directionMap[direction] }}
+      transition={{ duration, delay, ease: [0.25, 0.1, 0.25, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ──────────────── Staggered Grid Reveal (for card grids) ──────────────── */
+
+interface StaggerGridRevealProps {
+  children: ReactNode;
+  className?: string;
+  staggerDelay?: number;
+  once?: boolean;
+  columns?: number;
+}
+
+export function StaggerGridReveal({
+  children,
+  className = "",
+  staggerDelay = 0.08,
+  once = true,
+}: StaggerGridRevealProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once, margin: "-60px" });
+  const controls = useAnimation();
+
+  useEffect(() => {
+    if (isInView) {
+      controls.start("visible");
+    }
+  }, [isInView, controls]);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={controls}
+      variants={{
+        hidden: {},
+        visible: {
+          transition: {
+            staggerChildren: staggerDelay,
+            delayChildren: 0.1,
+          },
+        },
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ──────────────── Card with 3D Scroll Reveal ──────────────── */
+
+interface Card3DRevealProps {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+  direction?: "up" | "left" | "right";
+}
+
+export function Card3DReveal({
+  children,
+  className = "",
+  delay = 0,
+  direction = "up",
+}: Card3DRevealProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+
+  const variantsMap = {
+    up: cardReveal3D,
+    left: cardRevealLeft,
+    right: cardRevealRight,
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      variants={variantsMap[direction]}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      transition={{
+        duration: 0.7,
+        delay,
+        ease: [0.25, 0.1, 0.25, 1],
+      }}
+      style={{ perspective: 1200 }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ──────────────── Mobile Swipe Reveal (touch-optimized) ──────────────── */
+
+interface MobileSwipeRevealProps {
+  children: ReactNode;
+  className?: string;
+  direction?: "left" | "right" | "up";
+  delay?: number;
+}
+
+export function MobileSwipeReveal({
+  children,
+  className = "",
+  direction = "up",
+  delay = 0,
+}: MobileSwipeRevealProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
+
+  const dirMap = {
+    up: { y: 30, x: 0 },
+    left: { y: 0, x: 30 },
+    right: { y: 0, x: -30 },
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, ...dirMap[direction], scale: 0.97 }}
+      animate={isInView ? { opacity: 1, x: 0, y: 0, scale: 1 } : {}}
+      transition={{
+        duration: 0.5,
+        delay,
+        ease: [0.25, 0.1, 0.25, 1],
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ──────────────── Pulse Ring Animation ──────────────── */
+
+interface PulseRingProps {
+  children: ReactNode;
+  className?: string;
+  color?: string;
+  size?: number;
+}
+
+export function PulseRing({ children, className = "", color = "var(--color-brand-green)", size = 40 }: PulseRingProps) {
+  return (
+    <div className={`relative ${className}`}>
+      {children}
+      <motion.div
+        animate={{
+          scale: [1, 1.8],
+          opacity: [0.4, 0],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 2,
+          ease: "easeOut",
+        }}
+        className="absolute inset-0 rounded-full pointer-events-none"
+        style={{
+          backgroundColor: color,
+          opacity: 0.2,
+          width: size,
+          height: size,
+          top: "50%",
+          left: "50%",
+          marginTop: -size / 2,
+          marginLeft: -size / 2,
+        }}
+      />
+    </div>
+  );
+}
+
+/* ──────────────── Scroll Progress Bar ──────────────── */
+
+interface ScrollProgressProps {
+  className?: string;
+  color?: string;
+}
+
+export function ScrollProgress({ className = "", color = "var(--color-brand-green)" }: ScrollProgressProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const scrollYProgress = useMotionValue(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollHeight > 0) {
+        scrollYProgress.set(window.scrollY / scrollHeight);
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [scrollYProgress]);
+
+  const width = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
+  return (
+    <motion.div
+      ref={ref}
+      className={`h-1 rounded-full ${className}`}
+      style={{ width, backgroundColor: color, originX: 0 }}
+    />
+  );
+}
+
+/* ──────────────── Staggered Number Counter with Suffix ──────────────── */
+
+interface StaggerCounterProps {
+  items: Array<{ value: number; suffix?: string; prefix?: string; label: string }>;
+  className?: string;
+}
+
+export function StaggerCounter({ items, className = "" }: StaggerCounterProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <div ref={ref} className={`grid grid-cols-2 gap-6 ${className}`}>
+      {items.map((item, i) => (
+        <motion.div
+          key={item.label}
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: i * 0.12, ease: [0.25, 0.1, 0.25, 1] }}
+          className="text-center"
+        >
+          <div className="text-3xl sm:text-4xl font-extrabold">
+            <AnimatedCounter target={item.value} suffix={item.suffix} prefix={item.prefix} />
+          </div>
+          <p className="text-sm text-gray-500 mt-1">{item.label}</p>
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+/* ──────────────── Image Reveal with Mask ──────────────── */
+
+interface ImageRevealProps {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+  direction?: "left" | "right" | "up" | "down";
+}
+
+export function ImageReveal({ children, className = "", delay = 0, direction = "up" }: ImageRevealProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  const clipPaths = {
+    up: { hidden: "inset(100% 0 0 0)", visible: "inset(0% 0 0 0)" },
+    down: { hidden: "inset(0 0 100% 0)", visible: "inset(0% 0 0 0)" },
+    left: { hidden: "inset(0 100% 0 0)", visible: "inset(0% 0 0 0)" },
+    right: { hidden: "inset(0 0 0 100%)", visible: "inset(0% 0 0 0)" },
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ clipPath: clipPaths[direction].hidden, opacity: 0 }}
+      animate={isInView ? { clipPath: clipPaths[direction].visible, opacity: 1 } : {}}
+      transition={{ duration: 0.8, delay, ease: [0.25, 0.1, 0.25, 1] }}
+      className={className}
+    >
+      <motion.div
+        initial={{ scale: 1.15 }}
+        animate={isInView ? { scale: 1 } : { scale: 1.15 }}
+        transition={{ duration: 1.2, delay, ease: [0.25, 0.1, 0.25, 1] }}
+      >
+        {children}
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ──────────────── Section Heading Reveal (staggered badge + title + subtitle) ──────────────── */
+
+interface SectionHeadingRevealProps {
+  badge?: string;
+  title: ReactNode;
+  subtitle?: string;
+  className?: string;
+  badgeColor?: "green" | "amber";
+}
+
+export function SectionHeadingReveal({
+  badge,
+  title,
+  subtitle,
+  className = "",
+  badgeColor = "green",
+}: SectionHeadingRevealProps) {
+  const badgeStyles = {
+    green: "bg-green-50 text-[var(--color-brand-green)]",
+    amber: "bg-amber-50 text-[var(--color-brand-amber-dark)]",
+  };
+
+  return (
+    <div className={`text-center mb-14 ${className}`}>
+      {badge && (
+        <ScrollReveal delay={0}>
+          <span className={`inline-block px-4 py-1.5 rounded-full font-semibold text-sm mb-4 ${badgeStyles[badgeColor]}`}>
+            {badge}
+          </span>
+        </ScrollReveal>
+      )}
+      <ScrollReveal delay={0.08}>
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+          {title}
+        </h2>
+      </ScrollReveal>
+      {subtitle && (
+        <ScrollReveal delay={0.16}>
+          <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+            {subtitle}
+          </p>
+        </ScrollReveal>
+      )}
+    </div>
+  );
+}
+
+/* ──────────────── Hover Tilt Card (touch-friendly) ──────────────── */
+
+interface HoverTiltProps {
+  children: ReactNode;
+  className?: string;
+  tiltDegree?: number;
+  scale?: number;
+}
+
+export function HoverTilt({ children, className = "", tiltDegree = 3, scale = 1.02 }: HoverTiltProps) {
+  return (
+    <motion.div
+      whileHover={{ scale, rotateZ: tiltDegree }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ──────────────── Stagger List (for sequential items) ──────────────── */
+
+interface StaggerListProps {
+  children: ReactNode;
+  className?: string;
+  staggerDelay?: number;
+}
+
+export function StaggerList({ children, className = "", staggerDelay = 0.06 }: StaggerListProps) {
+  return (
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-40px" }}
+      variants={{
+        hidden: {},
+        visible: { transition: { staggerChildren: staggerDelay } },
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+export const staggerListItem: { hidden: Variant; visible: Variant } = {
+  hidden: { opacity: 0, x: -20 },
+  visible: { opacity: 1, x: 0 },
+};

@@ -234,7 +234,7 @@ export function ServicesPageContent() {
                   </div>
 
                   <div className="mt-6">
-                    <RippleButton className="inline-block">
+                    <RippleButton className="inline-flex">
                       <Button
                         asChild
                         className="bg-[var(--color-brand-green)] hover:bg-[var(--color-brand-green-light)] text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300 group btn-shine"

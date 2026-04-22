@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from "framer-motion";
 import { ScrollReveal, HoverLiftCard, fadeInUp, RippleButton } from "@/components/animations";
 
 const testimonials = [
@@ -83,6 +83,10 @@ export function Testimonials() {
   const progressRef = useRef<NodeJS.Timeout | null>(null);
   const AUTO_ADVANCE_DURATION = 6000;
 
+  /* Swipe tracking for mobile */
+  const dragX = useMotionValue(0);
+  const dragOpacity = useTransform(dragX, [-200, 0, 200], [0.5, 1, 0.5]);
+
   const next = useCallback(() => {
     setDirection(1);
     setCurrent((prev) => (prev + 1) % testimonials.length);
@@ -110,6 +114,16 @@ export function Testimonials() {
       if (progressRef.current) clearInterval(progressRef.current);
     };
   }, [next, isPaused]);
+
+  /* Handle swipe end */
+  const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    const threshold = 50;
+    if (info.offset.x > threshold) {
+      prev();
+    } else if (info.offset.x < -threshold) {
+      next();
+    }
+  };
 
   const variants = {
     enter: (dir: number) => ({
@@ -153,7 +167,7 @@ export function Testimonials() {
           </div>
         </ScrollReveal>
 
-        {/* Testimonial Card */}
+        {/* Testimonial Card with Swipe Support */}
         <div className="max-w-4xl mx-auto">
           <ScrollReveal>
             <div
@@ -189,6 +203,12 @@ export function Testimonials() {
                         animate="center"
                         exit="exit"
                         transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                        drag="x"
+                        dragConstraints={{ left: 0, right: 0 }}
+                        dragElastic={0.15}
+                        onDragEnd={handleDragEnd}
+                        style={{ opacity: dragOpacity }}
+                        className="cursor-grab active:cursor-grabbing"
                       >
                         {/* Star rating */}
                         <div className="bg-white/60 inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-sm shadow-sm mb-6">
@@ -214,6 +234,18 @@ export function Testimonials() {
                             </span>
                           </div>
                         </div>
+
+                        {/* Mobile-only swipe hint */}
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 1.5 }}
+                          className="mt-6 flex items-center justify-center gap-2 text-gray-400 text-xs sm:hidden"
+                        >
+                          <ChevronLeft className="h-3 w-3" />
+                          Swipe to see more
+                          <ChevronRight className="h-3 w-3" />
+                        </motion.div>
                       </motion.div>
                     </AnimatePresence>
                   </div>

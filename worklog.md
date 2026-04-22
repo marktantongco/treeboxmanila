@@ -1,33 +1,31 @@
 ---
 Task ID: 1
 Agent: Main Agent
-Task: Comprehensive audit, bug fixes, and animation/motion/interaction upgrade of treeboxmanila.com
+Task: Comprehensive animation upgrade for treeboxmanila.com
 
 Work Log:
-- Audited all 20+ component files across the codebase
-- Diagnosed "Get a Quote Now" button visibility issue (btn-shine z-index CSS)
-- Enhanced animations.tsx with 8 new motion components: RippleButton, GlowCard, CountUp, SlideIn, BounceIn, TiltCard, TypingEffect, StaggerText
-- Upgraded HeroSection with: RippleButton, TiltCard (3D hover on hero image), morph animations on decorative elements, particle dots, blur transitions on rotating text, shadow pulse on badges
-- Fixed Header group-hover bug (changed to named group/cta)
-- Upgraded ServicesGrid with GlowCard, micro-interaction tag pills
-- Simplified WhyChooseUs over-animation (removed 3-layer glow, replaced with hover-glow)
-- Upgraded StatsSection with CountUp (spring-based counter)
-- Upgraded all 4 page content components:
-  - AboutPageContent: BounceIn stats, TiltCard image, SlideIn timeline, hover-glow CTAs, animate-morph decorations
-  - ServicesPageContent: SlideIn alternating directions, RippleButton on Request Quote, hover-glow CTAs
-  - ContactPageContent: SlideIn form/sidebar, BounceIn CTA, spotlight-hover map, hover-glow buttons
-  - HomePageContent: RippleButton on CTA, hover-glow-amber, animate-morph shapes
-- Upgraded Testimonials with motion.button arrows, whileTap micro-interactions
-- Upgraded FAQ with rotation animation on toggle badges, hover-lift items
-- Upgraded ProcessSection with BounceIn step icons
-- Upgraded ContactForm with RippleButton submit, focus:scale inputs, hover-glow
-- Added CSS utilities: hover-lift, hover-scale, hover-glow, hover-glow-amber, hover-wobble, animate-morph, animate-color-shift, animate-shadow-pulse, animate-elastic-bounce, spotlight-hover, animated-border, noise-overlay, gradient-text animation
-- Verified build passes successfully
+- Audited all component files (Header, Footer, HeroSection, ServicesGrid, StatsSection, WhyChooseUs, ProcessSection, Testimonials, FAQ, ClientLogoMarquee, MobileCTA, ScrollToTop, all page content components)
+- Fixed "Get a Quote Now" button visibility bug — changed RippleButton from `inline-block` to `inline-flex` and added `style={{ display: "inline-flex" }}` to the RippleButton component
+- Enhanced animations.tsx with 10+ new components: DirectionalReveal, StaggerGridReveal, Card3DReveal, MobileSwipeReveal, PulseRing, ScrollProgress, StaggerCounter, ImageReveal, SectionHeadingReveal, HoverTilt, StaggerList
+- Added new animation variants: cardReveal3D, cardRevealLeft, cardRevealRight, revealFromBlur, revealFromClip, fadeInUpMobile, fadeInUpBounce
+- Upgraded ServicesGrid with 3D scroll-triggered card reveals (alternating directions), SectionHeadingReveal, and animated background decorations
+- Enhanced HeroSection with mobile-responsive animation variants (shorter distance, faster duration), reduced particle count on mobile, conditional floating elements
+- Enhanced StatsSection with individual StatItem components featuring scroll-triggered scale animations and mobile animated line
+- Enhanced Testimonials with swipe gesture support (drag="x"), mobile swipe hint, and improved drag physics
+- Enhanced FAQ with spring-based accordion animations, touch-feedback class, and FAQItem component with individual scroll reveals
+- Enhanced WhyChooseUs with individual ReasonCard components featuring scroll-triggered animations and SectionHeadingReveal
+- Enhanced AboutPageContent with StatCard components, SectionHeadingReveal, and staggered industry tag animations
+- Enhanced ContactPageContent with ContactInfoCard components featuring hover micro-interactions and staggered city tag animations
+- Enhanced MobileCTA with pulse indicator, touch-feedback, and better transition timing
+- Enhanced ScrollToTop with whileHover/whileTap micro-interactions
+- Enhanced Header with whileTap on mobile buttons and spring transitions for mobile nav
+- Added comprehensive globals.css mobile-optimized utilities: touch-feedback, mobile scroll snap, page-enter, perspective-container, card-flip-inner, clip-path reveal animations, staggered entrance delays, reduced motion preference, and mobile-specific animation duration reductions
 
 Stage Summary:
-- Build verified passing with all changes
-- 8 new animation components added to animations.tsx
-- 13+ new CSS utility classes and keyframe animations added
-- All 4 pages upgraded with enhanced motion transitions
-- Bug fixes: Header group-hover, btn-shine z-index (button visibility)
-- Hero section now features 3D tilt, ripple clicks, particle dots, morph animations
+- Build passes successfully (Next.js 16.1.3 with Turbopack)
+- All 9 routes compile and generate correctly
+- "Get a Quote Now" button visibility bug fixed
+- Comprehensive animation system with 20+ reusable components
+- Mobile-optimized: shorter animation distances, fewer particles, touch feedback, swipe support, reduced motion preference
+- Scroll-triggered reveals with 3D card effects across ServicesGrid "What We Print" section
+- Enhanced micro-interactions: whileTap, whileHover, spring physics on all interactive elements

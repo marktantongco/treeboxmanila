@@ -3,8 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Award, Users, Target, Heart, ArrowRight, Phone } from "lucide-react";
-import { motion } from "framer-motion";
-import { ScrollReveal, StaggerReveal, AnimatedCounter, fadeInUp, fadeInRight, fadeInLeft, HoverLiftCard, ParallaxSection, BounceIn, SlideIn, TiltCard } from "@/components/animations";
+import { motion, useInView } from "framer-motion";
+import { ScrollReveal, StaggerGridReveal, AnimatedCounter, fadeInUp, fadeInRight, fadeInLeft, HoverLiftCard, ParallaxSection, BounceIn, SlideIn, TiltCard, SectionHeadingReveal, ImageReveal } from "@/components/animations";
+import { useRef } from "react";
 
 const milestones = [
   { year: "1997", title: "Founded as MWC Enterprises", description: "Our journey began in Quezon City as MWC Enterprises, providing offset lithography printing services to local businesses with a focus on quality and reliability." },
@@ -28,6 +29,26 @@ const stats = [
   { value: 50, suffix: "+", label: "Product Types" },
   { value: 99, suffix: "%", label: "On-Time Delivery" },
 ];
+
+function StatCard({ stat, index }: { stat: typeof stats[0]; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20, scale: 0.9 }}
+      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+      transition={{ duration: 0.5, delay: index * 0.1, type: "spring", stiffness: 200, damping: 20 }}
+      className="text-center"
+    >
+      <div className="text-3xl sm:text-4xl font-extrabold text-gradient-green">
+        <AnimatedCounter target={stat.value} suffix={stat.suffix} />
+      </div>
+      <p className="text-sm text-gray-500 mt-1 font-medium">{stat.label}</p>
+    </motion.div>
+  );
+}
 
 export function AboutPageContent() {
   return (
@@ -58,19 +79,12 @@ export function AboutPageContent() {
         </div>
       </section>
 
-      {/* Stats Bar */}
+      {/* Stats Bar with staggered reveals */}
       <section className="bg-white border-b border-gray-100">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, idx) => (
-              <BounceIn key={stat.label} delay={idx * 0.1}>
-                <div className="text-center">
-                  <div className="text-3xl sm:text-4xl font-extrabold text-gradient-green">
-                    <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                  </div>
-                  <p className="text-sm text-gray-500 mt-1 font-medium">{stat.label}</p>
-                </div>
-              </BounceIn>
+              <StatCard key={stat.label} stat={stat} index={idx} />
             ))}
           </div>
         </div>
@@ -127,23 +141,29 @@ export function AboutPageContent() {
           <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--color-brand-green)]/3 rounded-full blur-3xl animate-morph" />
         </div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal>
-            <div className="text-center mb-14">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-green-100 text-[var(--color-brand-green)] font-semibold text-sm mb-4">Our Values</span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+          <SectionHeadingReveal
+            badge="Our Values"
+            title={
+              <>
                 What Sets Us <span className="text-gradient-green">Apart</span>
-              </h2>
-              <p className="text-lg text-gray-500 max-w-2xl mx-auto">For over 25 years, these core principles have guided every print job and every client relationship.</p>
-            </div>
-          </ScrollReveal>
-          <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8" staggerDelay={0.12}>
-            {values.map((value) => {
+              </>
+            }
+            subtitle="For over 25 years, these core principles have guided every print job and every client relationship."
+          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
+            {values.map((value, i) => {
               const Icon = value.icon;
               return (
-                <motion.div key={value.title} variants={fadeInUp}>
+                <motion.div
+                  key={value.title}
+                  initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.6, delay: i * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+                >
                   <HoverLiftCard className="h-full">
                     <div className="bg-white rounded-2xl p-7 shadow-sm border border-gray-100 h-full">
-                      <motion.div whileHover={{ rotate: 360, scale: 1.1 }} transition={{ duration: 0.6 }} className="inline-flex items-center justify-center w-14 h-14 rounded-xl gradient-green text-white mb-5 shadow-lg shadow-green-900/20">
+                      <motion.div whileHover={{ rotate: 360, scale: 1.1 }} whileTap={{ scale: 0.95 }} transition={{ duration: 0.6 }} className="inline-flex items-center justify-center w-14 h-14 rounded-xl gradient-green text-white mb-5 shadow-lg shadow-green-900/20">
                         <Icon className="h-7 w-7" />
                       </motion.div>
                       <h3 className="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
@@ -153,31 +173,38 @@ export function AboutPageContent() {
                 </motion.div>
               );
             })}
-          </StaggerReveal>
+          </div>
         </div>
       </section>
 
       {/* Industries */}
       <section className="py-20 lg:py-28 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal>
-            <div className="text-center mb-14">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-amber-50 text-[var(--color-brand-amber-dark)] font-semibold text-sm mb-4">Who We Serve</span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+          <SectionHeadingReveal
+            badge="Who We Serve"
+            badgeColor="amber"
+            title={
+              <>
                 Industries We <span className="text-gradient-amber">Serve</span>
-              </h2>
-              <p className="text-lg text-gray-500 max-w-2xl mx-auto">Our printing expertise spans a wide range of industries.</p>
-            </div>
-          </ScrollReveal>
-          <StaggerReveal className="flex flex-wrap justify-center gap-3" staggerDelay={0.06}>
-            {industries.map((industry) => (
-              <motion.div key={industry} variants={fadeInUp}>
-                <motion.span whileHover={{ scale: 1.08, y: -2 }} className="inline-block px-5 py-2.5 bg-green-50 text-[var(--color-brand-green)] rounded-full font-medium text-sm border border-green-100 cursor-default hover:bg-green-100 hover:border-green-200 transition-colors shadow-sm">
-                  {industry}
-                </motion.span>
-              </motion.div>
+              </>
+            }
+            subtitle="Our printing expertise spans a wide range of industries."
+          />
+          <div className="flex flex-wrap justify-center gap-3">
+            {industries.map((industry, i) => (
+              <motion.span
+                key={industry}
+                initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.4, delay: i * 0.05, ease: [0.25, 0.1, 0.25, 1] }}
+                whileHover={{ scale: 1.08, y: -2 }}
+                className="inline-block px-5 py-2.5 bg-green-50 text-[var(--color-brand-green)] rounded-full font-medium text-sm border border-green-100 cursor-default hover:bg-green-100 hover:border-green-200 transition-colors shadow-sm"
+              >
+                {industry}
+              </motion.span>
             ))}
-          </StaggerReveal>
+          </div>
         </div>
       </section>
 
@@ -187,18 +214,16 @@ export function AboutPageContent() {
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-[var(--color-brand-amber)]/5 rounded-full blur-3xl animate-morph" />
         </div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal>
-            <div className="text-center mb-14">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-green-100 text-[var(--color-brand-green)] font-semibold text-sm mb-4">Our Journey</span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">Milestones</h2>
-            </div>
-          </ScrollReveal>
+          <SectionHeadingReveal
+            badge="Our Journey"
+            title={<span>Milestones</span>}
+          />
           <div className="max-w-3xl mx-auto">
             {milestones.map((milestone, index) => (
               <SlideIn key={milestone.year} direction={index % 2 === 0 ? "left" : "right"} delay={index * 0.1}>
                 <div className="flex gap-6 group">
                   <div className="flex flex-col items-center">
-                    <motion.div whileHover={{ scale: 1.15 }} className="flex items-center justify-center w-16 h-16 rounded-2xl gradient-green text-white font-bold text-sm shrink-0 shadow-lg shadow-green-900/20 group-hover:shadow-xl transition-shadow">
+                    <motion.div whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.95 }} className="flex items-center justify-center w-16 h-16 rounded-2xl gradient-green text-white font-bold text-sm shrink-0 shadow-lg shadow-green-900/20 group-hover:shadow-xl transition-shadow">
                       {milestone.year}
                     </motion.div>
                     {index < milestones.length - 1 && (

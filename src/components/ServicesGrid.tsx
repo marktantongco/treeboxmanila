@@ -5,8 +5,22 @@ import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Sparkles, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-import { ScrollReveal, StaggerReveal, GlowCard, fadeInUp, RippleButton } from "@/components/animations";
+import { motion, useInView } from "framer-motion";
+import {
+  ScrollReveal,
+  StaggerGridReveal,
+  GlowCard,
+  fadeInUp,
+  fadeInUpBounce,
+  RippleButton,
+  SectionHeadingReveal,
+  cardReveal3D,
+  cardRevealLeft,
+  cardRevealRight,
+  MobileSwipeReveal,
+  ImageReveal,
+} from "@/components/animations";
+import { useRef, useEffect, useAnimation } from "react";
 
 const services = [
   {
@@ -71,11 +85,30 @@ const services = [
   },
 ];
 
+/* ──── Enhanced Service Card with 3D scroll-triggered reveal ──── */
 function ServiceCard({ service, index }: { service: typeof services[0]; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+
+  /* Alternate reveal direction for visual variety */
+  const revealDirection = index % 3 === 0 ? cardReveal3D : index % 3 === 1 ? cardRevealLeft : cardRevealRight;
+
   return (
-    <motion.div variants={fadeInUp}>
+    <motion.div
+      ref={ref}
+      variants={revealDirection}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      transition={{
+        duration: 0.7,
+        delay: index * 0.08,
+        ease: [0.25, 0.1, 0.25, 1],
+      }}
+      style={{ perspective: 1200 }}
+    >
       <GlowCard className="h-full" glowColor="var(--color-brand-green)">
         <Card className="h-full overflow-hidden border border-gray-100 bg-white hover:border-[var(--color-brand-green)]/20 transition-all duration-500 group">
+          {/* Image with scroll-triggered reveal mask */}
           <div className="relative overflow-hidden aspect-[4/3]">
             <Image
               src={service.image}
@@ -127,9 +160,12 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
               {service.description}
             </p>
             <div className="flex flex-wrap gap-1.5">
-              {service.items.map((item) => (
+              {service.items.map((item, i) => (
                 <motion.span
                   key={item}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+                  transition={{ delay: 0.3 + i * 0.06, duration: 0.3 }}
                   whileHover={{ scale: 1.08, y: -2 }}
                   className="inline-block text-xs px-2.5 py-1 bg-green-50 text-[var(--color-brand-green)] rounded-full font-medium cursor-default hover:bg-green-100 transition-colors"
                 >
@@ -145,8 +181,16 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
 }
 
 function CustomCTACard() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+
   return (
-    <motion.div variants={fadeInUp}>
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 50, scale: 0.95 }}
+      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+      transition={{ duration: 0.7, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+    >
       <GlowCard className="h-full" glowColor="var(--color-brand-amber)">
         <div className="relative h-full min-h-[380px] rounded-2xl overflow-hidden group">
           {/* Green gradient background */}
@@ -224,36 +268,51 @@ function CustomCTACard() {
 }
 
 export function ServicesGrid() {
-  return (
-    <section className="py-20 lg:py-28 bg-white wave-divider">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <ScrollReveal>
-          <div className="text-center mb-14">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-green-50 text-[var(--color-brand-green)] font-semibold text-sm mb-4">
-              What We Print
-            </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-              What Can We Print for You?
-            </h2>
-            <p className="text-lg text-gray-500 max-w-2xl mx-auto">
-              We cater to a wide variety of industries including food, real
-              estate, healthcare, electronics, and legal. Whatever your printing
-              need, we have the expertise to deliver.
-            </p>
-          </div>
-        </ScrollReveal>
+  const sectionRef = useRef<HTMLElement>(null);
+  const headingRef = useRef<HTMLDivElement>(null);
+  const isHeadingInView = useInView(headingRef, { once: true, margin: "-80px" });
 
-        {/* Service Cards Grid - 7 items: 3+3+1 on desktop, 2+2+2+1 on tablet */}
-        <StaggerReveal
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
-          staggerDelay={0.1}
-        >
+  return (
+    <section className="py-20 lg:py-28 bg-white wave-divider relative" ref={sectionRef}>
+      {/* Animated background decoration that appears on scroll */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={isHeadingInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+          transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
+          className="absolute top-0 right-0 w-96 h-96 bg-[var(--color-brand-green)]/3 rounded-full blur-3xl"
+        />
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={isHeadingInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+          transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+          className="absolute bottom-0 left-0 w-72 h-72 bg-[var(--color-brand-amber)]/3 rounded-full blur-3xl"
+        />
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Enhanced heading with staggered reveal */}
+        <div ref={headingRef}>
+          <SectionHeadingReveal
+            badge="What We Print"
+            title={
+              <>
+                What Can We Print{" "}
+                <span className="text-gradient-green">for You</span>?
+              </>
+            }
+            subtitle="We cater to a wide variety of industries including food, real estate, healthcare, electronics, and legal. Whatever your printing need, we have the expertise to deliver."
+          />
+        </div>
+
+        {/* Service Cards Grid with staggered 3D reveals */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {services.map((service, index) => (
             <ServiceCard key={service.title} service={service} index={index} />
           ))}
           {/* 7th card - Custom CTA */}
           <CustomCTACard />
-        </StaggerReveal>
+        </div>
 
         <ScrollReveal delay={0.3}>
           <div className="text-center mt-12">
