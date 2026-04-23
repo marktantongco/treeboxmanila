@@ -8,6 +8,7 @@ import { LocalBusinessSchema } from "@/components/LocalBusinessSchema";
 import { FAQSchema } from "@/components/FAQSchema";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { Toaster } from "@/components/ui/sonner";
+import { ScrollProgress } from "@/components/ScrollProgress";
 
 const inter = Inter({
   variable: "--font-geist-sans",
@@ -95,6 +96,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.variable} font-sans antialiased overflow-x-hidden`}>
+        <ScrollProgress />
         <LocalBusinessSchema />
         <FAQSchema />
         <div className="min-h-screen flex flex-col overflow-x-hidden">

@@ -100,9 +100,16 @@ function FAQItem({ faq, index, isOpen, onToggle }: { faq: typeof faqs[0]; index:
               exit={{ height: 0, opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.4, type: "spring", stiffness: 300, damping: 25 }}
             >
-              <div className="px-5 sm:px-6 pb-5 sm:pb-6 text-sm text-gray-600 leading-relaxed border-t border-gray-50 pt-4 pl-14 sm:pl-16">
-                {faq.answer}
-              </div>
+              <motion.div
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -5 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="px-5 sm:px-6 pb-5 sm:pb-6 text-sm text-gray-600 leading-relaxed border-t border-gray-50 pt-4 pl-14 sm:pl-16">
+                  {faq.answer}
+                </div>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>

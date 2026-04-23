@@ -55,8 +55,8 @@ function StarRating({ rating }: { rating: number }) {
         <motion.div
           key={i}
           initial={{ scale: 0, rotate: -180 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{ delay: i * 0.1, type: "spring", stiffness: 300, damping: 15 }}
+          animate={{ scale: [0, 1, 1, 1.1, 1], rotate: [-180, 0, 0, 0, 0] }}
+          transition={{ delay: i * 0.1, duration: 0.8, times: [0, 0.5, 0.8, 0.9, 1], ease: "easeOut" }}
         >
           <Star
             className={`h-6 w-6 ${

@@ -100,7 +100,11 @@ function ReasonCard({ reason, index }: { reason: typeof reasons[0]; index: numbe
       }}
     >
       <HoverLiftCard className="h-full">
-        <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 h-full text-center group hover:shadow-xl hover:shadow-green-900/5 transition-all duration-500">
+        <motion.div
+          animate={isInView ? { boxShadow: ["0 1px 2px rgba(0,0,0,0.04)", "0 4px 16px rgba(27,94,32,0.08)", "0 1px 2px rgba(0,0,0,0.04)"] } : {}}
+          transition={{ repeat: Infinity, duration: 4, delay: index * 0.5, ease: "easeInOut" }}
+          className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-100 hover:border-[var(--color-brand-green)]/30 h-full text-center group transition-all duration-500"
+        >
           {/* Icon — full size with continuous idle rotate */}
           <div className="relative inline-flex items-center justify-center mb-4">
             {/* Rotating dashed ring decoration */}
@@ -110,17 +114,23 @@ function ReasonCard({ reason, index }: { reason: typeof reasons[0]; index: numbe
               className="absolute inset-[-6px] rounded-2xl border-2 border-dashed border-white/20"
             />
             <motion.div
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.92 }}
               transition={{ type: "spring", stiffness: 300, damping: 15 }}
-              className="relative inline-flex items-center justify-center w-20 h-20 rounded-2xl gradient-green text-white shadow-lg shadow-green-900/25 hover-glow cursor-pointer overflow-hidden"
+              className="relative inline-flex items-center justify-center w-24 h-24 sm:w-28 sm:h-28 rounded-2xl gradient-green text-white shadow-lg shadow-green-900/25 hover-glow cursor-pointer overflow-hidden"
             >
+              {/* Ambient glow pulse behind icon */}
+              <motion.div
+                animate={{ scale: [1, 1.4, 1], opacity: [0.15, 0, 0.15] }}
+                transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                className="absolute inset-0 bg-white rounded-2xl"
+              />
               {/* Continuous spinning icon */}
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
               >
-                <Icon className="h-10 w-10" />
+                <Icon className="h-12 w-12 sm:h-14 sm:w-14" />
               </motion.div>
             </motion.div>
           </div>
@@ -133,7 +143,7 @@ function ReasonCard({ reason, index }: { reason: typeof reasons[0]; index: numbe
           <p className="text-sm text-gray-600 leading-relaxed">
             {reason.description}
           </p>
-        </div>
+        </motion.div>
       </HoverLiftCard>
     </motion.div>
   );

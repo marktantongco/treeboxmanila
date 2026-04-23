@@ -88,7 +88,7 @@ export function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Follow us on ${label}`}
-                    whileHover={{ scale: 1.15, y: -2 }}
+                    whileHover={{ scale: 1.15, y: -2, rotate: 5 }}
                     whileTap={{ scale: 0.95 }}
                     className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 transition-all duration-300 hover:shadow-lg"
                   >

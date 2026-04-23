@@ -110,6 +110,8 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
       variants={revealDirection}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.98 }}
       transition={{
         duration: isMobile ? 0.5 : 0.7,
         delay: isMobile ? index * 0.06 : index * 0.1,
@@ -196,7 +198,7 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
                   animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.7, y: 10 }}
                   transition={{ delay: 0.5 + i * 0.06, duration: 0.4, type: "spring", stiffness: 200, damping: 15 }}
                   whileHover={{ scale: 1.08, y: -2, backgroundColor: "var(--color-brand-green)", color: "#fff" }}
-                  className="inline-block text-sm font-semibold px-3 py-1.5 bg-green-50 text-[var(--color-brand-green)] rounded-full cursor-default hover:bg-green-100 transition-colors border border-green-100"
+                  className="inline-block text-sm sm:text-base font-semibold px-3 sm:px-4 py-1.5 sm:py-2 bg-green-50 text-[var(--color-brand-green)] rounded-full cursor-default hover:bg-green-100 transition-colors border border-green-100 shadow-sm"
                 >
                   {item}
                 </motion.span>

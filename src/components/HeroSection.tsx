@@ -5,13 +5,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { Phone, ArrowRight, ChevronDown, Shield, Truck, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
 import {
   MagneticButton,
   FloatingElement,
   TiltCard,
 } from "@/components/animations";
-import { useRef } from "react";
+import { useRef, useCallback } from "react";
 
 const rotatingWords = [
   "Custom Boxes",
@@ -80,15 +80,15 @@ function RotatingText({ words }: { words: string[] }) {
   }, [words.length]);
 
   return (
-    <span className="inline-block relative h-[1.2em] overflow-hidden align-bottom min-w-[250px] sm:min-w-[300px] lg:min-w-[380px]">
+    <span className="inline-flex relative h-[1.3em] overflow-visible align-bottom min-w-[260px] sm:min-w-[320px] lg:min-w-[400px]">
       <AnimatePresence mode="wait">
         <motion.span
           key={words[index]}
-          initial={{ y: "100%", opacity: 0, filter: "blur(8px)", scale: 0.9 }}
-          animate={{ y: 0, opacity: 1, filter: "blur(0px)", scale: 1 }}
-          exit={{ y: "-100%", opacity: 0, filter: "blur(8px)", scale: 0.9 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute left-0 text-gradient-amber"
+          initial={{ y: "100%", opacity: 0, filter: "blur(6px)" }}
+          animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+          exit={{ y: "-100%", opacity: 0, filter: "blur(6px)" }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="absolute left-0 text-gradient-amber whitespace-nowrap"
         >
           {words[index]}
         </motion.span>
@@ -109,6 +109,23 @@ export function HeroSection() {
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 150]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
+  /* Mouse-follow parallax offsets using MotionValues */
+  const mouseXMV = useMotionValue(0.5);
+  const mouseYMV = useMotionValue(0.5);
+  const smoothMouseX = useSpring(mouseXMV, { stiffness: 50, damping: 20 });
+  const smoothMouseY = useSpring(mouseYMV, { stiffness: 50, damping: 20 });
+  const decorX1 = useTransform(smoothMouseX, [0, 1], [-15, 15]);
+  const decorY1 = useTransform(smoothMouseY, [0, 1], [-10, 10]);
+  const decorX2 = useTransform(smoothMouseX, [0, 1], [15, -15]);
+  const decorY2 = useTransform(smoothMouseY, [0, 1], [10, -10]);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    if (isMobile) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    mouseXMV.set((e.clientX - rect.left) / rect.width);
+    mouseYMV.set((e.clientY - rect.top) / rect.height);
+  }, [isMobile, mouseXMV, mouseYMV]);
+
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
     check();
@@ -120,7 +137,7 @@ export function HeroSection() {
   const iv = isMobile ? mobileImageVariants : imageVariants;
 
   return (
-    <section className="relative overflow-hidden gradient-mesh" ref={heroRef}>
+    <section className="relative overflow-hidden gradient-mesh" ref={heroRef} onMouseMove={handleMouseMove}>
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-[var(--color-brand-green)]/5 rounded-full blur-3xl animate-morph" />
@@ -128,17 +145,30 @@ export function HeroSection() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-green-100/30 rounded-full blur-[100px]" />
 
         <FloatingElement className="absolute top-[15%] right-[10%] hidden sm:block" amplitude={12} duration={4} delay={0}>
-          <div className="w-16 h-16 rounded-xl border border-[var(--color-brand-green)]/10 bg-[var(--color-brand-green)]/5 rotate-12 animate-morph" />
+          <motion.div style={{ x: decorX1, y: decorY1 }}>
+            <div className="w-16 h-16 rounded-xl border border-[var(--color-brand-green)]/10 bg-[var(--color-brand-green)]/5 rotate-12 animate-morph" />
+          </motion.div>
         </FloatingElement>
         <FloatingElement className="absolute bottom-[20%] left-[5%]" amplitude={8} duration={5} delay={1}>
-          <div className="w-10 h-10 rounded-full border border-[var(--color-brand-amber)]/10 bg-[var(--color-brand-amber)]/5 animate-color-shift" />
+          <motion.div style={{ x: decorX2, y: decorY2 }}>
+            <div className="w-10 h-10 rounded-full border border-[var(--color-brand-amber)]/10 bg-[var(--color-brand-amber)]/5 animate-color-shift" />
+          </motion.div>
         </FloatingElement>
         <FloatingElement className="absolute top-[40%] left-[8%] hidden sm:block" amplitude={6} duration={3.5} delay={0.5}>
-          <div className="w-6 h-6 rounded-md bg-[var(--color-brand-green)]/10 rotate-45" />
+          <motion.div style={{ x: decorX1, y: decorY1 }}>
+            <div className="w-6 h-6 rounded-md bg-[var(--color-brand-green)]/10 rotate-45" />
+          </motion.div>
         </FloatingElement>
         <FloatingElement className="absolute top-[20%] left-[40%] hidden md:block" amplitude={10} duration={4.5} delay={2}>
           <div className="w-4 h-4 rounded-full bg-[var(--color-brand-amber)]/15" />
         </FloatingElement>
+
+        {/* Decorative rotating ring */}
+        <motion.div
+          animate={{ rotate: [0, 360] }}
+          transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
+          className="absolute top-[10%] right-[25%] w-32 h-32 border border-[var(--color-brand-green)]/8 rounded-full hidden lg:block"
+        />
 
         {/* Particle dots — enhanced with varied sizes and colors */}
         {[...Array(isMobile ? 4 : 8)].map((_, i) => (

@@ -307,6 +307,10 @@ export function ProcessSection() {
                       <div className="relative z-10 mx-auto mb-6">
                         <BounceIn delay={i * 0.1}>
                         <motion.div
+                          animate={{ y: [-3, 3, -3] }}
+                          transition={{ repeat: Infinity, duration: 3, delay: i * 0.2, ease: "easeInOut" }}
+                        >
+                        <motion.div
                           whileHover={{ scale: 1.1 }}
                           transition={{ type: "spring", stiffness: 300, damping: 15 }}
                           className="relative inline-flex items-center justify-center w-24 h-24 rounded-2xl bg-white border-2 border-[var(--color-brand-green)]/10 shadow-lg shadow-green-900/5 group-hover:border-[var(--color-brand-green)]/30 group-hover:shadow-xl group-hover:shadow-green-900/10 transition-all duration-500"
@@ -320,6 +324,7 @@ export function ProcessSection() {
                           <Icon className="h-10 w-10 text-[var(--color-brand-green)]" />
                           {/* Step badge with enhanced pulse */}
                           <StepBadge number={i + 1} />
+                        </motion.div>
                         </motion.div>
                         </BounceIn>
                       </div>

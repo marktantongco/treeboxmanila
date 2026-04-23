@@ -91,6 +91,15 @@ function StatItem({ stat, index }: { stat: typeof stats[0]; index: number }) {
       <p className="text-green-100/50 text-xs mt-0.5">
         {stat.description}
       </p>
+      {/* Animated progress bar */}
+      <div className="mt-3 mx-auto w-20 h-1 bg-white/10 rounded-full overflow-hidden">
+        <motion.div
+          initial={{ width: 0 }}
+          animate={isInView ? { width: "100%" } : { width: 0 }}
+          transition={{ duration: 1.5, delay: 0.5 + index * 0.15, ease: [0.16, 1, 0.3, 1] }}
+          className="h-full bg-gradient-to-r from-white/60 to-[var(--color-brand-amber)] rounded-full"
+        />
+      </div>
     </motion.div>
   );
 }

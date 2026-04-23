@@ -126,15 +126,21 @@ export function Header() {
           transition={{ delay: 0.5 }}
           className="hidden md:flex items-center gap-3"
         >
-          <Button
-            asChild
-            className="group/cta bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-md shadow-amber-500/20 hover:shadow-lg hover:shadow-amber-500/30 transition-all duration-300 btn-shine h-11 px-5 text-sm hover-glow-amber"
+          <motion.div
+            animate={{ boxShadow: ["0 4px 12px rgba(245,124,0,0.2)", "0 4px 20px rgba(245,124,0,0.4)", "0 4px 12px rgba(245,124,0,0.2)"] }}
+            transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+            className="rounded-md"
           >
-            <Link href="/contact" aria-label="Get a quote">
-              Get a Quote Now
-              <ArrowRight className="ml-2 h-4 w-4 group-hover/cta:translate-x-1 transition-transform" />
-            </Link>
-          </Button>
+            <Button
+              asChild
+              className="group/cta bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-md shadow-amber-500/20 hover:shadow-lg hover:shadow-amber-500/30 transition-all duration-300 btn-shine h-11 px-5 text-sm hover-glow-amber"
+            >
+              <Link href="/contact" aria-label="Get a quote">
+                Get a Quote Now
+                <ArrowRight className="ml-2 h-4 w-4 group-hover/cta:translate-x-1 transition-transform" />
+              </Link>
+            </Button>
+          </motion.div>
         </motion.div>
 
         {/* Mobile Menu */}
