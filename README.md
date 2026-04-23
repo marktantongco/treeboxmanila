@@ -9,6 +9,7 @@
 </p>
 
 <p align="center">
+  <a href="https://treeboxmanilaph.vercel.app">Live Site</a> ·
   <a href="https://treeboxmanila.com">treeboxmanila.com</a> ·
   <a href="https://github.com/marktantongco/treeboxmanila">GitHub</a>
 </p>
@@ -34,7 +35,7 @@ This repository contains the source code for our corporate website — a modern,
 | **UI Components** | [shadcn/ui](https://ui.shadcn.com/) + [Radix UI](https://www.radix-ui.com/) |
 | **Icons** | [Lucide React](https://lucide.dev/) |
 | **Fonts** | [Inter](https://fonts.google.com/specimen/Inter) (Google Fonts) |
-| **Deployment** | [Vercel](https://vercel.com/) + [GitHub Pages](https://pages.github.com/) |
+| **Deployment** | [Vercel](https://treeboxmanilaph.vercel.app/) + [GitHub Pages](https://pages.github.com/) |
 | **Runtime** | [Bun](https://bun.sh/) |
 
 ---
@@ -251,9 +252,15 @@ bun run lint
 
 ## Deployment
 
-### Vercel (Recommended)
+### Vercel (Primary)
 
-The project is optimized for Vercel deployment:
+The project is deployed on Vercel:
+
+- **Live URL**: [https://treeboxmanilaph.vercel.app](https://treeboxmanilaph.vercel.app/)
+- Auto-deploys from the `main` branch on GitHub
+- Vercel auto-detects Next.js and handles SSR/ISR
+
+To set up your own Vercel deployment:
 
 1. Push to GitHub repository
 2. Connect repository at [vercel.com/new](https://vercel.com/new)
