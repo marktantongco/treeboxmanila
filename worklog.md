@@ -156,3 +156,44 @@ Stage Summary:
 - 2 additional enhancements for ClientLogoMarquee and CustomCTACard
 - All changes compile successfully with no new lint errors
 - Pre-existing lint errors remain (react-hooks/set-state-in-effect in Header and animations)
+
+---
+Task ID: 13
+Agent: Main Agent
+Task: Undo compact icons, fix RotatingText, 10 animation upgrades, README, GitHub push, deploy to GitHub Pages + Vercel
+
+Work Log:
+- Read all component files to understand current state
+- Fixed WhyChooseUs: restored icon sizes to w-24 h-24 sm:w-28 sm:h-28, icons to h-12 w-12 sm:h-14 sm:w-14, added ambient glow pulse behind icons
+- Fixed ServicesGrid: increased label text size (text-sm sm:text-base), padding (px-3 sm:px-4 py-1.5 sm:py-2), added shadow-sm
+- Fixed Hero RotatingText: changed overflow-hidden to overflow-visible, removed scale transforms, added whitespace-nowrap, increased min-widths
+- Implemented 10 comprehensive animation upgrades:
+  1. Header: Pulsing amber glow shadow on "Get a Quote Now" CTA
+  2. Hero: Mouse-follow parallax on decorative elements + rotating ring
+  3. Stats: Animated progress bars under each counter
+  4. ServicesGrid: Scale bounce hover/tap on service cards
+  5. WhyChooseUs: Ambient shadow pulse animation on cards
+  6. ProcessSection: Floating step icons after bounce entrance
+  7. Testimonials: Star rating sparkle with multi-keyframe animation
+  8. FAQ: Smooth answer fade-in with opacity + y transition
+  9. Footer: Social icons with rotation on hover
+  10. Global: Scroll progress bar component at page top
+- Created comprehensive README.md with project documentation
+- Created GitHub Actions workflow for GitHub Pages deployment
+- Pushed to GitHub: marktantongco/treeboxmanila
+- Also pushed to marktantongco/marktantongco.github.io
+- Enabled GitHub Pages on both repos with workflow build type
+- Deployed to Vercel: treeboxmanila project at prj_528NEleNZAPaweR4J6acAA83r9FW
+- Added custom domains: treeboxmanila.com and www.treeboxmanila.com (both verified)
+- Set AI_GATEWAY_API_KEY environment variable on Vercel
+- Renamed Vercel project from my-project to treeboxmanila
+- Build verified successful on all platforms
+
+Stage Summary:
+- All bug fixes applied: icon sizes, label readability, RotatingText clipping
+- 10 animation upgrades implemented and verified
+- Comprehensive README.md written
+- Pushed to GitHub: https://github.com/marktantongco/treeboxmanila
+- GitHub Pages: https://marktantongco.github.io/treeboxmanila/
+- Vercel: https://treeboxmanila.com (custom domain verified)
+- All deployments successful
