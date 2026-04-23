@@ -176,27 +176,27 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
               </span>
             </div>
           </div>
-          <CardContent className="p-5">
-            <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[var(--color-brand-green)] transition-colors duration-300 flex items-center gap-2">
+          <CardContent className="p-5 sm:p-6">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 group-hover:text-[var(--color-brand-green)] transition-colors duration-300 flex items-center gap-2">
               {service.title}
               {service.popular && (
-                <span className="text-[10px] px-2 py-0.5 bg-amber-50 text-[var(--color-brand-amber-dark)] rounded-full font-semibold border border-amber-100">
+                <span className="text-[10px] sm:text-xs px-2 py-0.5 bg-amber-50 text-[var(--color-brand-amber-dark)] rounded-full font-semibold border border-amber-100">
                   Most Requested
                 </span>
               )}
             </h3>
-            <p className="text-sm text-gray-500 mb-3 leading-relaxed line-clamp-2">
+            <p className="text-sm text-gray-600 mb-4 leading-relaxed line-clamp-2">
               {service.description}
             </p>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-2">
               {service.items.map((item, i) => (
                 <motion.span
                   key={item}
                   initial={{ opacity: 0, scale: 0.7, y: 10 }}
                   animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.7, y: 10 }}
                   transition={{ delay: 0.4 + i * 0.05, duration: 0.4, type: "spring", stiffness: 200, damping: 15 }}
-                  whileHover={{ scale: 1.12, y: -3, backgroundColor: "var(--color-brand-green)", color: "#fff" }}
-                  className="inline-block text-xs px-2.5 py-1 bg-green-50 text-[var(--color-brand-green)] rounded-full font-medium cursor-default hover:bg-green-100 transition-colors"
+                  whileHover={{ scale: 1.08, y: -2, backgroundColor: "var(--color-brand-green)", color: "#fff" }}
+                  className="inline-block text-sm sm:text-xs font-semibold px-3 py-1.5 sm:px-2.5 sm:py-1 bg-green-50 text-[var(--color-brand-green)] rounded-full cursor-default hover:bg-green-100 transition-colors border border-green-100"
                 >
                   {item}
                 </motion.span>

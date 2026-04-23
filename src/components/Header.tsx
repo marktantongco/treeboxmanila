@@ -114,24 +114,22 @@ export function Header() {
           ))}
         </nav>
 
-        {/* Desktop CTA */}
+        {/* Desktop CTA — prominent and always visible */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5 }}
           className="hidden md:flex items-center gap-3"
         >
-          <MagneticButton strength={0.15}>
-            <Button
-              asChild
-              className="group/cta bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300 btn-shine"
-            >
-              <a href="tel:+63281234567" aria-label="Call to get a quote">
-                <Phone className="mr-2 h-4 w-4 group-hover/cta:animate-pulse" />
-                Get a Quote
-              </a>
-            </Button>
-          </MagneticButton>
+          <Button
+            asChild
+            className="group/cta bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-md shadow-amber-500/20 hover:shadow-lg hover:shadow-amber-500/30 transition-all duration-300 btn-shine h-11 px-5 text-sm"
+          >
+            <Link href="/contact" aria-label="Get a quote">
+              Get a Quote Now
+              <ArrowRight className="ml-2 h-4 w-4 group-hover/cta:translate-x-1 transition-transform" />
+            </Link>
+          </Button>
         </motion.div>
 
         {/* Mobile Menu */}
@@ -140,7 +138,7 @@ export function Header() {
             <Button
               asChild
               size="sm"
-              className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold btn-shine"
+              className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold btn-shine h-9 px-3 text-xs"
             >
               <Link href="/contact" aria-label="Get a quote">
                 Get a Quote

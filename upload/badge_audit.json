@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "The badge in the top - right of the printing press image shows the text \"Since 1997\" and below it, the text \"MWC Enterprises\".",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1776902427,
+  "id": "2026042308002263e534f519b049f7",
+  "model": "glm-4.6v",
+  "object": "chat.completion",
+  "request_id": "2026042308002263e534f519b049f7",
+  "usage": {
+    "completion_tokens": 35,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 6181,
+    "prompt_tokens_details": {
+      "cached_tokens": 4
+    },
+    "total_tokens": 6216
+  }
+}

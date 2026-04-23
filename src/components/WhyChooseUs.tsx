@@ -127,10 +127,10 @@ function ReasonCard({ reason, index }: { reason: typeof reasons[0]; index: numbe
 
           <StatDisplay stat={reason.stat} suffix={reason.statSuffix} label={reason.statLabel} />
 
-          <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[var(--color-brand-green)] transition-colors duration-300">
+          <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 group-hover:text-[var(--color-brand-green)] transition-colors duration-300">
             {reason.title}
           </h3>
-          <p className="text-sm text-gray-500 leading-relaxed">
+          <p className="text-sm text-gray-600 leading-relaxed">
             {reason.description}
           </p>
         </div>

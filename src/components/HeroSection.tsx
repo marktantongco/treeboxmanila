@@ -9,7 +9,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   MagneticButton,
   FloatingElement,
-  TiltCard,
 } from "@/components/animations";
 import { useRef } from "react";
 
@@ -40,27 +39,6 @@ const mobileTextVariants = {
     filter: "blur(0px)",
     transition: { delay: 0.1 + i * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] },
   }),
-};
-
-const imageVariants = {
-  hidden: { opacity: 0, scale: 0.92, x: 50, rotateY: -8 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    x: 0,
-    rotateY: 0,
-    transition: { delay: 0.5, duration: 1, ease: [0.16, 1, 0.3, 1] },
-  },
-};
-
-const mobileImageVariants = {
-  hidden: { opacity: 0, scale: 0.97, y: 20 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: { delay: 0.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] },
-  },
 };
 
 const trustBadges = [
@@ -109,7 +87,6 @@ export function HeroSection() {
   }, []);
 
   const tv = isMobile ? mobileTextVariants : textVariants;
-  const iv = isMobile ? mobileImageVariants : imageVariants;
 
   return (
     <section className="relative overflow-hidden gradient-mesh" ref={heroRef}>
@@ -119,7 +96,7 @@ export function HeroSection() {
         <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-[var(--color-brand-amber)]/5 rounded-full blur-3xl animate-color-shift" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-green-100/30 rounded-full blur-[100px]" />
 
-        {/* Floating decorative shapes — fewer on mobile */}
+        {/* Floating decorative shapes */}
         <FloatingElement className="absolute top-[15%] right-[10%] hidden sm:block" amplitude={12} duration={4} delay={0}>
           <div className="w-16 h-16 rounded-xl border border-[var(--color-brand-green)]/10 bg-[var(--color-brand-green)]/5 rotate-12 animate-morph" />
         </FloatingElement>
@@ -136,7 +113,7 @@ export function HeroSection() {
           <div className="w-8 h-8 rounded-lg border border-[var(--color-brand-green)]/8 bg-[var(--color-brand-green)]/3 -rotate-12" />
         </FloatingElement>
 
-        {/* Animated particle dots — fewer on mobile for performance */}
+        {/* Animated particle dots */}
         {[...Array(isMobile ? 3 : 6)].map((_, i) => (
           <motion.div
             key={i}
@@ -160,11 +137,10 @@ export function HeroSection() {
         ))}
       </div>
 
-      <div className="relative py-12 lg:py-20">
-        <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-10 xl:gap-14">
-          {/* Text Content — aligned with site max-w-7xl grid */}
-          <div className="order-2 lg:order-1 w-full px-4 sm:px-6 lg:pl-[max(2rem,calc((100vw-80rem)/2))] lg:pr-6 xl:pr-10">
-            <div className="lg:max-w-lg xl:max-w-xl">
+      <div className="relative py-10 sm:py-14 lg:py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Text Content - centered above image */}
+          <div className="text-center max-w-3xl mx-auto mb-8 lg:mb-10">
             <motion.div
               custom={0}
               initial="hidden"
@@ -182,7 +158,7 @@ export function HeroSection() {
               initial="hidden"
               animate="visible"
               variants={tv}
-              className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-[1.1] mb-6"
+              className="mt-5 text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-gray-900 leading-[1.1] mb-6"
             >
               Premium{" "}
               <RotatingText words={rotatingWords} />
@@ -195,7 +171,7 @@ export function HeroSection() {
               initial="hidden"
               animate="visible"
               variants={tv}
-              className="text-lg text-gray-600 leading-relaxed mb-8"
+              className="text-base sm:text-lg text-gray-600 leading-relaxed mb-8 max-w-2xl mx-auto"
             >
               From custom boxes and paper bags to calendars, flyers, and
               brochures — Treebox Manila Co. delivers premium offset
@@ -203,13 +179,13 @@ export function HeroSection() {
               businesses across Metro Manila.
             </motion.p>
 
-            {/* CTA Buttons — always visible, not wrapped in MagneticButton on mobile */}
+            {/* CTA Buttons */}
             <motion.div
               custom={3}
               initial="hidden"
               animate="visible"
               variants={tv}
-              className="flex flex-col sm:flex-row gap-4"
+              className="flex flex-col sm:flex-row justify-center gap-4"
             >
               {isMobile ? (
                 <>
@@ -260,13 +236,13 @@ export function HeroSection() {
               )}
             </motion.div>
 
-            {/* Trust badges with enhanced micro-interactions */}
+            {/* Trust badges */}
             <motion.div
               custom={4}
               initial="hidden"
               animate="visible"
               variants={tv}
-              className="mt-10 flex items-center gap-4 sm:gap-6"
+              className="mt-10 flex items-center justify-center gap-4 sm:gap-6"
             >
               {trustBadges.map((badge, i) => {
                 const Icon = badge.icon;
@@ -291,81 +267,84 @@ export function HeroSection() {
                 );
               })}
             </motion.div>
-            </div>{/* end lg:max-w-lg wrapper */}
           </div>
 
-          {/* Hero Image — stretches to right edge of screen */}
+          {/* Hero Image — full-width, big, bold, semi-centered */}
           <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={iv}
-            className="order-1 lg:order-2 w-full lg:flex-1 px-4 sm:px-6 lg:pl-0 lg:pr-[max(1.5rem,calc((100vw-80rem)/2))] lg:pt-4 lg:pb-6"
+            initial={{ opacity: 0, y: 40, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={isMobile
+              ? { delay: 0.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+              : { delay: 0.4, duration: 1, ease: [0.16, 1, 0.3, 1] }
+            }
+            className="relative w-full"
           >
-            <TiltCard tiltAmount={5}>
-              <div className="relative w-full">
-                {/* Decorative shape with morph animation */}
-                <div className="absolute -inset-4 bg-gradient-to-br from-green-200/40 to-amber-200/30 rounded-3xl rotate-3 animate-morph" />
-                <div className="relative overflow-hidden rounded-2xl shadow-2xl shadow-green-900/10 ring-1 ring-black/5">
-                  <Image
-                    src="/images/hero-printing-press.png"
-                    alt="Treebox Manila offset lithography printing press producing custom boxes and packaging materials"
-                    width={1344}
-                    height={768}
-                    priority
-                    className="w-full h-auto object-cover"
-                    sizes="(max-width: 1024px) 100vw, 55vw"
-                  />
-                  {/* Overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent" />
+            <div className="relative w-full">
+              {/* Decorative shape with morph animation */}
+              <div className="absolute -inset-3 sm:-inset-4 bg-gradient-to-br from-green-200/40 to-amber-200/30 rounded-3xl rotate-1 animate-morph" />
+              <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl shadow-green-900/15 ring-1 ring-black/5">
+                <Image
+                  src="/images/hero-printing-press.png"
+                  alt="Treebox Manila offset lithography printing press producing custom boxes and packaging materials"
+                  width={1600}
+                  height={800}
+                  priority
+                  className="w-full h-auto object-cover"
+                  sizes="100vw"
+                />
+                {/* Overlay gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent" />
+              </div>
+
+              {/* Floating badge — Call Now */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ delay: 1.0, type: "spring", stiffness: 200, damping: 15 }}
+                whileHover={{ scale: 1.08, y: -2 }}
+                className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 lg:bottom-8 lg:left-8 bg-white rounded-xl shadow-lg p-3 sm:p-4 flex items-center gap-2 sm:gap-3 ring-1 ring-black/5 animate-shadow-pulse cursor-pointer"
+              >
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg gradient-green flex items-center justify-center text-white">
+                  <Phone className="h-5 w-5" />
                 </div>
-                {/* Floating badge — Call Now with shadow pulse — positioned inside bounds */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ delay: 1.2, type: "spring", stiffness: 200, damping: 15 }}
-                  whileHover={{ scale: 1.08, y: -2 }}
-                  className="absolute bottom-3 left-3 sm:bottom-6 sm:left-6 bg-white rounded-xl shadow-lg p-3 flex items-center gap-2 ring-1 ring-black/5 animate-shadow-pulse cursor-pointer"
-                >
-                  <div className="w-10 h-10 rounded-lg gradient-green flex items-center justify-center text-white">
-                    <Phone className="h-5 w-5" />
+                <div>
+                  <p className="text-xs text-gray-500">Call Now</p>
+                  <p className="text-sm sm:text-base font-bold text-gray-900">+63 2 8123 4567</p>
+                </div>
+              </motion.div>
+
+              {/* Floating badge — Since 1997 — FIXED: larger text for "Enterprises" */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0, y: -20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ delay: 1.3, type: "spring", stiffness: 200, damping: 15 }}
+                whileHover={{ scale: 1.08, y: -2 }}
+                className="absolute top-4 right-4 sm:top-6 sm:right-6 lg:top-8 lg:right-8 bg-white rounded-xl shadow-lg p-3 sm:p-4 ring-1 ring-black/5 cursor-pointer"
+              >
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg gradient-amber flex items-center justify-center text-white text-sm font-bold">
+                    25+
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">Call Now</p>
-                    <p className="text-sm font-bold text-gray-900">+63 2 8123 4567</p>
+                    <p className="text-sm font-bold text-gray-900">Since 1997</p>
+                    <p className="text-xs text-gray-500 font-medium">MWC Enterprises</p>
                   </div>
-                </motion.div>
-                {/* Floating badge — Since 1997 — positioned inside bounds */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0, y: -20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ delay: 1.5, type: "spring", stiffness: 200, damping: 15 }}
-                  whileHover={{ scale: 1.08, y: -2 }}
-                  className="absolute top-3 right-3 sm:top-6 sm:right-6 bg-white rounded-xl shadow-lg p-3 ring-1 ring-black/5 cursor-pointer"
-                >
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg gradient-amber flex items-center justify-center text-white text-xs font-bold">
-                      25+
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-gray-900">Since 1997</p>
-                      <p className="text-[10px] text-gray-400">MWC Enterprises</p>
-                    </div>
-                  </div>
-                </motion.div>
-                {/* Floating badge — Free Quote — positioned inside bounds */}
-                <motion.div
-                  initial={{ opacity: 0, x: 30, scale: 0.8 }}
-                  animate={{ opacity: 1, x: 0, scale: 1 }}
-                  transition={{ delay: 1.8, type: "spring", stiffness: 200, damping: 15 }}
-                  whileHover={{ scale: 1.1 }}
-                  className="absolute top-1/2 right-3 sm:right-6 -translate-y-1/2 hidden lg:block"
-                >
-                  <div className="bg-[var(--color-brand-green)] text-white rounded-xl shadow-lg px-3 py-2 text-xs font-bold animate-pulse-badge">
-                    Free Quote
-                  </div>
-                </motion.div>
-              </div>
-            </TiltCard>
+                </div>
+              </motion.div>
+
+              {/* Floating badge — Free Quote */}
+              <motion.div
+                initial={{ opacity: 0, x: 30, scale: 0.8 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{ delay: 1.6, type: "spring", stiffness: 200, damping: 15 }}
+                whileHover={{ scale: 1.1 }}
+                className="absolute top-1/2 right-4 sm:right-6 lg:right-8 -translate-y-1/2 hidden lg:block"
+              >
+                <div className="bg-[var(--color-brand-green)] text-white rounded-xl shadow-lg px-4 py-2.5 text-sm font-bold animate-pulse-badge">
+                  Free Quote
+                </div>
+              </motion.div>
+            </div>
           </motion.div>
         </div>
       </div>
