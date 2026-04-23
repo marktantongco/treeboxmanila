@@ -50,6 +50,12 @@ export function HomePageContent() {
             transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
             className="absolute bottom-10 right-10 w-16 h-16 border border-white/10 rounded-full animate-morph"
           />
+          {/* Pulsing glow circle */}
+          <motion.div
+            animate={{ scale: [1, 1.3, 1], opacity: [0.05, 0.15, 0.05] }}
+            transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/5 rounded-full"
+          />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
@@ -80,7 +86,7 @@ export function HomePageContent() {
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Button
                 asChild
-                className="bg-white text-[var(--color-brand-green)] hover:bg-green-50 font-bold shadow-xl shadow-black/20 hover:shadow-2xl transition-all duration-300 text-base group h-14 px-8 btn-shine"
+                className="bg-white text-[var(--color-brand-green)] hover:bg-green-50 font-bold shadow-xl shadow-black/20 hover:shadow-2xl transition-all duration-300 text-base group h-14 px-8 btn-shine hover:scale-105"
               >
                 <Link href="/contact">
                   Get a Quote Now

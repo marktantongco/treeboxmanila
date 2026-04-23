@@ -35,11 +35,16 @@ function IndustryCard({ name, Icon, index }: { name: string; Icon: React.Compone
       className="inline-flex items-center gap-2.5 px-5 py-3 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[var(--color-brand-green)]/20 transition-all duration-300 group cursor-default shrink-0 hover-lift"
     >
       <motion.div
-        whileHover={{ rotate: 360, scale: 1.1, backgroundColor: "var(--color-brand-green)" }}
-        transition={{ duration: 0.5 }}
-        className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center transition-colors duration-300"
+        whileHover={{ scale: 1.1, backgroundColor: "var(--color-brand-green)" }}
+        transition={{ type: "spring", stiffness: 300, damping: 15 }}
+        className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center transition-colors duration-300 overflow-hidden"
       >
-        <Icon className="h-4 w-4 text-[var(--color-brand-green)] group-hover:text-white transition-colors duration-300" />
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
+        >
+          <Icon className="h-4 w-4 text-[var(--color-brand-green)] group-hover:text-white transition-colors duration-300" />
+        </motion.div>
       </motion.div>
       <span className="text-sm font-semibold text-gray-700 group-hover:text-[var(--color-brand-green)] transition-colors whitespace-nowrap">
         {name}

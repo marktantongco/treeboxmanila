@@ -93,6 +93,18 @@ function AnimatedConnectingLine() {
         animate={controls}
         transition={{ duration: 2, ease: [0.25, 0.1, 0.25, 1], delay: 0.3 }}
       />
+      {/* Glowing pulse that travels along the line */}
+      <motion.div
+        className="absolute top-0 left-0 h-1 w-16 rounded-full bg-gradient-to-r from-transparent via-white/60 to-transparent"
+        style={{ transformOrigin: "left" }}
+        initial={{ x: "-10%", opacity: 0 }}
+        variants={{
+          hidden: { x: "-10%", opacity: 0 },
+          visible: { x: "110%", opacity: [0, 1, 1, 0] },
+        }}
+        animate={controls}
+        transition={{ duration: 3, ease: [0.25, 0.1, 0.25, 1], delay: 1, repeat: Infinity, repeatDelay: 2 }}
+      />
       {/* Diamond nodes at intervals */}
       <div className="absolute top-0 left-0 right-0 h-1 flex items-center justify-between">
         {[0, 1, 2, 3].map((i) => (
@@ -297,7 +309,7 @@ export function ProcessSection() {
                         <motion.div
                           whileHover={{ scale: 1.1 }}
                           transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                          className="relative inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white border-2 border-[var(--color-brand-green)]/10 shadow-lg shadow-green-900/5 group-hover:border-[var(--color-brand-green)]/30 group-hover:shadow-xl group-hover:shadow-green-900/10 transition-all duration-500"
+                          className="relative inline-flex items-center justify-center w-24 h-24 rounded-2xl bg-white border-2 border-[var(--color-brand-green)]/10 shadow-lg shadow-green-900/5 group-hover:border-[var(--color-brand-green)]/30 group-hover:shadow-xl group-hover:shadow-green-900/10 transition-all duration-500"
                         >
                           {/* Rotating ring decoration */}
                           <motion.div
@@ -305,7 +317,7 @@ export function ProcessSection() {
                             transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
                             className="absolute inset-0 rounded-2xl border-2 border-dashed border-[var(--color-brand-green)]/10"
                           />
-                          <Icon className="h-8 w-8 text-[var(--color-brand-green)]" />
+                          <Icon className="h-10 w-10 text-[var(--color-brand-green)]" />
                           {/* Step badge with enhanced pulse */}
                           <StepBadge number={i + 1} />
                         </motion.div>

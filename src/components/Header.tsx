@@ -13,7 +13,7 @@ import {
   SheetTitle,
   SheetClose,
 } from "@/components/ui/sheet";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
 import { MagneticButton } from "@/components/animations";
 
 const navLinks = [
@@ -27,6 +27,11 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+
+  /* Scroll progress bar */
+  const { scrollYProgress } = useScroll();
+  const scaleXRaw = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  const scaleX = useSpring(scaleXRaw, { stiffness: 100, damping: 30 });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -53,8 +58,8 @@ export function Header() {
       transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.1 }}
       className={`sticky top-0 z-50 w-full transition-all duration-500 ${
         scrolled
-          ? "glass shadow-lg border-b border-white/20"
-          : "bg-white/95 shadow-sm"
+          ? "glass shadow-lg shadow-green-900/5 border-b border-white/20 backdrop-blur-xl"
+          : "bg-white/95 backdrop-blur-sm shadow-sm"
       }`}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -123,7 +128,7 @@ export function Header() {
         >
           <Button
             asChild
-            className="group/cta bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-md shadow-amber-500/20 hover:shadow-lg hover:shadow-amber-500/30 transition-all duration-300 btn-shine h-11 px-5 text-sm"
+            className="group/cta bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-md shadow-amber-500/20 hover:shadow-lg hover:shadow-amber-500/30 transition-all duration-300 btn-shine h-11 px-5 text-sm hover-glow-amber"
           >
             <Link href="/contact" aria-label="Get a quote">
               Get a Quote Now
@@ -225,6 +230,11 @@ export function Header() {
           </Sheet>
         </div>
       </div>
+      {/* Scroll progress bar */}
+      <motion.div
+        className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[var(--color-brand-green)] to-[var(--color-brand-amber)] origin-left"
+        style={{ scaleX }}
+      />
     </motion.header>
   );
 }

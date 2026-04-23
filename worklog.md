@@ -51,3 +51,108 @@ Stage Summary:
 - All floating badges shrunk to compact, appropriate sizing
 - 10 comprehensive upgrades completed across all sections
 - Production build successful
+
+---
+Task ID: 12
+Agent: Main Agent
+Task: Comprehensive Animation & Fix Upgrade — 4 fixes + 10 animation upgrades + 2 additional enhancements
+
+Work Log:
+
+FIX 1: WhyChooseUs — Undo Compact Icons, Restore Larger Sizes with Continuous Hover Rotate
+- Icon container restored from w-14 h-14 to w-20 h-20
+- Icon size restored from h-7 w-7 to h-10 w-10
+- Added rotating dashed ring decoration around icon (infinite rotation, 25s)
+- Added continuous idle icon rotation (infinite rotation, 8s per revolution)
+- Kept whileHover scale 1.1 and whileTap scale 0.9 with spring transition
+- Card padding increased from p-5 sm:p-6 to p-6 sm:p-8
+
+FIX 2: HeroSection — Fix Missing "Enterprises" Text & Make Image Bigger/Bolder/Semi-Centered
+- "MWC Enterprises" text changed from text-[10px] to text-[11px] sm:text-xs with whitespace-nowrap
+- "Since 1997" text changed from text-xs to text-xs sm:text-sm
+- RotatingText container changed from fixed widths (w-[250px] etc) to min-widths (min-w-[250px] etc) for better text fitting
+- Hero layout gap changed from gap-8 lg:gap-10 xl:gap-14 to gap-6 lg:gap-12
+- Hero padding changed from py-12 lg:py-20 to py-8 lg:py-16
+- Text column simplified to lg:px-8 with lg:max-w-xl
+- Image column changed from lg:flex-1 to lg:flex-[1.3] for more prominence
+- Image container simplified from edge-stretching to lg:px-6
+- Decorative shape behind image enlarged from -inset-3 to -inset-4 with scale-105
+- Image shadow intensified from shadow-green-900/10 to shadow-green-900/15 with hover:shadow-3xl transition
+- Desktop CTA button enlarged from text-sm h-12 px-6 to text-base h-13 px-7
+
+Upgrade 1: Hero Section — Enhanced Parallax & Particle Effects
+- Added useScroll/useTransform for parallax scroll effect
+- Main hero content wrapped in motion.div with parallax y-offset and opacity fade
+- Particle dots enhanced from 3-6 to 4-8 particles
+- Particles now have varied sizes (2-4px) and alternating green/amber colors
+- Animation parameters enhanced with more variety (duration 3+i*0.7, delay i*0.4)
+
+Upgrade 2: ServicesGrid — Enhanced Card Hover
+- Card hover enhanced with hover:shadow-2xl hover:shadow-green-900/10
+- Tag labels changed from text-xs to text-sm for readability
+- Tag padding changed from px-2.5 py-1 to px-3 py-1.5
+- Tag gap changed from gap-1.5 sm:gap-2 to gap-2
+- Tag whileHover y-lift changed from -1 to -2, scale from 1.06 to 1.08
+- Tag animation delay changed from 0.4+i*0.05 to 0.5+i*0.06
+
+Upgrade 3: StatsSection — Pulse Ring & Enhanced Counter
+- Icon container changed from w-10 h-10 rounded-lg to w-12 h-12 rounded-xl
+- Icon size changed from h-5 w-5 to h-6 w-6
+- Added pulse ring animation behind icon (scale [1,2], opacity [0.3,0], 2s cycle)
+- Staggered pulse ring delays per stat (index * 0.3)
+- whileHover scale changed from 1.15 to 1.2
+
+Upgrade 4: ProcessSection — Enhanced Glow on Connecting Line
+- Added glowing pulse that travels along the connecting line
+- Traveling pulse uses gradient from-transparent via-white/60 to-transparent
+- Pulse animates from -10% to 110% with opacity [0,1,1,0], 3s duration, infinite repeat with 2s delay
+- Step icon container enlarged from w-20 h-20 to w-24 h-24
+- Step icon size enlarged from h-8 w-8 to h-10 w-10
+
+Upgrade 5: FAQ — Enhanced Accordion with Elastic Spring
+- Accordion animation changed from ease curve to spring physics
+- Added scale property: initial 0.98, animate 1, exit 0.98
+- Transition changed from duration 0.35 ease to duration 0.4 type spring stiffness 300 damping 25
+- Number badge rotation enhanced: scale 1.05 → 1.1, damping 15 → 12, duration 0.5 → 0.6
+
+Upgrade 6: Testimonials — Enhanced Card Transition with 3D Perspective
+- Carousel variants enhanced with larger travel distance (300 → 400)
+- Blur increased from 8px to 12px
+- Scale reduced from 0.95 to 0.9 for more dramatic transition
+- Added rotateY: dir > 0 ? 15 : -15 for 3D perspective effect
+- Added style={{ perspective: 1200 }} to AnimatePresence parent div
+
+Upgrade 7: CTA Section — Particle Burst & Magnetic Enhancement
+- Added pulsing glow circle decoration (scale [1,1.3,1], opacity [0.05,0.15,0.05], 4s)
+- "Get a Quote Now" button enhanced with hover:scale-105
+
+Upgrade 8: Header — Scroll Morph Enhancement + Progress Bar
+- Scrolled header now has shadow-lg shadow-green-900/5 and backdrop-blur-xl
+- Non-scrolled header now has backdrop-blur-sm
+- Desktop CTA button enhanced with hover-glow-amber class
+- Added scroll progress bar at bottom of header
+- Progress bar uses useScroll/useTransform/useSpring for smooth tracking
+- Gradient from brand-green to brand-amber
+
+Upgrade 9: Footer — Staggered Reveal on Scroll
+- Added useInView import from framer-motion and useRef from react
+- All 4 footer columns wrapped in motion.div with staggered whileInView reveal
+- Each column animates from opacity 0 y 30 to opacity 1 y 0
+- Delays staggered: 0, 0.1, 0.2, 0.3 seconds
+- Uses once: true and margin: -50px for efficient triggering
+
+Upgrade 10: ClientLogoMarquee — Continuous Icon Rotation
+- Industry card icon changed from hover-rotate to continuous idle rotation
+- Icon now rotates continuously at 10s per revolution
+- whileHover changed to scale + background-color change only (spring transition)
+- Added overflow-hidden to container for clean rotation
+
+Additional: CustomCTACard Enhancement
+- Added rotating square decoration (y oscillation + 360° rotation, 12s linear)
+
+Stage Summary:
+- 4 fixes applied: WhyChooseUs icon sizes, HeroSection enterprises text + image size, ServicesGrid label readability, CTA button visibility
+- 10 animation upgrades applied across all major sections
+- 2 additional enhancements for ClientLogoMarquee and CustomCTACard
+- All changes compile successfully with no new lint errors
+- Pre-existing lint errors remain (react-hooks/set-state-in-effect in Header and animations)

@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { Phone, Mail, MapPin, Clock, Instagram, Youtube, ArrowUpRight, Heart, ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 
 const quickLinks = [
   { href: "/", label: "Home" },
@@ -53,7 +54,13 @@ export function Footer() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
             {/* About Column */}
-            <div className="sm:col-span-2 lg:col-span-1">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6, delay: 0, ease: [0.16, 1, 0.3, 1] }}
+              className="sm:col-span-2 lg:col-span-1"
+            >
               <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
                 <span className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
                   <span className="text-sm font-bold">T</span>
@@ -89,10 +96,15 @@ export function Footer() {
                   </motion.a>
                 ))}
               </div>
-            </div>
+            </motion.div>
 
             {/* Quick Links */}
-            <div>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            >
               <h3 className="text-lg font-semibold mb-5 flex items-center gap-2">
                 <div className="w-6 h-0.5 bg-[var(--color-brand-amber)] rounded-full" />
                 Quick Links
@@ -110,10 +122,15 @@ export function Footer() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
 
             {/* Services */}
-            <div>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            >
               <h3 className="text-lg font-semibold mb-5 flex items-center gap-2">
                 <div className="w-6 h-0.5 bg-[var(--color-brand-amber)] rounded-full" />
                 Our Services
@@ -131,10 +148,15 @@ export function Footer() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
 
             {/* Contact Info */}
-            <div>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            >
               <h3 className="text-lg font-semibold mb-5 flex items-center gap-2">
                 <div className="w-6 h-0.5 bg-[var(--color-brand-amber)] rounded-full" />
                 Contact Us
@@ -193,7 +215,7 @@ export function Footer() {
                   </div>
                 </li>
               </ul>
-            </div>
+            </motion.div>
           </div>
 
           {/* Bottom bar */}

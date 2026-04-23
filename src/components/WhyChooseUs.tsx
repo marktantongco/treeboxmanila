@@ -100,16 +100,30 @@ function ReasonCard({ reason, index }: { reason: typeof reasons[0]; index: numbe
       }}
     >
       <HoverLiftCard className="h-full">
-        <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100 h-full text-center group hover:shadow-xl hover:shadow-green-900/5 transition-all duration-500">
-          {/* Icon — compact with hover rotate */}
-          <motion.div
-            whileHover={{ rotate: 90, scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 300, damping: 15 }}
-            className="relative inline-flex items-center justify-center w-14 h-14 rounded-xl gradient-green text-white mb-3 shadow-lg shadow-green-900/25 hover-glow cursor-pointer"
-          >
-            <Icon className="h-7 w-7" />
-          </motion.div>
+        <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 h-full text-center group hover:shadow-xl hover:shadow-green-900/5 transition-all duration-500">
+          {/* Icon — full size with continuous idle rotate */}
+          <div className="relative inline-flex items-center justify-center mb-4">
+            {/* Rotating dashed ring decoration */}
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
+              className="absolute inset-[-6px] rounded-2xl border-2 border-dashed border-white/20"
+            />
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 300, damping: 15 }}
+              className="relative inline-flex items-center justify-center w-20 h-20 rounded-2xl gradient-green text-white shadow-lg shadow-green-900/25 hover-glow cursor-pointer overflow-hidden"
+            >
+              {/* Continuous spinning icon */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
+              >
+                <Icon className="h-10 w-10" />
+              </motion.div>
+            </motion.div>
+          </div>
 
           <StatDisplay stat={reason.stat} suffix={reason.statSuffix} label={reason.statLabel} />
 

@@ -66,14 +66,22 @@ function StatItem({ stat, index }: { stat: typeof stats[0]; index: number }) {
         <div className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 w-px h-12 bg-white/15" />
       )}
 
-      <motion.div
-        whileHover={{ scale: 1.15 }}
-        whileTap={{ scale: 0.9 }}
-        transition={{ type: "spring", stiffness: 300 }}
-        className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 mb-3 group-hover:bg-white/20 transition-colors cursor-pointer"
-      >
-        <Icon className="h-5 w-5 text-white" />
-      </motion.div>
+      <div className="relative inline-flex items-center justify-center mb-3">
+        {/* Pulse ring */}
+        <motion.div
+          animate={{ scale: [1, 2], opacity: [0.3, 0] }}
+          transition={{ repeat: Infinity, duration: 2, delay: index * 0.3, ease: "easeOut" }}
+          className="absolute inset-0 rounded-lg bg-white/10"
+        />
+        <motion.div
+          whileHover={{ scale: 1.2 }}
+          whileTap={{ scale: 0.9 }}
+          transition={{ type: "spring", stiffness: 300 }}
+          className="relative inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white/10 group-hover:bg-white/20 transition-colors cursor-pointer"
+        >
+          <Icon className="h-6 w-6 text-white" />
+        </motion.div>
+      </div>
       <div className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-none tracking-tight">
         <CountUp target={stat.value} suffix={stat.suffix} duration={2} />
       </div>

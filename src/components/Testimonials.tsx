@@ -129,22 +129,25 @@ export function Testimonials() {
 
   const variants = {
     enter: (dir: number) => ({
-      x: dir > 0 ? 300 : -300,
+      x: dir > 0 ? 400 : -400,
       opacity: 0,
-      filter: "blur(8px)",
-      scale: 0.95,
+      filter: "blur(12px)",
+      scale: 0.9,
+      rotateY: dir > 0 ? 15 : -15,
     }),
     center: {
       x: 0,
       opacity: 1,
       filter: "blur(0px)",
       scale: 1,
+      rotateY: 0,
     },
     exit: (dir: number) => ({
-      x: dir > 0 ? -300 : 300,
+      x: dir > 0 ? -400 : 400,
       opacity: 0,
-      filter: "blur(8px)",
-      scale: 0.95,
+      filter: "blur(12px)",
+      scale: 0.9,
+      rotateY: dir > 0 ? -15 : 15,
     }),
   };
 
@@ -205,7 +208,7 @@ export function Testimonials() {
                 <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--color-brand-green)]/5 rounded-full -translate-y-1/2 translate-x-1/2" />
                 <div className="absolute bottom-0 left-0 w-24 h-24 bg-[var(--color-brand-amber)]/5 rounded-full translate-y-1/2 -translate-x-1/2" />
 
-                <div className="relative">
+                <div className="relative" style={{ perspective: 1200 }}>
                   <AnimatePresence mode="wait" custom={direction}>
                     <motion.div
                       key={current}

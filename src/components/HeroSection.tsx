@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Phone, ArrowRight, ChevronDown, Shield, Truck, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
 import {
   MagneticButton,
   FloatingElement,
@@ -80,7 +80,7 @@ function RotatingText({ words }: { words: string[] }) {
   }, [words.length]);
 
   return (
-    <span className="inline-block relative h-[1.2em] overflow-hidden align-bottom w-[250px] sm:w-[300px] lg:w-[360px]">
+    <span className="inline-block relative h-[1.2em] overflow-hidden align-bottom min-w-[250px] sm:min-w-[300px] lg:min-w-[380px]">
       <AnimatePresence mode="wait">
         <motion.span
           key={words[index]}
@@ -100,6 +100,14 @@ function RotatingText({ words }: { words: string[] }) {
 export function HeroSection() {
   const [isMobile, setIsMobile] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
+
+  /* Parallax scroll effect */
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, 150]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -132,35 +140,39 @@ export function HeroSection() {
           <div className="w-4 h-4 rounded-full bg-[var(--color-brand-amber)]/15" />
         </FloatingElement>
 
-        {/* Particle dots */}
-        {[...Array(isMobile ? 3 : 6)].map((_, i) => (
+        {/* Particle dots — enhanced with varied sizes and colors */}
+        {[...Array(isMobile ? 4 : 8)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1.5 h-1.5 rounded-full bg-[var(--color-brand-green)]/20"
+            className="absolute rounded-full"
             style={{
-              top: `${15 + i * 15}%`,
-              left: `${10 + i * 15}%`,
+              width: 2 + (i % 3),
+              height: 2 + (i % 3),
+              top: `${10 + i * 12}%`,
+              left: `${5 + i * 13}%`,
+              backgroundColor: i % 2 === 0 ? 'var(--color-brand-green)' : 'var(--color-brand-amber)',
             }}
             animate={{
-              y: [-10, 10, -10],
-              opacity: [0.2, 0.6, 0.2],
-              scale: [1, 1.5, 1],
+              y: [-15, 15, -15],
+              opacity: [0.1, 0.5, 0.1],
+              scale: [1, 1.8, 1],
             }}
             transition={{
               repeat: Infinity,
-              duration: 3 + i * 0.5,
-              delay: i * 0.3,
+              duration: 3 + i * 0.7,
+              delay: i * 0.4,
               ease: "easeInOut",
             }}
           />
         ))}
       </div>
 
-      <div className="relative py-12 lg:py-20">
-        <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-10 xl:gap-14">
+      <motion.div style={{ y: heroY, opacity: heroOpacity }}>
+      <div className="relative py-8 lg:py-16">
+        <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-12">
           {/* Text Content — left column on desktop */}
-          <div className="order-2 lg:order-1 w-full px-4 sm:px-6 lg:pl-[max(2rem,calc((100vw-80rem)/2))] lg:pr-6 xl:pr-10">
-            <div className="lg:max-w-lg xl:max-w-xl">
+          <div className="order-2 lg:order-1 w-full px-4 sm:px-6 lg:px-8">
+            <div className="lg:max-w-xl">
               <motion.div
                 custom={0}
                 initial="hidden"
@@ -233,7 +245,7 @@ export function HeroSection() {
                     <MagneticButton strength={0.15} className="inline-flex">
                       <Button
                         asChild
-                        className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/30 transition-all duration-300 text-sm group h-12 px-6 btn-shine"
+                        className="bg-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber-light)] text-white font-bold shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/30 transition-all duration-300 text-base group h-13 px-7 btn-shine"
                       >
                         <Link href="/contact">
                           Get a Quote Now
@@ -290,13 +302,13 @@ export function HeroSection() {
             initial="hidden"
             animate="visible"
             variants={iv}
-            className="order-1 lg:order-2 w-full lg:flex-1 px-4 sm:px-6 lg:pl-0 lg:pr-[max(1rem,calc((100vw-80rem)/2))] lg:pt-2 lg:pb-4"
+            className="order-1 lg:order-2 w-full lg:flex-[1.3] px-4 sm:px-6 lg:px-6"
           >
             <TiltCard tiltAmount={4}>
               <div className="relative w-full">
                 {/* Decorative shape */}
-                <div className="absolute -inset-3 bg-gradient-to-br from-green-200/40 to-amber-200/30 rounded-3xl rotate-2 animate-morph" />
-                <div className="relative overflow-hidden rounded-2xl shadow-2xl shadow-green-900/10 ring-1 ring-black/5">
+                <div className="absolute -inset-4 bg-gradient-to-br from-green-200/40 to-amber-200/30 rounded-3xl rotate-2 animate-morph scale-105" />
+                <div className="relative overflow-hidden rounded-2xl shadow-2xl shadow-green-900/15 ring-1 ring-black/5 hover:shadow-3xl hover:shadow-green-900/20 transition-shadow duration-700">
                   <Image
                     src="/images/hero-printing-press.png"
                     alt="Treebox Manila offset lithography printing press producing custom boxes and packaging materials"
@@ -340,8 +352,8 @@ export function HeroSection() {
                       25+
                     </div>
                     <div>
-                      <p className="text-xs font-bold text-gray-900 leading-tight">Since 1997</p>
-                      <p className="text-[10px] text-gray-400 leading-tight">MWC Enterprises</p>
+                      <p className="text-xs sm:text-sm font-bold text-gray-900 leading-tight">Since 1997</p>
+                      <p className="text-[11px] sm:text-xs text-gray-400 leading-tight whitespace-nowrap">MWC Enterprises</p>
                     </div>
                   </div>
                 </motion.div>
@@ -363,6 +375,7 @@ export function HeroSection() {
           </motion.div>
         </div>
       </div>
+      </motion.div>
 
       {/* Scroll indicator */}
       <motion.div

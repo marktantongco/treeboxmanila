@@ -70,8 +70,8 @@ function FAQItem({ faq, index, isOpen, onToggle }: { faq: typeof faqs[0]; index:
         >
           <div className="flex items-center gap-3 pr-4">
             <motion.span
-              animate={isOpen ? { rotate: 360, scale: 1.05 } : { rotate: 0, scale: 1 }}
-              transition={{ duration: 0.5, type: "spring", stiffness: 200, damping: 15 }}
+              animate={isOpen ? { rotate: 360, scale: 1.1 } : { rotate: 0, scale: 1 }}
+              transition={{ duration: 0.6, type: "spring", stiffness: 200, damping: 12 }}
               className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold transition-colors duration-300 ${
                 isOpen ? 'bg-[var(--color-brand-green)] text-white shadow-md shadow-green-900/20' : 'bg-green-50 text-[var(--color-brand-green)]'
               }`}
@@ -95,10 +95,10 @@ function FAQItem({ faq, index, isOpen, onToggle }: { faq: typeof faqs[0]; index:
         <AnimatePresence initial={false}>
           {isOpen && (
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+              initial={{ height: 0, opacity: 0, scale: 0.98 }}
+              animate={{ height: "auto", opacity: 1, scale: 1 }}
+              exit={{ height: 0, opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.4, type: "spring", stiffness: 300, damping: 25 }}
             >
               <div className="px-5 sm:px-6 pb-5 sm:pb-6 text-sm text-gray-600 leading-relaxed border-t border-gray-50 pt-4 pl-14 sm:pl-16">
                 {faq.answer}

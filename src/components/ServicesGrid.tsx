@@ -118,7 +118,7 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
       style={{ perspective: 1200, willChange: "transform, opacity" }}
     >
       <GlowCard className="h-full" glowColor="var(--color-brand-green)">
-        <Card className="h-full overflow-hidden border border-gray-100 bg-white hover:border-[var(--color-brand-green)]/20 transition-all duration-500 group">
+        <Card className="h-full overflow-hidden border border-gray-100 bg-white hover:border-[var(--color-brand-green)]/20 transition-all duration-500 group hover:shadow-2xl hover:shadow-green-900/10">
           {/* Image - directly visible with simple opacity fade */}
           <div className="relative overflow-hidden aspect-[4/3] bg-gray-100">
             <Image
@@ -188,15 +188,15 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
             <p className="text-sm text-gray-600 mb-4 leading-relaxed line-clamp-2">
               {service.description}
             </p>
-            <div className="flex flex-wrap gap-1.5 sm:gap-2">
+            <div className="flex flex-wrap gap-2">
               {service.items.map((item, i) => (
                 <motion.span
                   key={item}
                   initial={{ opacity: 0, scale: 0.7, y: 10 }}
                   animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.7, y: 10 }}
-                  transition={{ delay: 0.4 + i * 0.05, duration: 0.4, type: "spring", stiffness: 200, damping: 15 }}
-                  whileHover={{ scale: 1.06, y: -1, backgroundColor: "var(--color-brand-green)", color: "#fff" }}
-                  className="inline-block text-xs font-semibold px-2.5 py-1 bg-green-50 text-[var(--color-brand-green)] rounded-full cursor-default hover:bg-green-100 transition-colors border border-green-100"
+                  transition={{ delay: 0.5 + i * 0.06, duration: 0.4, type: "spring", stiffness: 200, damping: 15 }}
+                  whileHover={{ scale: 1.08, y: -2, backgroundColor: "var(--color-brand-green)", color: "#fff" }}
+                  className="inline-block text-sm font-semibold px-3 py-1.5 bg-green-50 text-[var(--color-brand-green)] rounded-full cursor-default hover:bg-green-100 transition-colors border border-green-100"
                 >
                   {item}
                 </motion.span>
@@ -245,6 +245,11 @@ function CustomCTACard() {
               animate={{ y: [-8, 8, -8] }}
               transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
               className="absolute top-1/3 right-1/4 w-3 h-3 bg-white/10 rounded-full"
+            />
+            <motion.div
+              animate={{ y: [-6, 6, -6], rotate: [0, 180, 360] }}
+              transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
+              className="absolute top-1/2 left-4 w-8 h-8 border border-white/5 rounded-lg"
             />
             <motion.div
               animate={{ y: [6, -6, 6] }}
