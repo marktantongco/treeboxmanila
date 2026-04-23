@@ -32,19 +32,14 @@ function IndustryCard({ name, Icon, index }: { name: string; Icon: React.Compone
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.05, duration: 0.3 }}
-      className="inline-flex items-center gap-3 px-6 py-3.5 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[var(--color-brand-green)]/20 transition-all duration-300 group cursor-default shrink-0 hover-lift"
+      className="inline-flex items-center gap-2.5 px-5 py-3 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[var(--color-brand-green)]/20 transition-all duration-300 group cursor-default shrink-0 hover-lift"
     >
       <motion.div
         whileHover={{ rotate: 360, scale: 1.1, backgroundColor: "var(--color-brand-green)" }}
         transition={{ duration: 0.5 }}
-        className="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center transition-colors duration-300"
+        className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center transition-colors duration-300"
       >
-        <motion.div
-          whileHover={{ rotate: -360 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Icon className="h-4.5 w-4.5 text-[var(--color-brand-green)] group-hover:text-white transition-colors duration-300" />
-        </motion.div>
+        <Icon className="h-4 w-4 text-[var(--color-brand-green)] group-hover:text-white transition-colors duration-300" />
       </motion.div>
       <span className="text-sm font-semibold text-gray-700 group-hover:text-[var(--color-brand-green)] transition-colors whitespace-nowrap">
         {name}
@@ -58,10 +53,10 @@ export function ClientLogoMarquee() {
   const isInView = useInView(sectionRef, { once: true, margin: "-80px" });
 
   return (
-    <section className="py-16 bg-white border-y border-gray-100 relative overflow-hidden" ref={sectionRef}>
+    <section className="py-14 bg-[var(--color-brand-cream)]/50 border-y border-gray-100 relative overflow-hidden" ref={sectionRef}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
-          <div className="text-center mb-10">
+          <div className="text-center mb-8">
             <span className="inline-block px-4 py-1.5 rounded-full bg-green-50 text-[var(--color-brand-green)] font-semibold text-sm mb-3">
               Industries We Serve
             </span>
@@ -69,13 +64,13 @@ export function ClientLogoMarquee() {
               Trusted Across <span className="text-gradient-green">Industries</span>
             </h2>
             <p className="text-gray-500 text-sm sm:text-base max-w-xl mx-auto">
-              From food and beverage to legal services, businesses across sectors rely on our printing expertise for quality, reliability, and competitive pricing.
+              From food and beverage to legal services, businesses across sectors rely on our printing expertise.
             </p>
           </div>
         </ScrollReveal>
       </div>
 
-      {/* Marquee row with fade edges — only animates when in view */}
+      {/* Marquee row with fade edges */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -83,12 +78,12 @@ export function ClientLogoMarquee() {
         className="marquee-fade"
       >
         <Marquee speed={40} pauseOnHover>
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             {industries.map((industry, i) => (
               <IndustryCard key={industry.name} name={industry.name} Icon={industry.Icon} index={i} />
             ))}
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             {industries.map((industry, i) => (
               <IndustryCard key={`${industry.name}-dup`} name={industry.name} Icon={industry.Icon} index={i} />
             ))}

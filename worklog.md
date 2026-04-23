@@ -22,3 +22,32 @@ Stage Summary:
 - Header "Get a Quote" button now links to /contact page instead of phone call
 - All fixes verified via VLM audit of screenshots
 - Build passes cleanly
+
+---
+Task ID: 2-11
+Agent: Main Agent
+Task: Return hero image to top, shrink floating badges, make 10 comprehensive upgrades
+
+Work Log:
+- Returned hero to side-by-side layout (image on top/right, text below/left) — original layout
+- Shrunk "Call Now" badge: rounded-lg, p-2, w-7h-7 icon, text-xs number, compact footprint
+- Shrunk "Since 1997" badge: rounded-lg, p-2, w-7h-7 icon, text-[10px] "MWC Enterprises", compact
+- Added backdrop-blur-sm to badges for cleaner look over image
+- Hero CTA buttons reduced from h-14 to h-12, px-6 (more proportionate)
+- Trust badges reduced: w-9h-9 icon, text-xs title, text-[10px] subtext
+- Upgrade #2 ServicesGrid: uniform tag sizing (text-xs on all breakpoints), compact padding
+- Upgrade #3 StatsSection: added vertical dividers between stats, compact icon sizing (w-10h-10), reduced text sizes
+- Upgrade #4 WhyChooseUs: replaced continuous rotation with hover-rotate icon, reduced icon to w-14h-14, smaller stat display (text-5xl/6xl/7xl)
+- Upgrade #5 ProcessSection: improved mobile card text readability (text-gray-600, text-[11px] detail)
+- Upgrade #6 Testimonials: service badge now visible on mobile (removed hidden sm:block)
+- Upgrade #7 FAQ: answer text color changed from gray-500 to gray-600 for better readability
+- Upgrade #8 ClientLogoMarquee: compact card sizing (px-5 py-3, w-8h-8 icon), bg-[var(--color-brand-cream)]/50 section
+- Upgrade #9 CTA/Footer: reviewed and confirmed solid
+- Upgrade #10 Global: CSS already comprehensive, verified all animation classes work
+- Build passes cleanly
+
+Stage Summary:
+- Hero returned to side-by-side layout with image at top/right
+- All floating badges shrunk to compact, appropriate sizing
+- 10 comprehensive upgrades completed across all sections
+- Production build successful

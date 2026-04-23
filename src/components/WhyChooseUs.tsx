@@ -47,20 +47,20 @@ const reasons = [
 function StatDisplay({ stat, suffix, label }: { stat: string | number; suffix: string; label: string }) {
   if (typeof stat === "number") {
     return (
-      <div className="text-center mb-5">
-        <div className="text-6xl sm:text-7xl lg:text-8xl font-extrabold text-gradient-green leading-none tracking-tight">
+      <div className="text-center mb-4">
+        <div className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-gradient-green leading-none tracking-tight">
           <AnimatedCounter target={stat} suffix={suffix} />
         </div>
-        <p className="text-sm text-gray-400 font-semibold uppercase tracking-[0.2em] mt-3">{label}</p>
+        <p className="text-xs text-gray-400 font-semibold uppercase tracking-[0.15em] mt-2">{label}</p>
       </div>
     );
   }
   return (
-    <div className="text-center mb-5">
-      <div className="text-6xl sm:text-7xl lg:text-8xl font-extrabold text-gradient-green leading-none tracking-tight">
+    <div className="text-center mb-4">
+      <div className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-gradient-green leading-none tracking-tight">
         {stat}{suffix}
       </div>
-      <p className="text-sm text-gray-400 font-semibold uppercase tracking-[0.2em] mt-3">{label}</p>
+      <p className="text-xs text-gray-400 font-semibold uppercase tracking-[0.15em] mt-2">{label}</p>
     </div>
   );
 }
@@ -100,29 +100,15 @@ function ReasonCard({ reason, index }: { reason: typeof reasons[0]; index: numbe
       }}
     >
       <HoverLiftCard className="h-full">
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-full text-center group hover:shadow-xl hover:shadow-green-900/5 transition-all duration-500">
-          {/* Icon with continuous slow rotation + speed-up on hover */}
+        <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100 h-full text-center group hover:shadow-xl hover:shadow-green-900/5 transition-all duration-500">
+          {/* Icon — compact with hover rotate */}
           <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
-            whileHover={{ scale: 1.2 }}
-            whileTap={{ scale: 0.9, rotate: 180 }}
-            className="relative inline-flex items-center justify-center rounded-xl gradient-green text-white mb-2 shadow-lg shadow-green-900/25 hover-glow cursor-pointer"
-            style={{ width: "4.5rem", height: "4.5rem" }}
+            whileHover={{ rotate: 90, scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 300, damping: 15 }}
+            className="relative inline-flex items-center justify-center w-14 h-14 rounded-xl gradient-green text-white mb-3 shadow-lg shadow-green-900/25 hover-glow cursor-pointer"
           >
-            {/* Rotating ring decoration */}
-            <motion.div
-              animate={{ rotate: -360 }}
-              transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
-              className="absolute inset-[-4px] rounded-xl border-2 border-dashed border-white/20"
-            />
-            <motion.div
-              animate={{ rotate: -360 }}
-              transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
-              style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
-            >
-              <Icon className="h-9 w-9" />
-            </motion.div>
+            <Icon className="h-7 w-7" />
           </motion.div>
 
           <StatDisplay stat={reason.stat} suffix={reason.statSuffix} label={reason.statLabel} />

@@ -188,15 +188,15 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
             <p className="text-sm text-gray-600 mb-4 leading-relaxed line-clamp-2">
               {service.description}
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2">
               {service.items.map((item, i) => (
                 <motion.span
                   key={item}
                   initial={{ opacity: 0, scale: 0.7, y: 10 }}
                   animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.7, y: 10 }}
                   transition={{ delay: 0.4 + i * 0.05, duration: 0.4, type: "spring", stiffness: 200, damping: 15 }}
-                  whileHover={{ scale: 1.08, y: -2, backgroundColor: "var(--color-brand-green)", color: "#fff" }}
-                  className="inline-block text-sm sm:text-xs font-semibold px-3 py-1.5 sm:px-2.5 sm:py-1 bg-green-50 text-[var(--color-brand-green)] rounded-full cursor-default hover:bg-green-100 transition-colors border border-green-100"
+                  whileHover={{ scale: 1.06, y: -1, backgroundColor: "var(--color-brand-green)", color: "#fff" }}
+                  className="inline-block text-xs font-semibold px-2.5 py-1 bg-green-50 text-[var(--color-brand-green)] rounded-full cursor-default hover:bg-green-100 transition-colors border border-green-100"
                 >
                   {item}
                 </motion.span>

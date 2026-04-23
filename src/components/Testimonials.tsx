@@ -244,7 +244,7 @@ export function Testimonials() {
                           <p className="font-bold text-gray-900">{t.name}</p>
                           <p className="text-sm text-gray-500">{t.role}</p>
                         </div>
-                        <div className="ml-auto hidden sm:block">
+                        <div className="ml-auto">
                           <span className="inline-block text-xs font-semibold px-3 py-1.5 rounded-full bg-green-50 text-[var(--color-brand-green)] border border-green-100">
                             {t.service}
                           </span>

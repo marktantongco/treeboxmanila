@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import { ScrollReveal, CountUp, MobileSwipeReveal } from "@/components/animations";
+import { ScrollReveal, CountUp } from "@/components/animations";
 import { Building2, Users, Package, Clock } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 
@@ -59,30 +59,28 @@ function StatItem({ stat, index }: { stat: typeof stats[0]; index: number }) {
         delay: index * (isMobile ? 0.08 : 0.12),
         ease: [0.16, 1, 0.3, 1],
       }}
-      className="text-center group"
+      className="text-center group relative"
     >
+      {/* Divider between items (desktop only) */}
+      {index > 0 && (
+        <div className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 w-px h-12 bg-white/15" />
+      )}
+
       <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
-        whileHover={{ scale: 1.2 }}
-        whileTap={{ scale: 0.9, rotate: 180 }}
-        className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white/10 mb-3 group-hover:bg-white/20 transition-colors cursor-pointer"
+        whileHover={{ scale: 1.15 }}
+        whileTap={{ scale: 0.9 }}
+        transition={{ type: "spring", stiffness: 300 }}
+        className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 mb-3 group-hover:bg-white/20 transition-colors cursor-pointer"
       >
-        <motion.div
-          animate={{ rotate: -360 }}
-          transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
-          style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
-        >
-          <Icon className="h-6 w-6 text-white" />
-        </motion.div>
+        <Icon className="h-5 w-5 text-white" />
       </motion.div>
-      <div className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-none tracking-tight">
+      <div className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-none tracking-tight">
         <CountUp target={stat.value} suffix={stat.suffix} duration={2} />
       </div>
-      <p className="text-white font-semibold text-sm sm:text-base mt-2">
+      <p className="text-white font-semibold text-sm mt-2">
         {stat.label}
       </p>
-      <p className="text-green-100/60 text-xs sm:text-sm mt-1">
+      <p className="text-green-100/50 text-xs mt-0.5">
         {stat.description}
       </p>
     </motion.div>
@@ -92,7 +90,6 @@ function StatItem({ stat, index }: { stat: typeof stats[0]; index: number }) {
 export function StatsSection() {
   const sectionRef = useRef<HTMLElement>(null);
 
-  /* Parallax background effect */
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
@@ -100,8 +97,7 @@ export function StatsSection() {
   const bgScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.05, 1, 1.05]);
 
   return (
-    <section className="relative py-14 lg:py-16 gradient-stats overflow-hidden" ref={sectionRef}>
-      {/* Decorative elements with subtle parallax */}
+    <section className="relative py-12 lg:py-14 gradient-stats overflow-hidden" ref={sectionRef}>
       <motion.div className="absolute inset-0 pointer-events-none" style={{ scale: bgScale }}>
         <div className="absolute -top-20 -right-20 w-72 h-72 bg-white/5 rounded-full blur-3xl" />
         <div className="absolute -bottom-16 -left-16 w-56 h-56 bg-white/5 rounded-full blur-3xl" />
@@ -117,17 +113,8 @@ export function StatsSection() {
         />
       </motion.div>
 
-      {/* Mobile-only subtle animated line */}
-      <motion.div
-        initial={{ scaleX: 0 }}
-        whileInView={{ scaleX: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
-        className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white/10 to-transparent origin-left sm:hidden"
-      />
-
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0">
           {stats.map((stat, i) => (
             <StatItem key={stat.label} stat={stat} index={i} />
           ))}

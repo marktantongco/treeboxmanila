@@ -190,8 +190,8 @@ function MobileStepCard({ step, index, isActive }: { step: typeof steps[0]; inde
           </motion.div>
           <div className="flex-1 min-w-0">
             <h3 className="text-base font-bold text-gray-900 mb-1">{step.title}</h3>
-            <p className="text-xs text-gray-500 leading-relaxed mb-2">{step.description}</p>
-            <span className="inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-50 text-[var(--color-brand-green)] border border-green-100">
+            <p className="text-xs text-gray-600 leading-relaxed mb-2">{step.description}</p>
+            <span className="inline-block text-[11px] font-semibold px-2.5 py-1 rounded-full bg-green-50 text-[var(--color-brand-green)] border border-green-100">
               {step.detail}
             </span>
           </div>
